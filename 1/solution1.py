@@ -1,10 +1,6 @@
 if __name__ == '__main__':
-    with open('./input1.txt') as input_file:
-        depths = []
-
-        for line in input_file.readlines():
-            depths.append(int(line.strip()))
-
+    with open('./input.txt') as input_file:
+        depths = [int(line.strip()) for line in input_file.readlines()]
         input_file.close()
 
     n_increases = 0
