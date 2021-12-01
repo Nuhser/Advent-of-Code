@@ -3,11 +3,9 @@ if __name__ == '__main__':
         depths = []
 
         for line in input_file.readlines():
-            depths.append(line.strip())
+            depths.append(int(line.strip()))
 
         input_file.close()
-
-    depths = [int(d) for d in depths]
 
     n_increases = 0
     last_depth = depths[0]
@@ -16,4 +14,4 @@ if __name__ == '__main__':
             n_increases += 1
         last_depth = depth
 
-    print(f'Total dpth increasses: {n_increases}')
+    print(f'Total depth increasses: {n_increases}')
