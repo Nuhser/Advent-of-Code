@@ -1,8 +1,3 @@
-from os import system
-import os
-import sys
-
-
 if __name__ == '__main__':
     with open('./input.txt') as input_file:
         # get drawn numbers
@@ -21,7 +16,8 @@ if __name__ == '__main__':
 
         input_file.close()
 
-    # mark cards
+    # mark cards & find solution
+    solution_found = False
     for number in draws:
         for card in cards:
             if card[0].count(number) > 0:
@@ -31,10 +27,15 @@ if __name__ == '__main__':
                 card[2][int(idx / 5)] += 1
 
                 if card[1].count(5) > 0 or card[2].count(5) > 0:
+                    solution_found = True
                     unmarked_sum = sum([n for n in card[0] if n != '#'])
 
                     print(f'BINGO!!!\n--------\n\nCard:\t{card[0][0 : 5]}\n\t{card[0][5 : 10]}\n\t{card[0][10 : 15]}\n\t{card[0][15 : 20]}\n\t{card[0][20 : 25]}\n')
                     print(f'Sum of Unmarked Numbers: {unmarked_sum}\nLast Number: {number}\n')
                     print(f'Solution: {unmarked_sum * number}')
+                
+            if solution_found:
+                break
 
-                    sys.exit()
+        if solution_found:
+            break
