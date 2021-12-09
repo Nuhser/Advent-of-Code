@@ -23,5 +23,7 @@ Collect stars by solving puzzles. Two puzzles will be made available on each day
 5. Hydrothermal Venture
 6. Lanternfish
 7. The Treachery of Whales
+8. Seven Segment Search
+9. Smoke Basin
 
 *More tasks will be added as advent moves on...*
