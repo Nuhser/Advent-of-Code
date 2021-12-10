@@ -25,5 +25,6 @@ Collect stars by solving puzzles. Two puzzles will be made available on each day
 7. The Treachery of Whales
 8. Seven Segment Search
 9. Smoke Basin
+10. Syntax Scoring
 
 *More tasks will be added as advent moves on...*
