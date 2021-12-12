@@ -26,5 +26,7 @@ Collect stars by solving puzzles. Two puzzles will be made available on each day
 8. Seven Segment Search
 9. Smoke Basin
 10. Syntax Scoring
+11. Dumbo Octopus
+12. Passage Pathing
 
 *More tasks will be added as advent moves on...*
