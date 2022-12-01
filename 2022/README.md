@@ -14,4 +14,4 @@ Collect stars by solving puzzles. Two puzzles will be made available on each day
 
 ## This Year's Tasks
 
-1. Calorie Counting
+1. [Calorie Counting](https://github.com/Nuhser/Advent-of-Code/blob/master/2022/task01.ipynb)
