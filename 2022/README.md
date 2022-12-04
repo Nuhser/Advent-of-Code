@@ -14,6 +14,4 @@ Collect stars by solving puzzles. Two puzzles will be made available on each day
 
 ## This Year's Tasks
 
-1. [Calorie Counting](https://github.com/Nuhser/Advent-of-Code/blob/master/2022/task01.ipynb)
-2. [Rock Paper Scissors](https://github.com/Nuhser/Advent-of-Code/blob/master/2022/task02.ipynb)
-3. [Rucksack Reorganization](https://github.com/Nuhser/Advent-of-Code/blob/master/2022/task03.ipynb)
+<!--- advent_readme_stars table 2022 --->
