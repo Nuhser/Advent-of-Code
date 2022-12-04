@@ -14,4 +14,4 @@ Collect stars by solving puzzles. Two puzzles will be made available on each day
 
 ## This Year's Tasks
 
-<!--- advent_readme_stars table 2022 --->
+<!--- advent_readme_stars table --->
