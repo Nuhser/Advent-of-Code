@@ -38,3 +38,6 @@ def split_string_in_chunks(string: str, chunk_size: int, padding_size: int=0) ->
         chunks.append(string[i : i+chunk_size])
 
     return chunks
+
+def convert_hex_to_bin(hex_string: str) -> str:
+    return str(bin(int(hex_string, base=16)))[2 :].zfill(4)
