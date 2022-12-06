@@ -25,4 +25,4 @@ class Solution(aoc.AbstractSolution):
             if ((len(set(message_start_marker)) == 14) and (not "" in message_start_marker)):
                 return f"First start-of-message marker '{''.join(message_start_marker)}' after {idx + 1} characters"
 
-        return "Error: No start-of-packet marker found"
+        return "Error: No start-of-message marker found"
