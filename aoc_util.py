@@ -22,12 +22,13 @@ def parse_input_with_blocks(puzzle_input: list[str], *line_delimiters: str, bloc
         if len(line_delimiters) == 0:
             blocks[-1].append(cast_to(line))
         else:
-            blocks[-1].append([recursive_split(line, line_delimiters, cast_to) for line in puzzle_input])
+            blocks[-1].append(recursive_split(line, line_delimiters, cast_to))
 
     return blocks
 
 def recursive_split(item: str, delimiters: tuple, cast_to: type) -> list:
     if len(delimiters) <= 1:
+        print([subitem for subitem in item.split(delimiters[0])])
         return [cast_to(subitem) for subitem in item.split(delimiters[0])]
     else:
         return [recursive_split(subitem, delimiters[1:], cast_to) for subitem in item.split(delimiters[0])]
