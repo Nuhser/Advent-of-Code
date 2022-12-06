@@ -32,10 +32,10 @@ def recursive_split(item: str, delimiters: tuple, cast_to: type) -> list:
     else:
         return [recursive_split(subitem, delimiters[1:], cast_to) for subitem in (item.split(delimiters[0]) if delimiters[0] != "" else item.split())]
 
-def split_string_in_chunks(string: str, chunk_size: int, padding_size: int=0) -> list[str]:
+def split_string_in_chunks(string: str, chunk_size: int, padding_size: int=0, cast_to: type=str) -> list:
     chunks = []
     for i in range(0, len(string), chunk_size + padding_size):
-        chunks.append(string[i : i+chunk_size])
+        chunks.append(cast_to(string[i : i+chunk_size]))
 
     return chunks
 
