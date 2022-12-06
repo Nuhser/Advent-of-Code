@@ -3,15 +3,6 @@ import argparse
 import importlib
 
 if __name__ == "__main__":
-    SOLUTIONS = {
-        (2022, 1): importlib.import_module("2022.day01"),
-        (2022, 2): importlib.import_module("2022.day02"),
-        (2022, 3): importlib.import_module("2022.day03"),
-        (2022, 4): importlib.import_module("2022.day04"),
-        (2022, 5): importlib.import_module("2022.day05"),
-        (2022, 6): importlib.import_module("2022.day06")
-    }
-
     parser = argparse.ArgumentParser(
         prog = "python3 run.py",
         description = "",
@@ -29,15 +20,15 @@ if __name__ == "__main__":
 
     print(f"Executing year {args.year} day {args.day}...\n")
 
-    if (args.year, args.day) in SOLUTIONS:
-        puzzle_input = aoc.get_puzzle_input(args.year, args.day) if not args.use_test_input else aoc.get_test_input(args.year, args.day)
-        solution = SOLUTIONS[args.year, args.day].Solution(args.year, args.day, puzzle_input)
+    puzzle_input = aoc.get_puzzle_input(args.year, args.day) if not args.use_test_input else aoc.get_test_input(args.year, args.day)
 
-        if (args.part == None) or (args.part == 1):
-            print("Part 1:\n" + solution.part1() + "\n")
-        
-        if (args.part == None) or (args.part == 2):
-            print("Part 2:\n" + solution.part2())
+    try:
+        solution = importlib.import_module(f"{args.year}.day{args.day:02d}").Solution(args.year, args.day, puzzle_input, args.verbose)
+    except ModuleNotFoundError:
+        raise ModuleNotFoundError(f"There is no solution module for day {args.day} of year {args.year}! Create a module named '{args.year}/day{args.day:02d}.py'")
 
-    else:
-        raise AttributeError(f"There is no module for day {args.day} of year {args.year}!")
+    if (args.part == None) or (args.part == 1):
+        print("Part 1:\n" + solution.part1() + "\n")
+    
+    if (args.part == None) or (args.part == 2):
+        print("Part 2:\n" + solution.part2())

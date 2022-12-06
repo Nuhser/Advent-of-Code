@@ -43,9 +43,10 @@ def convert_hex_to_bin(hex_string: str) -> str:
     return str(bin(int(hex_string, base=16)))[2 :].zfill(4)
 
 class AbstractSolution:
-    def __init__(self, year: int, day: int, puzzle_input: list[str]) -> None:
+    def __init__(self, year: int, day: int, puzzle_input: list[str], verbose: bool=False) -> None:
         self.year = year
         self.day = day
+        self.verbose = verbose
 
         self.parse(puzzle_input)
 
