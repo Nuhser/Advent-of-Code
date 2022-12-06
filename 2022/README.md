@@ -14,9 +14,9 @@ Collect stars by solving puzzles. Two puzzles will be made available on each day
 
 ## This Year's Tasks
 
-1. [Calorie Counting](https://github.com/Nuhser/Advent-of-Code/blob/master/2022/task01.ipynb)
-2. [Rock Paper Scissors](https://github.com/Nuhser/Advent-of-Code/blob/master/2022/task02.ipynb)
-3. [Rucksack Reorganization](https://github.com/Nuhser/Advent-of-Code/blob/master/2022/task03.ipynb)
-4. [Camp Cleanup](https://github.com/Nuhser/Advent-of-Code/blob/master/2022/task04.ipynb)
-5. [Supply Stacks](https://github.com/Nuhser/Advent-of-Code/blob/master/2022/task05.ipynb)
-6. [Supply Stacks](https://github.com/Nuhser/Advent-of-Code/blob/master/2022/task06.ipynb)
+1. [Calorie Counting](https://github.com/Nuhser/Advent-of-Code/blob/master/2022/day01.py)
+2. [Rock Paper Scissors](https://github.com/Nuhser/Advent-of-Code/blob/master/2022/day02.py)
+3. [Rucksack Reorganization](https://github.com/Nuhser/Advent-of-Code/blob/master/2022/day03.py)
+4. [Camp Cleanup](https://github.com/Nuhser/Advent-of-Code/blob/master/2022/day04.py)
+5. [Supply Stacks](https://github.com/Nuhser/Advent-of-Code/blob/master/2022/day05.py)
+6. [Supply Stacks](https://github.com/Nuhser/Advent-of-Code/blob/master/2022/day06.py)
