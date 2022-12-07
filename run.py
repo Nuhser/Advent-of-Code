@@ -18,7 +18,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    print(f"Executing year {args.year} day {args.day}...\n")
+    print(f"{'Testing' if args.use_test_input else 'Executing'} year {args.year} day {args.day}...\n")
 
     puzzle_input = aoc.get_puzzle_input(args.year, args.day) if not args.use_test_input else aoc.get_test_input(args.year, args.day)
 
