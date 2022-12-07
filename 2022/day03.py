@@ -4,7 +4,7 @@ class Solution(aoc.AbstractSolution):
     def parse(self, puzzle_input: list[str]) -> None:
         self.puzzle_input = puzzle_input
 
-    def part1(self) -> str:
+    def part1(self) -> tuple[str, (int | str)]:
         wrong_items = []
         for line in aoc.parse_input(self.puzzle_input):
             pivot = int(len(line) / 2)
@@ -15,9 +15,10 @@ class Solution(aoc.AbstractSolution):
                     wrong_items.append(item)
                     break
 
-        return f"Total priority sum of wrong items: {self.get_priority_sum(wrong_items)}"
+        solution = self.get_priority_sum(wrong_items)
+        return f"Total priority sum of wrong items: {solution}", solution
 
-    def part2(self) -> str:
+    def part2(self) -> tuple[str, (int | str)]:
         badges = []
         backpacks = aoc.parse_input(self.puzzle_input, cast_to=set)
         for i in range(0, len(backpacks), 3):
@@ -26,7 +27,8 @@ class Solution(aoc.AbstractSolution):
                     badges.append(item)
                     break
 
-        return f"Total priority sum of badges: {self.get_priority_sum(badges)}"
+        solution = self.get_priority_sum(badges)
+        return f"Total priority sum of badges: {solution}", solution
 
     def get_priority_sum(self, items: list):
         priority_sum = 0

@@ -4,7 +4,7 @@ class Solution(aoc.AbstractSolution):
     def parse(self, puzzle_input: list[str]) -> None:
         self.turns = aoc.parse_input(puzzle_input, " ")
 
-    def part1(self) -> str:
+    def part1(self) -> tuple[str, (int | str)]:
         decryption = {
             "A": ("Z", "Y"),
             "B": ("X", "Z"),
@@ -19,9 +19,9 @@ class Solution(aoc.AbstractSolution):
             win_multiplier = 2 if decryption[elf][1] == player else (0 if decryption[elf][0] == player else 1)
             total_score += (3 * win_multiplier) + decryption[player]
 
-        return f"Your total score is {total_score}."
+        return f"Your total score is {total_score}.", total_score
 
-    def part2(self) -> str:
+    def part2(self) -> tuple[str, (int | str)]:
         decryption = {
             "A": ("C", "B", 1),
             "B": ("A", "C", 2),
@@ -38,4 +38,4 @@ class Solution(aoc.AbstractSolution):
                 case "Z":
                     total_score += decryption[decryption[elf][1]][2] + 6
 
-        return f"Your total score is {total_score}."
+        return f"Your total score is {total_score}.", total_score

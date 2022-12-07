@@ -19,21 +19,23 @@ class Solution(aoc.AbstractSolution):
                 if crate != "":
                     self.initial_crates[idx].append(crate)
 
-    def part1(self) -> str:
+    def part1(self) -> tuple[str, (int | str)]:
         # do moves
         crates = [inner_list[:] for inner_list in self.initial_crates]
         for move in self.moves:
             for _ in range(move[0]):
                 crates[move[2]-1].append(crates[move[1]-1].pop())
 
-        return f"Final top crates: {''.join([crate[-1].replace('[', '').replace(']', '') for crate in crates])}"
+        solution = ''.join([crate[-1].replace('[', '').replace(']', '') for crate in crates])
+        return f"Final top crates: {solution}", solution
 
 
-    def part2(self) -> str:
+    def part2(self) -> tuple[str, (int | str)]:
         # do moves
         crates = [inner_list[:] for inner_list in self.initial_crates]
         for move in self.moves:
             crates[move[2]-1]+= crates[move[1]-1][-move[0] :]
             crates[move[1]-1] = crates[move[1]-1][: -move[0]]
 
-        return f"Final top crates: {''.join([crate[-1].replace('[', '').replace(']', '') for crate in crates])}"
+        solution = ''.join([crate[-1].replace('[', '').replace(']', '') for crate in crates])
+        return f"Final top crates: {solution}", solution

@@ -60,11 +60,13 @@ class Solution(aoc.AbstractSolution):
         if self.verbose:
             print(f"File System:\n{json.dumps(self.file_system)}\n")
 
-    def part1(self) -> str:
+    def part1(self) -> tuple[str, (int | str)]:
         threshold = 100000
-        return f"Total size of all directories with a size below {threshold}: {sum([directory['size'] for directory in self.file_system if ('children' in directory) and (directory['size'] <= threshold)])}"
 
-    def part2(self) -> str:
+        solution = sum([directory['size'] for directory in self.file_system if ('children' in directory) and (directory['size'] <= threshold)])
+        return f"Total size of all directories with a size below {threshold}: {solution}", solution
+
+    def part2(self) -> tuple[str, (int | str)]:
         space_used = self.file_system[0]["size"]
         space_free = 70000000 - space_used
         space_needed = 30000000 - space_free
@@ -72,4 +74,5 @@ class Solution(aoc.AbstractSolution):
         if self.verbose:
             print(f"Used Space: {space_used}\nFree Space: {space_free}\nNeeded Space: {space_needed}\n")
 
-        return f"Size of smalest directory that can be deleted: {min([element['size'] for element in self.file_system if ('children' in element) and (element['size'] >= space_needed)])}"
+        solution = min([element['size'] for element in self.file_system if ('children' in element) and (element['size'] >= space_needed)])
+        return f"Size of smalest directory that can be deleted: {solution}", solution
