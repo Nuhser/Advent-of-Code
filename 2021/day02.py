@@ -4,7 +4,7 @@ class Solution(aoc.AbstractSolution):
     def parse(self, puzzle_input: list[str]) -> None:
         self.commands = [(direction, int(strength)) for direction, strength in aoc.parse_input(puzzle_input, " ")]
 
-    def part1(self) -> str:
+    def part1(self) -> tuple[str, (int | str)]:
         horizontal = 0
         depth = 0
 
@@ -16,11 +16,11 @@ class Solution(aoc.AbstractSolution):
             elif command[0] == 'down':
                 depth += command[1]
             else:
-                return f'ERROR: Unknown command "{command[0]}"'
+                raise RuntimeError(f'Unknown command "{command[0]}"')
 
-        return f'Horizontal Position: {horizontal}\nDepth: {depth}\n\nSolution: {horizontal * depth}'
+        return f'Horizontal Position: {horizontal}\nDepth: {depth}\n\nSolution: {horizontal * depth}', horizontal * depth
 
-    def part2(self) -> str:
+    def part2(self) -> tuple[str, (int | str)]:
         horizontal = 0
         depth = 0
         aim = 0
@@ -34,6 +34,6 @@ class Solution(aoc.AbstractSolution):
             elif command[0] == 'down':
                 aim += command[1]
             else:
-                return f'ERROR: Unknown command "{command[0]}"'
+                raise RuntimeError(f'Unknown command "{command[0]}"')
 
-        return f'Horizontal Position: {horizontal}\nDepth: {depth}\n\nSolution: {horizontal * depth}'
+        return f'Horizontal Position: {horizontal}\nDepth: {depth}\n\nSolution: {horizontal * depth}', horizontal * depth

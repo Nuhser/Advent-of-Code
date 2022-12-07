@@ -10,7 +10,7 @@ class Solution(aoc.AbstractSolution):
         self.max_position = max(self.crabs.keys())
         self.min_position = min(self.crabs.keys())
 
-    def part1(self) -> str:
+    def part1(self) -> tuple[str, (int | str)]:
         # find least required ammount of fuel
         least_fuel = None
         for curr_position in range(self.min_position, self.max_position + 1):
@@ -22,9 +22,9 @@ class Solution(aoc.AbstractSolution):
                 least_fuel = fuel
                 best_position = curr_position
 
-        return f'Best Position: {best_position} (w/ {self.crabs[best_position] if best_position in self.crabs else 0} crabs starting there)\nRequired Fuel: {least_fuel}'
+        return f'Best Position: {best_position} (w/ {self.crabs[best_position] if best_position in self.crabs else 0} crabs starting there)\nRequired Fuel: {least_fuel}', str(least_fuel)
 
-    def part2(self) -> str:
+    def part2(self) -> tuple[str, (int | str)]:
         # find least required ammount of fuel
         least_fuel = None
         for curr_position in range(self.min_position, self.max_position + 1):
@@ -41,4 +41,4 @@ class Solution(aoc.AbstractSolution):
                 least_fuel = fuel
                 best_position = curr_position
 
-        return f'Best Position: {best_position} (w/ {self.crabs[best_position] if best_position in self.crabs else 0} crabs starting there)\nRequired Fuel: {least_fuel}'
+        return f'Best Position: {best_position} (w/ {self.crabs[best_position] if best_position in self.crabs else 0} crabs starting there)\nRequired Fuel: {least_fuel}', str(least_fuel)

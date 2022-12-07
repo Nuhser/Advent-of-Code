@@ -7,7 +7,7 @@ class Solution(aoc.AbstractSolution):
         self.cards = aoc.parse_input_with_blocks(puzzle_input[2:], "", cast_to=int)
         self.cards = [[list(itertools.chain.from_iterable(card)), [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]] for card in self.cards]
 
-    def part1(self) -> str:
+    def part1(self) -> tuple[str, (int | str)]:
         # mark cards & find solution
         solution_found = False
         for number in self.draws:
@@ -22,7 +22,7 @@ class Solution(aoc.AbstractSolution):
                         solution_found = True
                         unmarked_sum = sum([n for n in card[0] if n != '#'])
 
-                        return f'BINGO!!!\n--------\n\nCard:\t{card[0][0 : 5]}\n\t{card[0][5 : 10]}\n\t{card[0][10 : 15]}\n\t{card[0][15 : 20]}\n\t{card[0][20 : 25]}\n\nSum of Unmarked Numbers: {unmarked_sum}\nLast Number: {number}\n\nSolution: {unmarked_sum * number}'
+                        return f'Card:\t{card[0][0 : 5]}\n\t{card[0][5 : 10]}\n\t{card[0][10 : 15]}\n\t{card[0][15 : 20]}\n\t{card[0][20 : 25]}\n\nSum of Unmarked Numbers: {unmarked_sum}\nLast Number: {number}\n\nSolution: {unmarked_sum * number}', unmarked_sum * number
                     
                 if solution_found:
                     break
@@ -30,9 +30,9 @@ class Solution(aoc.AbstractSolution):
             if solution_found:
                 break
 
-        return "Error: No BINGO found!"
+        raise RuntimeError("No BINGO found!")
 
-    def part2(self) -> str:
+    def part2(self) -> tuple[str, (int | str)]:
         # mark cards & find solution
         solution_found = False
         for number in self.draws:
@@ -57,4 +57,4 @@ class Solution(aoc.AbstractSolution):
         card = self.cards[0]
         unmarked_sum = sum([n for n in card[0] if n != '#'])
 
-        return f'BINGO!!!\n--------\n\nCard:\t{card[0][0 : 5]}\n\t{card[0][5 : 10]}\n\t{card[0][10 : 15]}\n\t{card[0][15 : 20]}\n\t{card[0][20 : 25]}\n\nSum of Unmarked Numbers: {unmarked_sum}\nLast Number: {number}\n\nSolution: {unmarked_sum * number}'
+        return f'Card:\t{card[0][0 : 5]}\n\t{card[0][5 : 10]}\n\t{card[0][10 : 15]}\n\t{card[0][15 : 20]}\n\t{card[0][20 : 25]}\n\nSum of Unmarked Numbers: {unmarked_sum}\nLast Number: {number}\n\nSolution: {unmarked_sum * number}', unmarked_sum * number

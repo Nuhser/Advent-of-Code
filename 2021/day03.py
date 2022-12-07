@@ -4,7 +4,7 @@ class Solution(aoc.AbstractSolution):
     def parse(self, puzzle_input: list[str]) -> None:
         self.lines = aoc.parse_input(puzzle_input)
 
-    def part1(self) -> str:
+    def part1(self) -> tuple[str, (int | str)]:
         # count 1s per digit
         counts = [int(d) for d in self.lines[0].strip()]
         for line in self.lines[1 :]:
@@ -21,9 +21,10 @@ class Solution(aoc.AbstractSolution):
             gamma += str(most_common_digit)
             epsilon += str(0 if most_common_digit == 1 else 1)
 
-        return f'Gamma: {gamma} -> {int(gamma, 2)}\nEpsilon: {epsilon} -> {int(epsilon, 2)}\n\nPower Consumption: {int(gamma, 2) * int(epsilon, 2)}'
+        solution = int(gamma, 2) * int(epsilon, 2)
+        return f'Gamma: {gamma} -> {int(gamma, 2)}\nEpsilon: {epsilon} -> {int(epsilon, 2)}\n\nPower Consumption: {solution}', solution
 
-    def part2(self) -> str:
+    def part2(self) -> tuple[str, (int | str)]:
         oxygen = self.lines
         for i in range(len(oxygen[0])):
             digit_counts = [0, 0]
@@ -50,4 +51,5 @@ class Solution(aoc.AbstractSolution):
             if len(co2) <= 1:
                 break
 
-        return f'Oxygen:\t{oxygen[0]} -> {int(oxygen[0], 2)}\nCO2:\t{co2[0]} -> {int(co2[0], 2)}\n\nLife Support Rating: {int(oxygen[0], 2) * int(co2[0], 2)}'
+        solution = int(oxygen[0], 2) * int(co2[0], 2)
+        return f'Oxygen:\t{oxygen[0]} -> {int(oxygen[0], 2)}\nCO2:\t{co2[0]} -> {int(co2[0], 2)}\n\nLife Support Rating: {solution}', solution

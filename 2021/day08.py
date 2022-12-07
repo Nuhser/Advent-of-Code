@@ -4,14 +4,14 @@ class Solution(aoc.AbstractSolution):
     def parse(self, puzzle_input: list[str]) -> None:
         self.notes = aoc.parse_input(puzzle_input, " | ", " ")
 
-    def part1(self) -> str:
+    def part1(self) -> tuple[str, (int | str)]:
         count = 0
         for note in self.notes:
             count += len([digit for digit in note[1] if len(digit) in [2, 3, 4, 7]])
 
-        return f'Solution: {count}'
+        return f'Solution: {count}', count
 
-    def part2(self) -> str:
+    def part2(self) -> tuple[str, (int | str)]:
         solution = 0
         for note in self.notes:
             mapping = [None] * 10
@@ -31,4 +31,4 @@ class Solution(aoc.AbstractSolution):
 
             solution += int(''.join(str(mapping.index(set(digit))) for digit in note[1]))
 
-        return f'Solution: {solution}'
+        return f'Solution: {solution}', solution

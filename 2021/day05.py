@@ -5,7 +5,7 @@ class Solution(aoc.AbstractSolution):
     def parse(self, puzzle_input: list[str]) -> None:
         self.vent_lines = aoc.parse_input(puzzle_input, " -> ", ",", cast_to=int)
 
-    def part1(self) -> str:
+    def part1(self) -> tuple[str, (int | str)]:
         # remove non horizontal or verticel lines
         vent_lines = [line for line in self.vent_lines if line[0][0] == line[1][0] or line[0][1] == line[1][1]]
 
@@ -32,14 +32,14 @@ class Solution(aoc.AbstractSolution):
 
             # Shouldn't hapen in this part of the challenge.
             else:
-                return "ERROR: Line not horizontal or vertical"
+                raise RuntimeError("Line not horizontal or vertical")
 
         # count dangerous coords
         count = len([coord for coord in vent_map if vent_map[coord] > 1])
 
-        return f'Solution: {count}'
+        return f'Solution: {count}', count
 
-    def part2(self) -> str:
+    def part2(self) -> tuple[str, (int | str)]:
         # fill map
         vent_map = dict()
         for line in self.vent_lines:
@@ -88,4 +88,4 @@ class Solution(aoc.AbstractSolution):
         # count dangerous coords
         count = len([coord for coord in vent_map if vent_map[coord] > 1])
 
-        return f'Solution: {count}'
+        return f'Solution: {count}', count

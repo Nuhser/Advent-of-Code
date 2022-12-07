@@ -4,7 +4,7 @@ class Solution(aoc.AbstractSolution):
     def parse(self, puzzle_input: list[str]) -> None:
         self.depths = aoc.parse_input(puzzle_input, cast_to=int)
 
-    def part1(self) -> str:
+    def part1(self) -> tuple[str, (int | str)]:
         n_increases = 0
         last_depth = self.depths[0]
         for depth in self.depths[1 :]:
@@ -12,9 +12,9 @@ class Solution(aoc.AbstractSolution):
                 n_increases += 1
             last_depth = depth
 
-        return f"Total depth increases: {n_increases}"
+        return f"Total depth increases: {n_increases}", n_increases
 
-    def part2(self) -> str:
+    def part2(self) -> tuple[str, (int | str)]:
         sliding_sums = [sum(self.depths[i : i+3]) for i in range(len(self.depths[: -2]))]
 
         n_increases = 0
@@ -24,4 +24,4 @@ class Solution(aoc.AbstractSolution):
                 n_increases += 1
             last_depth = depth
 
-        return f"Total depth increases: {n_increases}"
+        return f"Total depth increases: {n_increases}", n_increases

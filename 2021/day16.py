@@ -10,14 +10,16 @@ class Solution(aoc.AbstractSolution):
 
         self.packets, _ = self.parse_packets(bin_code)
 
-    def part1(self) -> str:
-        return f"Sum of packet versions: {self.get_version_sum(self.packets)}"
+    def part1(self) -> tuple[str, (int | str)]:
+        solution = self.get_version_sum(self.packets)
+        return f"Sum of packet versions: {solution}", solution
 
-    def part2(self) -> str:
+    def part2(self) -> tuple[str, (int | str)]:
         if len(self.packets) > 1:
             raise RuntimeError("'packets' can't be interpreted. There is more than one root package.")
 
-        return f"Value of encoded transmission: {self.interpret_packet(self.packets[0])}"
+        solution = self.interpret_packet(self.packets[0])
+        return f"Value of encoded transmission: {solution}", solution
 
     def parse_packets(self, bin_code: str, max_packets_size: int=0) -> tuple[list[dict], int]:
         packets = []

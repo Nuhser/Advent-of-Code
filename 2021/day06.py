@@ -4,13 +4,15 @@ class Solution(aoc.AbstractSolution):
     def parse(self, puzzle_input: list[str]) -> None:
         self.initial_fish = aoc.parse_input(puzzle_input, ",", cast_to=int)[0]
 
-    def part1(self) -> str:
+    def part1(self) -> tuple[str, (int | str)]:
         days = 80
-        return f'Initial Population: {len(self.initial_fish)}\nFinal Population afters {days} days: {self.calculate_population(self.initial_fish, days)}'
+        solution = self.calculate_population(self.initial_fish, days)
+        return f'Initial Population: {len(self.initial_fish)}\nFinal Population afters {days} days: {solution}', solution
 
-    def part2(self) -> str:
+    def part2(self) -> tuple[str, (int | str)]:
         days = 256
-        return f'Initial Population: {len(self.initial_fish)}\nFinal Population afters {days} days: {self.calculate_population(self.initial_fish, days)}'
+        solution = self.calculate_population(self.initial_fish, days)
+        return f'Initial Population: {len(self.initial_fish)}\nFinal Population afters {days} days: {solution}', solution
 
     def calculate_population(self, initial_fish: list, days: int) -> int:
         fish = [0] * 9
