@@ -36,7 +36,7 @@ class Solution(aoc.AbstractSolution):
         y = list(range(len(self.height_map_for_visualization)))
 
         fig = go.Figure(data=[go.Surface(z=self.height_map_for_visualization, x=x, y=y)])
-        fig.update_layout(title='Cave Height Map', scene = dict(aspectratio=dict(x=1, y=1, z=0.25), xaxis_title="X", yaxis_title="Y", zaxis_title="Height"), autosize=False, width=700, height=600, margin=dict(l=65, r=50, b=10, t=50))
+        fig.update_layout(title='Cave Height Map', scene = dict(aspectratio=dict(x=1, y=1, z=0.25), xaxis_title="X", yaxis_title="Y", zaxis_title="Height"), autosize=False, width=1200, height=900, margin=dict(l=65, r=50, b=10, t=50))
         fig.show()
 
     def get_neighbours(self, x, y):
