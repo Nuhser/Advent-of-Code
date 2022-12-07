@@ -48,15 +48,21 @@ class AbstractSolution:
         self.day = day
         self.verbose = verbose
 
+        if verbose:
+            print("Start parsing input...")
+
         self.parse(puzzle_input)
+
+        if verbose:
+            print("Parsing complete.")
 
     def parse(self, puzzle_input: list[str]) -> None:
         raise NotImplementedError(f"The parser the puzzle input for day {self.day} of year {self.year} isn't implemented yet!")
 
-    def part1(self) -> tuple[str, (int | str)]:
+    def part1(self) -> tuple[str, (int | str | None)]:
         raise NotImplementedError(f"Part 1 of the solution for day {self.day} of year {self.year} isn't implemented yet!")
 
-    def part2(self) -> tuple[str, (int | str)]:
+    def part2(self) -> tuple[str, (int | str | None)]:
         raise NotImplementedError(f"Part 2 of the solution for day {self.day} of year {self.year} isn't implemented yet!")
 
     def visualize(self) -> None:

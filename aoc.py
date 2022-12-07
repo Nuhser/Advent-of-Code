@@ -31,6 +31,9 @@ if __name__ == "__main__":
         elif (args.part != None) and (len(args.expected_solutions) != 1):
             raise AttributeError("Exactly one expected test result is needed when testing only one part of the solution.")
 
+    if (args.subcommand == "run"):
+        print(f"{'Testing' if run_is_test else 'Executing'} year {args.year} day {args.day}...")
+
     # get puzzle/test input
     try:
         puzzle_input = aoc.get_puzzle_input(args.year, args.day) if not run_is_test else aoc.get_test_input(args.year, args.day)
@@ -52,9 +55,6 @@ if __name__ == "__main__":
         solution.visualize()
         raise SystemExit
 
-    # else start normal run
-    print(f"{'Testing' if run_is_test else 'Executing'} year {args.year} day {args.day}...")
-
     # run part 1
     if (args.part == None) or (args.part == 1):
         print("\nPart 1:")
@@ -68,7 +68,9 @@ if __name__ == "__main__":
 
             # check if solutions equals the expected test result
             if run_is_test:
-                if args.expected_solutions[0] == str(raw_solution):
+                if raw_solution == None:
+                    print("Solution not testable.")
+                elif args.expected_solutions[0] == str(raw_solution):
                     print("This solution is correct!")
                 else:
                     print("This solution is incorrect! Expected solution: " + args.expected_solutions[0])
@@ -86,7 +88,9 @@ if __name__ == "__main__":
 
             # check if solutions equals the expected test result
             if run_is_test:
-                if args.expected_solutions[-1] == str(raw_solution):
+                if raw_solution == None:
+                    print("Solution not testable.")
+                elif args.expected_solutions[-1] == str(raw_solution):
                     print("This solution is correct!")
                 else:
                     print("This solution is incorrect! Expected solution: " + args.expected_solutions[-1])
