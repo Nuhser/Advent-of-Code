@@ -28,7 +28,9 @@ if __name__ == "__main__":
         raise ModuleNotFoundError(f"There is no solution module for day {args.day} of year {args.year}! Create a module named '{args.year}/day{args.day:02d}.py'")
 
     if (args.part == None) or (args.part == 1):
-        print("Part 1:\n" + solution.part1() + "\n")
+        print("Part 1:")
+        print(solution.part1() + "\n")
     
     if (args.part == None) or (args.part == 2):
-        print("Part 2:\n" + solution.part2())
+        print("Part 2:")
+        print(solution.part2() + "\n")
