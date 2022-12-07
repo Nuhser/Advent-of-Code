@@ -58,3 +58,6 @@ class AbstractSolution:
 
     def part2(self) -> tuple[str, (int | str)]:
         raise NotImplementedError(f"Part 2 of the solution for day {self.day} of year {self.year} isn't implemented yet!")
+
+    def visualize(self) -> None:
+        raise NotImplementedError(f"The visualization for day {self.day} of year {self.year} isn't implemented yet!")
