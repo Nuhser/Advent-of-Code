@@ -53,8 +53,8 @@ class AbstractSolution:
     def parse(self, puzzle_input: list[str]) -> None:
         raise NotImplementedError(f"The parser the puzzle input for day {self.day} of year {self.year} isn't implemented yet!")
 
-    def part1(self) -> str:
+    def part1(self) -> tuple[str, (int | str)]:
         raise NotImplementedError(f"Part 1 of the solution for day {self.day} of year {self.year} isn't implemented yet!")
 
-    def part2(self) -> str:
+    def part2(self) -> tuple[str, (int | str)]:
         raise NotImplementedError(f"Part 2 of the solution for day {self.day} of year {self.year} isn't implemented yet!")

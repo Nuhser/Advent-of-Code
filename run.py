@@ -11,16 +11,29 @@ if __name__ == "__main__":
 
     parser.add_argument("year", type=int, metavar="YEAR", help="year to use")
     parser.add_argument("day", type=int, metavar="DAY", help="day to use")
-    parser.add_argument("-t", "--test", action="store_true", dest="use_test_input", help="use test input instead of real one")
-    parser.add_argument("-p", "--part", type=int, dest="part", help="which part of the task should be executed (default: both)")
+    parser.add_argument("-t", "--test", dest="expected_solutions", metavar="EXPECTATIONS", nargs="+", help="test solution with test input and compare to expected value")
+    parser.add_argument("-p", "--part", type=int, dest="part", choices=[0, 1, 2], help="which part of the task should be executed (default: both), use 0 to test only the parser")
     parser.add_argument("-v", "--verbose", action="store_true", dest="verbose", help="show more logs while running")
     parser.add_argument("--version", action="version", version="v22.01.1", help="show the version of this program")
 
     args = parser.parse_args()
 
-    print(f"{'Testing' if args.use_test_input else 'Executing'} year {args.year} day {args.day}...\n")
+    run_is_test = args.expected_solutions != None
+    if run_is_test:
+        if (args.part == None) and (len(args.expected_solutions) != 2):
+            raise AttributeError("Two expected test results are needed when testing both parts of the solution.")
+        elif (args.part != None) and (len(args.expected_solutions) != 1):
+            raise AttributeError("Exactly one expected test result is needed when testing only one part of the solution.")
 
-    puzzle_input = aoc.get_puzzle_input(args.year, args.day) if not args.use_test_input else aoc.get_test_input(args.year, args.day)
+    print(f"{'Testing' if run_is_test else 'Executing'} year {args.year} day {args.day}...")
+
+    try:
+        puzzle_input = aoc.get_puzzle_input(args.year, args.day) if not run_is_test else aoc.get_test_input(args.year, args.day)
+    except FileNotFoundError:
+        if run_is_test:
+            raise FileNotFoundError(f"There is no test input for day {args.day} of year {args.year}! Create a text file named '{args.year}/test{args.day:02d}.txt'")
+        else:
+            raise FileNotFoundError(f"There is no puzzle input for day {args.day} of year {args.year}! Create a text file named '{args.year}/input{args.day:02d}.txt'")
 
     try:
         solution = importlib.import_module(f"{args.year}.day{args.day:02d}").Solution(args.year, args.day, puzzle_input, args.verbose)
@@ -28,9 +41,25 @@ if __name__ == "__main__":
         raise ModuleNotFoundError(f"There is no solution module for day {args.day} of year {args.year}! Create a module named '{args.year}/day{args.day:02d}.py'")
 
     if (args.part == None) or (args.part == 1):
-        print("Part 1:")
-        print(solution.part1() + "\n")
+        print("\nPart 1:")
+
+        solution_string, raw_solution = solution.part1()
+        print(solution_string)
+
+        if run_is_test:
+            if args.expected_solutions[0] == str(raw_solution):
+                print("This solution is correct!")
+            else:
+                print("This solution is incorrect! Expected solution: " + args.expected_solutions[0])
     
     if (args.part == None) or (args.part == 2):
-        print("Part 2:")
-        print(solution.part2() + "\n")
+        print("\nPart 2:")
+
+        solution_string, raw_solution = solution.part2()
+        print(solution_string)
+
+        if run_is_test:
+            if args.expected_solutions[-1] == str(raw_solution):
+                print("This solution is correct!")
+            else:
+                print("This solution is incorrect! Expected solution: " + args.expected_solutions[-1])
