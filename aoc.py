@@ -12,7 +12,7 @@ if __name__ == "__main__":
 
     parser.add_argument("year", type=int, metavar="YEAR", help="year to use")
     parser.add_argument("day", type=int, metavar="DAY", help="day to use")
-    parser.add_argument("--verbose", action="store_true", dest="verbose", help="show more logs while running")
+    parser.add_argument("-v", "--verbose", action="store_true", dest="verbose", help="show more logs while running")
     parser.add_argument("--version", action="version", version="v22.01.1", help="show the version of this program")
 
     run_parser = subparsers.add_parser("run")
@@ -66,6 +66,7 @@ if __name__ == "__main__":
         else:
             print(solution_string)
 
+            # check if solutions equals the expected test result
             if run_is_test:
                 if args.expected_solutions[0] == str(raw_solution):
                     print("This solution is correct!")
@@ -83,6 +84,7 @@ if __name__ == "__main__":
         else:
             print(solution_string)
 
+            # check if solutions equals the expected test result
             if run_is_test:
                 if args.expected_solutions[-1] == str(raw_solution):
                     print("This solution is correct!")
