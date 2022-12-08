@@ -13,3 +13,4 @@ Each day consists of one input file containing my personal randomly generated pu
 5. [Supply Stacks](https://github.com/Nuhser/Advent-of-Code/blob/master/2022/day05.py) (*[original task](https://adventofcode.com/2022/day/5)*)
 6. [Supply Stacks](https://github.com/Nuhser/Advent-of-Code/blob/master/2022/day06.py) (*[original task](https://adventofcode.com/2022/day/6)*)
 7. [No Space Left On Device](https://github.com/Nuhser/Advent-of-Code/blob/master/2022/day07.py) (*[original task](https://adventofcode.com/2022/day/7)*)
+8. [No Space Left On Device](https://github.com/Nuhser/Advent-of-Code/blob/master/2022/day08.py) (*[original task](https://adventofcode.com/2022/day/8)*)
