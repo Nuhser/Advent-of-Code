@@ -1,4 +1,7 @@
 import aoc_util as aoc
+import matplotlib.colors as colors
+import matplotlib.pyplot as plt
+import numpy as np
 
 from math import prod
 
@@ -129,6 +132,38 @@ class Solution(aoc.AbstractSolution):
 
         solution = max([prod(self.tree_map[tree].view_distance.values()) for tree in self.tree_map])
         return f"Highest scenic score: {solution}", solution
+
+    def visualize(self) -> None:
+        _, visibile_trees = self.part1()
+        _, max_scenic_score = self.part2()
+
+        heights = np.array([[self.tree_map[x, y].height for x in range(self.max_x + 1)] for y in range(self.max_y + 1)])
+        visibilities = np.array([[(1 if self.tree_map[x, y].visible else 0) for x in range(self.max_x + 1)] for y in range(self.max_y + 1)])
+        scenic_scores = np.array([[prod(self.tree_map[x, y].view_distance.values()) for x in range(self.max_x + 1)] for y in range(self.max_y + 1)])
+
+        _, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2)
+
+        ax2.axis("off")
+
+        im = ax1.imshow(heights)
+        cbar = plt.colorbar(im)
+        cbar.ax.get_yaxis().labelpad = 15
+        cbar.ax.set_ylabel("Height", rotation=270)
+        ax1.set_xticklabels([])
+        ax1.set_yticklabels([])
+        ax1.set_title("Tree Height Map")
+
+        im = ax3.imshow(visibilities)
+        ax3.set_xticklabels([])
+        ax3.set_yticklabels([])
+        ax3.set_title(f"Tree Visibility (Total Number: {visibile_trees})")
+
+        im = ax4.imshow(scenic_scores, norm=colors.LogNorm())
+        ax4.set_xticklabels([])
+        ax4.set_yticklabels([])
+        ax4.set_title(f"Scenic Scores (Highest Score: {max_scenic_score})")
+
+        plt.show()
 
     class Tree:
         def __init__(self, height) -> None:
