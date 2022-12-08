@@ -16,7 +16,7 @@ if __name__ == "__main__":
     parser.add_argument("--version", action="version", version="v22.01.1", help="show the version of this program")
 
     run_parser = subparsers.add_parser("run")
-    run_parser.add_argument("-t", "--test", dest="expected_solutions", metavar="EXPECTATIONS", nargs="+", help="test solution with test input and compare to expected value")
+    run_parser.add_argument("-t", "--test", action="store_true", dest="run_is_test", help="run is a test and should use the test input and solutions")
     run_parser.add_argument("-p", "--part", type=int, dest="part", choices=[0, 1, 2], help="which part of the task should be executed (default: both), use 0 to test only the parser")
 
     visualization_parser = subparsers.add_parser("visualize")
@@ -24,24 +24,30 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # check if run is test
-    run_is_test = (args.subcommand == "run") and (args.expected_solutions != None)
-    if run_is_test:
-        if (args.part == None) and (len(args.expected_solutions) != 2):
-            raise AttributeError("Two expected test results are needed when testing both parts of the solution.")
-        elif (args.part != None) and (len(args.expected_solutions) != 1):
-            raise AttributeError("Exactly one expected test result is needed when testing only one part of the solution.")
+    run_is_test = (args.subcommand == "run") and args.run_is_test
 
     if (args.subcommand == "run"):
         print(f"{'Testing' if run_is_test else 'Executing'} year {args.year} day {args.day}...")
 
     # get puzzle/test input
     try:
-        puzzle_input = aoc.get_puzzle_input(args.year, args.day) if not run_is_test else aoc.get_test_input(args.year, args.day)
+        puzzle_input, expected_results = aoc.get_puzzle_input(args.year, args.day) if not run_is_test else aoc.get_test_input(args.year, args.day)
     except FileNotFoundError:
         if run_is_test:
             raise FileNotFoundError(f"There is no test input for day {args.day} of year {args.year}! Create a text file named '{args.year}/test{args.day:02d}.txt'")
         else:
             raise FileNotFoundError(f"There is no puzzle input for day {args.day} of year {args.year}! Create a text file named '{args.year}/input{args.day:02d}.txt'")
+
+    # check if the correct test solutions are provided
+    if run_is_test:
+        if expected_results == None:
+            raise AttributeError("No expected results found in the test file ({args.year}/test{args.day:02d}.txt)! Make sure that the correct number of expected results is given at the start of the file (e.g.: #!part1:<RESULT>).")
+        elif (args.part == None) and (("part1" not in expected_results) or ("part2" not in expected_results)):
+            raise AttributeError("Two expected test results are needed when testing both parts of the solution! Make sure that the correct number of expected results is given at the start of the file (e.g.: #!part1:<RESULT>).")
+        elif (args.part == 1) and ("part1" not in expected_results):
+            raise AttributeError("No expected test result found in your test file for part 1 of the solution! Make sure that the correct number of expected results is given at the start of the file (e.g.: #!part1:<RESULT>).")
+        elif (args.part == 2) and ("part2" not in expected_results):
+            raise AttributeError("No expected test result found in your test file for part 2 of the solution! Make sure that the correct number of expected results is given at the start of the file (e.g.: #!part2:<RESULT>).")
 
     # create solution object for given day and year
     try:
@@ -68,12 +74,14 @@ if __name__ == "__main__":
 
             # check if solutions equals the expected test result
             if run_is_test:
-                if raw_solution == None:
+                assert expected_results != None
+
+                if expected_results["part1"] == None:
                     print("Solution not testable.")
-                elif args.expected_solutions[0] == str(raw_solution):
+                elif expected_results["part1"] == str(raw_solution):
                     print("This solution is correct!")
                 else:
-                    print("This solution is incorrect! Expected solution: " + args.expected_solutions[0])
+                    print("This solution is incorrect! Expected solution: " + expected_results["part1"])
 
     # run part 2
     if (args.part == None) or (args.part == 2):
@@ -88,9 +96,11 @@ if __name__ == "__main__":
 
             # check if solutions equals the expected test result
             if run_is_test:
-                if raw_solution == None:
+                assert expected_results != None
+
+                if expected_results["part2"] == None:
                     print("Solution not testable.")
-                elif args.expected_solutions[-1] == str(raw_solution):
+                elif expected_results["part2"] == str(raw_solution):
                     print("This solution is correct!")
                 else:
-                    print("This solution is incorrect! Expected solution: " + args.expected_solutions[-1])
+                    print("This solution is incorrect! Expected solution: " + expected_results["part2"])

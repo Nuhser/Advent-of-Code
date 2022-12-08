@@ -1,10 +1,25 @@
-def get_puzzle_input(year: int, day: int):
+def get_puzzle_input(year: int, day: int) -> tuple[list[str], None]:
     with open(f"./{year}/input{day:02d}.txt", "r") as puzzle_input:
-        return [line for line in puzzle_input.readlines()]
+        return [line for line in puzzle_input.readlines()], None
 
-def get_test_input(year: int, day: int):
+def get_test_input(year: int, day: int) -> tuple[list[str], dict[str, (str | None)]]:
     with open(f"./{year}/test{day:02d}.txt", "r") as test_input:
-        return [line for line in test_input.readlines()]
+        expected_results = {}
+
+        while (True):
+            last_position = test_input.tell()
+            line = test_input.readline()
+            
+            if (not line.strip().startswith("#!")):
+                break
+
+            line = line.strip().removeprefix("#!").split(":")
+
+            expected_results[line[0]] = line[1] if not line[1] == "None" else None
+
+        test_input.seek(last_position)
+
+        return [line for line in test_input.readlines()], expected_results
 
 def parse_input(puzzle_input: list[str], *delimiters: str, strip_lines: bool=True, cast_to: type=str, use_test: bool=False) -> list:
     if len(delimiters) == 0:
@@ -49,12 +64,12 @@ class AbstractSolution:
         self.verbose = verbose
 
         if verbose:
-            print("Start parsing input...")
+            print("Start parsing input...\n")
 
         self.parse(puzzle_input)
 
         if verbose:
-            print("Parsing complete.")
+            print("Parsing complete.\n")
 
     def parse(self, puzzle_input: list[str]) -> None:
         raise NotImplementedError(f"The parser the puzzle input for day {self.day} of year {self.year} isn't implemented yet!")
