@@ -68,9 +68,9 @@ if __name__ == "__main__":
         try:
             solution_string, raw_solution = solution.part1()
         except RuntimeError as error:
-            print(f"ERROR: {error}")
+            print(f"\u001b[31;1mERROR: {error}\u001b[0m")
         else:
-            print(solution_string)
+            print("\u001b[34;1m" + solution_string + "\u001b[0m")
 
             # check if solutions equals the expected test result
             if run_is_test:
@@ -79,9 +79,9 @@ if __name__ == "__main__":
                 if expected_results["part1"] == None:
                     print("Solution not testable.")
                 elif expected_results["part1"] == str(raw_solution):
-                    print("This solution is correct!")
+                    print("\u001b[32;1mThis solution is correct!\u001b[0m")
                 else:
-                    print("This solution is incorrect! Expected solution: " + expected_results["part1"])
+                    print("\u001b[31;1mThis solution is incorrect! Expected solution: \u001b[4m" + expected_results["part1"] + "\u001b[0m")
 
     # run part 2
     if (args.part == None) or (args.part == 2):
