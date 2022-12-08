@@ -15,14 +15,22 @@ python aoc.py run 2022 6
 This would execute both parts of the solution of day 6 from 2022. If you would only like to execute the second part, you could use:
 
 ```
-python aoc.py run 2022 6 -p 2
+python aoc.py run -p 2 2022 6
 ```
 
 To use the test input instead of the real one (if a test input exists) use something like (`--test` also works):
 
 ```
-python aoc.py run 2020 12 -t
+python aoc.py run -t 2020 12
 ```
+
+To test your solution add the expected results at the top of the test file. To add a expected solution for part 1 add the following line at the beginning:
+
+```
+#!part1:<RESULT>
+```
+
+Replace `<RESULT>`with your expected result. You can do the same for part 2. The order shouldn't matter.
 
 To start the visualization use:
 
