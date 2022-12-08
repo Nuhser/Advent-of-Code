@@ -38,6 +38,8 @@ To start the visualization use:
 python aoc.py visualize
 ```
 
+You can add `--time` to the end of every run to get the time it took to complete the parsing, solving or visualization.
+
 Use `-h` or `--help` either directly or with `run` and `visualize` to see the full list of possible console parameters and their descriptions.
 
 ----
