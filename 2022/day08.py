@@ -65,9 +65,81 @@ class Solution(aoc.AbstractSolution):
         solution = len([self.tree_map[x, y] for x, y in self.tree_map if self.tree_map[x, y].visible])
         return f"Number of visible trees: {solution}", solution
 
+    def part2(self) -> tuple[str, (int | str | None)]:
+        for y in range(self.max_y + 1):
+            # calculate west view distance
+            for x in range(self.max_x + 1):
+                if x == 0:
+                    continue
+
+                x2 = x - 1
+                while x2 >= 0:
+                    self.tree_map[x, y].view_distance["west"] += 1
+
+                    if self.tree_map[x2, y].height >= self.tree_map[x, y].height:
+                        break
+
+                    x2 -= 1
+
+            # calculate east view distance
+            for x in range(self.max_x, -1, -1):
+                if x == self.max_x:
+                    continue
+
+                x2 = x + 1
+                while x2 <= self.max_x:
+                    self.tree_map[x, y].view_distance["east"] += 1
+
+                    if self.tree_map[x2, y].height >= self.tree_map[x, y].height:
+                        break
+
+                    x2 += 1
+
+        for x in range(self.max_x + 1):
+            # calculate north view distance
+            for y in range(self.max_y + 1):
+                if y == 0:
+                    continue
+
+                y2 = y - 1
+                while y2 >= 0:
+                    self.tree_map[x, y].view_distance["north"] += 1
+
+                    if self.tree_map[x, y2].height >= self.tree_map[x, y].height:
+                        break
+
+                    y2 -= 1
+
+            # calculate south view distance
+            for y in range(self.max_y, -1, -1):
+                if y == self.max_y:
+                    continue
+
+                y2 = y + 1
+                while y2 <= self.max_y:
+                    self.tree_map[x, y].view_distance["south"] += 1
+
+                    if self.tree_map[x, y2].height >= self.tree_map[x, y].height:
+                        break
+
+                    y2 += 1
+
+        if self.verbose:
+            print(f"Tree Map:\n{self.tree_map}")
+
+        solution = max([prod(self.tree_map[tree].view_distance.values()) for tree in self.tree_map])
+        return f"Highest scenic score: {solution}", solution
+
     class Tree:
         def __init__(self, height) -> None:
             self.height = height
             self.visible = False
-            self.view_distance = [0, 0, 0, 0]
-            self.scenic_view = 0
+            self.view_distance = {
+                "north": 0,
+                "south": 0,
+                "west": 0,
+                "east": 0
+            }
+
+        def __repr__(self) -> str:
+            return f"Tree(height: {self.height}, visible: {self.visible}, view_distance: {self.view_distance})"
