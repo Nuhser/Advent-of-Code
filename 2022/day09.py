@@ -21,7 +21,7 @@ class Solution(aoc.AbstractSolution):
         knots = [[0, 0], [0, 0]]
 
         # move rope
-        visited_locations = self.move_rope(knots)
+        visited_locations, _ = self.move_rope(knots)
 
         return f"The tail of the rope visited {len(visited_locations)} locations.", len(visited_locations)
 
@@ -30,14 +30,81 @@ class Solution(aoc.AbstractSolution):
         knots = [[0, 0] for _ in range(10)]
 
         # move rope
-        visited_locations = self.move_rope(knots)
+        visited_locations, _ = self.move_rope(knots)
 
         return f"The tail of the rope visited {len(visited_locations)} locations.", len(visited_locations)
 
-    def move_rope(self, knots: list[list[int]]) -> set[tuple[int, int]]:
+    def visualize(self) -> None:
+        import matplotlib.pyplot as plt
+        from matplotlib.animation import FuncAnimation
+        
+        # initialize knots
+        knots = [[0, 0] for _ in range(10)]
+
+        # move rope
+        _, history = self.move_rope(knots, save_history=True)
+
+        print(f"Need to animate {len(history)} frames.")
+
+        # initialize plot
+        fig = plt.figure()
+
+        ax = plt.axes()
+        ax.set_xticklabels([])
+        ax.set_yticklabels([])
+        ax.set_title("Rope Movement with 10 Knots")
+
+        visited_points, = ax.plot([], [], "x", ms=3)
+        line, = ax.plot([], [], "-o", lw=2)
+        head, = ax.plot([], [], "o", ms=10)
+
+        # animation init function
+        def init():
+            print()
+
+            visited_points.set_data([0], [0])
+            line.set_data([0] * 10, [0] * 10)
+            head.set_data([0], [0])
+
+            return line,
+
+        # animation function
+        def animate(i):
+            locations = history[i][0]
+
+            x_visited = [x for x, _ in history[i][1]]
+            y_visited = [y for _, y in history[i][1]]
+
+            x_locations = [x for x, _ in locations]
+            y_locations = [y for _, y in locations]
+
+            # calculate plot size
+            ax.set_xlim(min(min(x_visited), min(x_locations)) - 5, max(max(x_visited), max(x_locations)) + 5)
+            ax.set_ylim(min(min(y_visited), min(y_locations)) - 5, max(max(y_visited), max(y_locations)) + 5)
+
+            # draw points
+            visited_points.set_data(x_visited, y_visited)
+            line.set_data(x_locations, y_locations)
+            head.set_data(x_locations[0:1], y_locations[0:1])
+
+            return line,
+
+        anim = FuncAnimation(fig, animate, init_func=init, frames=len(history), interval=20, blit=True)
+
+        anim.save(
+            "2022/day09_visualization.gif",
+            progress_callback=lambda i, n: print(f"\u001b[1A\u001b[1000DAnimating frame {i + 1} of {n}..." + ("\nAnimation done. Saving GIF..." if (i+1) == n else ""))
+        )
+
+    def move_rope(self, knots: list[list[int]], save_history: bool=False) -> tuple[set[tuple[int, int]], (list[tuple[list[list[int]], list[list[int]]]] | None)]:
         # initialize visitied locations
         visited_locations = set()
         visited_locations.add((0, 0))
+
+        # initialize history
+        history = []
+        if save_history:
+            history = [([knot[:] for knot in knots], [knots[-1].copy()])]
 
         # move rope
         for direction, length in self.steps:
@@ -58,7 +125,12 @@ class Solution(aoc.AbstractSolution):
                         elif knots[i][1] < knots[i+1][1]:
                             knots[i+1][1] -= 1
 
+                # update visited locations
                 visited_locations.add((knots[-1][0], knots[-1][1]))
+
+                # update history
+                if save_history:
+                    history.append(([knot[:] for knot in knots], history[-1][1] + [knots[-1].copy()]))
 
                 if self.verbose:
                     print(f"Tail Location: {knots[-1]}")
@@ -67,7 +139,7 @@ class Solution(aoc.AbstractSolution):
             visited_location_string = "\n".join(f"[{x}, {y}]" for x, y in visited_locations)
             print(f"\nVisited Locations:\n{visited_location_string}\n")
 
-        return visited_locations
+        return visited_locations, (history if len(history) > 0 else None)
 
     def are_knots_touching(self, knot1: list[int], knot2: list[int]) -> bool:
         for x in range(-1, 2):
