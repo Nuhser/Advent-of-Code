@@ -69,7 +69,7 @@ if __name__ == "__main__":
 
     if args.track_time:
         parse_time = time.time() - parse_time
-        print(aoc.ANSI_INVERT + f"Parsing took {aoc.ANSI_ITALIC}{parse_time:.5f} seconds{aoc.ANSI_NOT_ITALIC} to complete" + aoc.ANSI_RESET)
+        print(aoc.ANSI_INVERTED + f"Parsing took {aoc.ANSI_ITALIC}{parse_time:.5f} seconds{aoc.ANSI_NOT_ITALIC} to complete" + aoc.ANSI_RESET)
 
     # start visualization and exit program if wanted
     if (args.subcommand == "visualize"):
@@ -81,7 +81,7 @@ if __name__ == "__main__":
 
         if args.track_time:
             visualization_time = time.time() - visualization_time
-            print(aoc.ANSI_INVERT + f"Visualization took {aoc.ANSI_ITALIC}{visualization_time:.5f} seconds{aoc.ANSI_NOT_ITALIC} to complete" + aoc.ANSI_RESET)
+            print(aoc.ANSI_INVERTED + f"Visualization took {aoc.ANSI_ITALIC}{visualization_time:.5f} seconds{aoc.ANSI_NOT_ITALIC} to complete" + aoc.ANSI_RESET)
 
     # else start computation run
     else:
@@ -95,24 +95,24 @@ if __name__ == "__main__":
             try:
                 solution_string, raw_solution = solution.part1()
             except (NotImplementedError, RuntimeError) as error:
-                print(aoc.ANSI_RED + f"ERROR: {error}" + aoc.ANSI_RESET)
+                print(aoc.ANSI_COLOR["red"] + f"ERROR: {error}" + aoc.ANSI_RESET)
             else:
-                print(aoc.ANSI_BLUE + solution_string + aoc.ANSI_RESET)
+                print(aoc.ANSI_COLOR["blue"] + solution_string + aoc.ANSI_RESET)
 
                 # check if solutions equals the expected test result
                 if run_is_test:
                     assert expected_results != None
 
                     if expected_results["part1"] == None:
-                        print(aoc.ANSI_YELLOW + "Solution not testable." + aoc.ANSI_RESET)
+                        print(aoc.ANSI_COLOR["yellow"] + "Solution not testable." + aoc.ANSI_RESET)
                     elif expected_results["part1"] == str(raw_solution):
-                        print(aoc.ANSI_GREEN + "This solution is correct!" + aoc.ANSI_RESET)
+                        print(aoc.ANSI_COLOR["green"] + "This solution is correct!" + aoc.ANSI_RESET)
                     else:
-                        print(aoc.ANSI_RED + "This solution is incorrect! Expected solution: " + aoc.ANSI_UNDERLINE + expected_results["part1"] + aoc.ANSI_RESET)
+                        print(aoc.ANSI_COLOR["red"] + "This solution is incorrect! Expected solution: " + aoc.ANSI_UNDERLINE + expected_results["part1"] + aoc.ANSI_RESET)
 
             if args.track_time:
                 part1_time = time.time() - part1_time
-                print(aoc.ANSI_INVERT + f"Part 1 took {aoc.ANSI_ITALIC}{part1_time:.5f} seconds{aoc.ANSI_NOT_ITALIC} to complete" + aoc.ANSI_RESET)
+                print(aoc.ANSI_INVERTED + f"Part 1 took {aoc.ANSI_ITALIC}{part1_time:.5f} seconds{aoc.ANSI_NOT_ITALIC} to complete" + aoc.ANSI_RESET)
 
         # run part 2
         if (args.part == None) or (args.part == 2):
@@ -124,24 +124,24 @@ if __name__ == "__main__":
             try:
                 solution_string, raw_solution = solution.part2()
             except (NotImplementedError, RuntimeError) as error:
-                print(aoc.ANSI_RED + f"ERROR: {error}" + aoc.ANSI_RESET)
+                print(aoc.ANSI_COLOR["red"] + f"ERROR: {error}" + aoc.ANSI_RESET)
             else:
-                print(aoc.ANSI_BLUE + solution_string + aoc.ANSI_RESET)
+                print(aoc.ANSI_COLOR["blue"] + solution_string + aoc.ANSI_RESET)
 
                 # check if solutions equals the expected test result
                 if run_is_test:
                     assert expected_results != None
 
                     if expected_results["part2"] == None:
-                        print(aoc.ANSI_YELLOW + "Solution not testable." + aoc.ANSI_RESET)
+                        print(aoc.ANSI_COLOR["yellow"] + "Solution not testable." + aoc.ANSI_RESET)
                     elif expected_results["part2"] == str(raw_solution):
-                        print(aoc.ANSI_GREEN + "This solution is correct!" + aoc.ANSI_RESET)
+                        print(aoc.ANSI_COLOR["green"] + "This solution is correct!" + aoc.ANSI_RESET)
                     else:
-                        print(aoc.ANSI_RED + "This solution is incorrect! Expected solution: " + aoc.ANSI_UNDERLINE + expected_results["part2"] + aoc.ANSI_RESET)
+                        print(aoc.ANSI_COLOR["red"] + "This solution is incorrect! Expected solution: " + aoc.ANSI_UNDERLINE + expected_results["part2"] + aoc.ANSI_RESET)
 
             if args.track_time:
                 part2_time = time.time() - part2_time
-                print(aoc.ANSI_INVERT + f"Part 2 took {aoc.ANSI_ITALIC}{part2_time:.5f} seconds{aoc.ANSI_NOT_ITALIC} to complete" + aoc.ANSI_RESET)
+                print(aoc.ANSI_INVERTED + f"Part 2 took {aoc.ANSI_ITALIC}{part2_time:.5f} seconds{aoc.ANSI_NOT_ITALIC} to complete" + aoc.ANSI_RESET)
 
     if args.track_time:
-        print(f"\n{aoc.ANSI_INVERT}Total compute time: {aoc.ANSI_ITALIC}{(parse_time + part1_time + part2_time + visualization_time):.5f} seconds" + aoc.ANSI_RESET)
+        print(f"\n{aoc.ANSI_INVERTED}Total compute time: {aoc.ANSI_ITALIC}{(parse_time + part1_time + part2_time + visualization_time):.5f} seconds" + aoc.ANSI_RESET)
