@@ -69,7 +69,7 @@ if __name__ == "__main__":
 
     if args.track_time:
         parse_time = time.time() - parse_time
-        print(f"\u001b[7mParsing took {parse_time:.5f} seconds to complete\u001b[0m")
+        print(f"\u001b[7mParsing took \u001b[3m{parse_time:.5f} seconds\u001b[23m to complete\u001b[0m")
 
     # start visualization and exit program if wanted
     if (args.subcommand == "visualize"):
@@ -81,7 +81,7 @@ if __name__ == "__main__":
 
         if args.track_time:
             visualization_time = time.time() - visualization_time
-            print(f"\u001b[7mVisualization took {visualization_time:.5f} seconds to complete\u001b[0m")
+            print(f"\u001b[7mVisualization took \u001b[3m{visualization_time:.5f} seconds\u001b[23m to complete\u001b[0m")
 
     # else start computation run
     else:
@@ -112,7 +112,7 @@ if __name__ == "__main__":
 
             if args.track_time:
                 part1_time = time.time() - part1_time
-                print(f"\u001b[7mPart 1 took {part1_time:.5f} seconds to complete\u001b[0m")
+                print(f"\u001b[7mPart 1 took \u001b[3m{part1_time:.5f} seconds\u001b[23m to complete\u001b[0m")
 
         # run part 2
         if (args.part == None) or (args.part == 2):
@@ -141,7 +141,7 @@ if __name__ == "__main__":
 
             if args.track_time:
                 part2_time = time.time() - part2_time
-                print(f"\u001b[7mPart 2 took {part2_time:.5f} seconds to complete\u001b[0m")
+                print(f"\u001b[7mPart 2 took \u001b[3m{part2_time:.5f} seconds\u001b[23m to complete\u001b[0m")
 
     if args.track_time:
-        print(f"\n\u001b[7mTotal compute time: {(parse_time + part1_time + part2_time + visualization_time):.5f} seconds\u001b[0m")
+        print(f"\n\u001b[7mTotal compute time: \u001b[3m{(parse_time + part1_time + part2_time + visualization_time):.5f} seconds\u001b[0m")
