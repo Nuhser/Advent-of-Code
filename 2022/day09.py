@@ -93,7 +93,7 @@ class Solution(aoc.AbstractSolution):
 
         anim.save(
             "2022/day09_visualization.gif",
-            progress_callback=lambda i, n: print(f"\u001b[1A\u001b[1000DAnimating frame {i + 1} of {n}..." + ("\nAnimation done. Saving GIF..." if (i+1) == n else ""))
+            progress_callback=lambda i, n: print(f"{aoc.ANSI_LINE_BEGINNING}Animating frame {i + 1} of {n}..." + ("\nAnimation done. Saving GIF..." if (i+1) == n else ""))
         )
 
     def move_rope(self, knots: list[list[int]], save_history: bool=False) -> tuple[set[tuple[int, int]], (list[tuple[list[list[int]], list[list[int]]]] | None)]:
