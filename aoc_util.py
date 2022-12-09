@@ -1,3 +1,13 @@
+ANSI_RESET = "\u001b[0m"
+ANSI_ITALIC = "\u001b[3m"
+ANSI_NOT_ITALIC = "\u001b[23m"
+ANSI_UNDERLINE = "\u001b[4m"
+ANSI_INVERT = "\u001b[7m"
+ANSI_BLUE = "\u001b[34;1m"
+ANSI_GREEN = "\u001b[32;1m"
+ANSI_RED = "\u001b[31;1m"
+ANSI_YELLOW = "\u001b[33;1m"
+
 def get_puzzle_input(year: int, day: int) -> tuple[list[str], None]:
     with open(f"./{year}/input{day:02d}.txt", "r") as puzzle_input:
         return [line for line in puzzle_input.readlines()], None
