@@ -23,10 +23,6 @@ class Solution(aoc.AbstractSolution):
         # move rope
         visited_locations = self.move_rope(knots)
 
-        if self.verbose:
-            visited_location_string = "\n".join(f"[{x}, {y}]" for x, y in visited_locations)
-            print(f"\nVisited Locations:\n{visited_location_string}\n")
-
         return f"The tail of the rope visited {len(visited_locations)} locations.", len(visited_locations)
 
     def part2(self) -> tuple[str, (int | str | None)]:
@@ -35,10 +31,6 @@ class Solution(aoc.AbstractSolution):
 
         # move rope
         visited_locations = self.move_rope(knots)
-
-        if self.verbose:
-            visited_location_string = "\n".join(f"[{x}, {y}]" for x, y in visited_locations)
-            print(f"\nVisited Locations:\n{visited_location_string}\n")
 
         return f"The tail of the rope visited {len(visited_locations)} locations.", len(visited_locations)
 
@@ -70,6 +62,10 @@ class Solution(aoc.AbstractSolution):
 
                 if self.verbose:
                     print(f"Tail Location: {knots[-1]}")
+
+        if self.verbose:
+            visited_location_string = "\n".join(f"[{x}, {y}]" for x, y in visited_locations)
+            print(f"\nVisited Locations:\n{visited_location_string}\n")
 
         return visited_locations
 
