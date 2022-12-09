@@ -30,7 +30,7 @@ To test your solution add the expected results at the top of the test file. To a
 #!part1:<RESULT>
 ```
 
-Replace `<RESULT>`with your expected result. You can do the same for part 2. The order shouldn't matter.
+Replace `<RESULT>`with your expected result. You can do the same for part 2. The order shouldn't matter. You can have multiple test inputs per day by naming them like `test03-1.txt`, `test03-2.txt`, ... To use a specific test file add the number of that file after the `-t`/`--test` parameter of the command.
 
 To start the visualization use:
 
