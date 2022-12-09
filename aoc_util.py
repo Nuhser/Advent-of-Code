@@ -61,8 +61,8 @@ def get_puzzle_input(year: int, day: int) -> tuple[list[str], None]:
     with open(f"./{year}/input{day:02d}.txt", "r") as puzzle_input:
         return [line for line in puzzle_input.readlines()], None
 
-def get_test_input(year: int, day: int) -> tuple[list[str], dict[str, (str | None)]]:
-    with open(f"./{year}/test{day:02d}.txt", "r") as test_input:
+def get_test_input(year: int, day: int, test_number: int) -> tuple[list[str], dict[str, (str | None)]]:
+    with open(f"./{year}/test{day:02d}{f'-{test_number}' if (test_number > -1) else ''}.txt", "r") as test_input:
         expected_results = {}
 
         while (True):
