@@ -21,13 +21,13 @@ def get_test_input(year: int, day: int) -> tuple[list[str], dict[str, (str | Non
 
         return [line for line in test_input.readlines()], expected_results
 
-def parse_input(puzzle_input: list[str], *delimiters: str, strip_lines: bool=True, cast_to: type=str, use_test: bool=False) -> list:
+def parse_input(puzzle_input: list[str], *delimiters: str, strip_lines: bool=True, cast_to: type=str) -> list:
     if len(delimiters) == 0:
         return [cast_to(line.strip() if strip_lines else line) for line in puzzle_input]
     else:
         return [recursive_split(line.strip() if strip_lines else line, delimiters, cast_to) for line in puzzle_input]
 
-def parse_input_with_blocks(puzzle_input: list[str], *line_delimiters: str, block_delimiter: str="", strip_lines: bool=True, cast_to: type=str, use_test: bool=False) -> list[list]:
+def parse_input_with_blocks(puzzle_input: list[str], *line_delimiters: str, block_delimiter: str="", strip_lines: bool=True, cast_to: type=str) -> list[list]:
     blocks = [[]]
     for line in [line.strip() if strip_lines else line for line in puzzle_input]:
         if line == block_delimiter:
