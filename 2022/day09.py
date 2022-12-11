@@ -52,17 +52,21 @@ class Solution(aoc.AbstractSolution):
         ax = plt.axes()
         ax.set_xticklabels([])
         ax.set_yticklabels([])
-        ax.set_title("Rope Movement with 10 Knots")
+        ax.set_title(f"Rope Movement with 10 Knots")
 
-        visited_points, = ax.plot([], [], "x", ms=3)
+        visited_points1, = ax.plot([], [], "-", lw=1, label="Part 1")
+        visited_points2, = ax.plot([], [], "-", lw=1, label="Part 2")
         line, = ax.plot([], [], "-o", lw=2)
         head, = ax.plot([], [], "o", ms=10)
+
+        ax.legend()
 
         # animation init function
         def init():
             print()
 
-            visited_points.set_data([0], [0])
+            visited_points1.set_data([0], [0])
+            visited_points2.set_data([0], [0])
             line.set_data([0] * 10, [0] * 10)
             head.set_data([0], [0])
 
@@ -72,24 +76,31 @@ class Solution(aoc.AbstractSolution):
         def animate(i):
             locations = history[i][0]
 
-            x_visited = [x for x, _ in history[i][1]]
-            y_visited = [y for _, y in history[i][1]]
+            x_visited1 = [x for x, _ in history[i][1][0]]
+            y_visited1 = [y for _, y in history[i][1][0]]
+            
+            x_visited2 = [x for x, _ in history[i][1][1]]
+            y_visited2 = [y for _, y in history[i][1][1]]
 
             x_locations = [x for x, _ in locations]
             y_locations = [y for _, y in locations]
 
             # calculate plot size
-            ax.set_xlim(min(min(x_visited), min(x_locations)) - 5, max(max(x_visited), max(x_locations)) + 5)
-            ax.set_ylim(min(min(y_visited), min(y_locations)) - 5, max(max(y_visited), max(y_locations)) + 5)
+            ax.set_xlim(min(min(x_visited1), min(x_visited1), min(x_locations)) - 5, max(max(x_visited1), max(x_visited1), max(x_locations)) + 5)
+            ax.set_ylim(min(min(y_visited1), min(y_visited1), min(y_locations)) - 5, max(max(y_visited1), max(x_visited1), max(y_locations)) + 5)
+
+            # update plot title
+            ax.set_title(f"Rope Movement with 10 Knots - Step {i+1} of {len(history)}")
 
             # draw points
-            visited_points.set_data(x_visited, y_visited)
+            visited_points1.set_data(x_visited1, y_visited1)
+            visited_points2.set_data(x_visited2, y_visited2)
             line.set_data(x_locations, y_locations)
             head.set_data(x_locations[0:1], y_locations[0:1])
 
             return line,
 
-        anim = FuncAnimation(fig, animate, init_func=init, frames=len(history), interval=20, blit=True)
+        anim = FuncAnimation(fig, animate, init_func=init, frames=len(history), interval=50, blit=True)
 
         anim.save(
             "2022/day09_visualization.gif",
@@ -104,7 +115,7 @@ class Solution(aoc.AbstractSolution):
         # initialize history
         history = []
         if save_history:
-            history = [([knot[:] for knot in knots], [knots[-1].copy()])]
+            history = [([knot[:] for knot in knots], ([knots[1].copy()], [knots[-1].copy()]))]
 
         # move rope
         for direction, length in self.steps:
@@ -130,7 +141,7 @@ class Solution(aoc.AbstractSolution):
 
                 # update history
                 if save_history:
-                    history.append(([knot[:] for knot in knots], history[-1][1] + [knots[-1].copy()]))
+                    history.append(([knot[:] for knot in knots], (history[-1][1][0] + [knots[1].copy()], history[-1][1][1] + [knots[-1].copy()])))
 
                 if self.verbose:
                     print(f"Tail Location: {knots[-1]}")
