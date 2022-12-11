@@ -42,11 +42,11 @@ class Solution(aoc.AbstractSolution):
 
         for instruction in self.instructions:
             cycle += 1
-            display += ("#" if (cycle-1) % 40 in range(X-1, X+2) else " ")
+            display += ("█" if (cycle-1) % 40 in range(X-1, X+2) else " ")
 
             if instruction[0] != "noop":
                 cycle += 1
-                display += ("#" if (cycle-1) % 40 in range(X-1, X+2) else " ")
+                display += ("█" if (cycle-1) % 40 in range(X-1, X+2) else " ")
 
                 X += int(instruction[1])
 
