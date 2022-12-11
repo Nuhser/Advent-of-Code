@@ -50,6 +50,8 @@ class Solution(aoc.AbstractSolution):
         return f"The level of monkey business is {solution}.", solution
 
     def part2(self) -> tuple[str, (int | str | None)]:
+        mod_factor = math.prod([monkey.divider for monkey in self.monkeys])
+
         for _ in range(10000):
             for idx, monkey in enumerate(self.monkeys):
                 for item in monkey.items:
@@ -65,6 +67,8 @@ class Solution(aoc.AbstractSolution):
                             raise RuntimeError(f"Unknown operator in monkey {idx}: '{monkey.operation[1]}'")
 
                     monkey.inspected_items += 1
+
+                    item %= mod_factor
 
                     if (item % monkey.divider) == 0:
                         self.monkeys[monkey.true_monkey].items.append(item)
