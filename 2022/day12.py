@@ -1,7 +1,6 @@
 import aoc_util as aoc
 import numpy as np
 import plotly.graph_objects as go
-import prettytable
 
 class Solution(aoc.AbstractSolution):
     def parse(self, puzzle_input: list[str]) -> None:
@@ -32,8 +31,6 @@ class Solution(aoc.AbstractSolution):
         weight_map_downhill = {coordinates: [(point, 1) for point in self.get_adjacent_points(*coordinates, False)] for coordinates in self.heightmap.keys()}
         _, costs = aoc.calculate_dijkstra(weight_map_downhill, self.end)
 
-        min_cost = min([costs[coordinates] for coordinates in costs])
-
         shortest_path_start = None
         shortest_path_costs = float("inf")
         for point in costs:
@@ -54,35 +51,42 @@ class Solution(aoc.AbstractSolution):
             shortest_path_part1.append(parents_map_part1[_point])
             _point = parents_map_part1[_point]
 
+        # calculate shortest path for part 1 with dijkstra
+        weight_map_downhill = {coordinates: [(point, 1) for point in self.get_adjacent_points(*coordinates, False)] for coordinates in self.heightmap.keys()}
+        parents_map_part2, costs_part2 = aoc.calculate_dijkstra(weight_map_downhill, self.end)
+
+        shortest_path_start_part2 = None
+        shortest_path_costs_part2 = float("inf")
+        for point in costs_part2:
+            if (self.heightmap[point] == 0) and (costs_part2[point] < shortest_path_costs_part2):
+                shortest_path_costs_part2 = costs_part2[point]
+                shortest_path_start_part2 = point
+
+        shortest_path_part2 = [shortest_path_start_part2]
+        _point = shortest_path_start_part2
+        while _point != self.end:
+            shortest_path_part2.append(parents_map_part2[_point])
+            _point = parents_map_part2[_point]
+
         # get arrays for height map
         z = [[self.heightmap[_x, _y] for _x in range(self.x_max + 1)] for _y in range(self.y_max + 1)]
         x = list(range(len(z[0])))
         y = list(range(len(z)))
         
         # add height map surface
-        fig = go.Figure(data = [go.Surface(z=z, x=x, y=y)])
-
-        # add height lines to top and bottom of plot
-        fig.update_traces(
-            contours_z = dict(
-                show = True,
-                usecolormap = True,
-                highlightcolor = "limegreen",
-                project_z = True
-            )
-        )
+        fig = go.Figure(data=[go.Surface(z=z, x=x, y=y, colorscale="Greens")])
 
         # add start and end point
         fig.add_scatter3d(
-            x = [self.start[0], self.end[0]],
-            y = [self.start[1], self.end[1]],
-            z = [self.heightmap[self.start], self.heightmap[self.end]],
+            x = [self.start[0], shortest_path_start_part2[0], self.end[0]],
+            y = [self.start[1], shortest_path_start_part2[1], self.end[1]],
+            z = [self.heightmap[self.start], self.heightmap[shortest_path_start_part2], self.heightmap[self.end]],
             showlegend = False,
             mode = "markers",
             marker = dict(
                 size = 10,
-                color = [0, 0],
-                colorscale = "Bluyl"
+                color = [0, 0, 0],
+                colorscale = "Plotly3"
             )
         )
 
@@ -95,10 +99,20 @@ class Solution(aoc.AbstractSolution):
             mode = "lines",
             line = dict(width=8)
         )
+
+        # add line from start to end for part 2
+        fig.add_scatter3d(
+            x = [x for x, _ in shortest_path_part2],
+            y = [y for _, y in shortest_path_part2],
+            z = [self.heightmap[point] for point in shortest_path_part2],
+            name = "Part 2",
+            mode = "lines",
+            line = dict(width=8)
+        )
         
         # add title and set layout
         fig.update_layout(
-            title = "Mountain Hight Map",
+            title = "Mountain Height Map",
             scene = dict(
                 aspectratio = dict(x=1, y=(self.y_max / self.x_max), z=0.25),
                 xaxis_title = "X",
@@ -110,7 +124,25 @@ class Solution(aoc.AbstractSolution):
                         x = self.start[0],
                         y = self.start[1],
                         z = self.heightmap[self.start],
-                        text = "Start",
+                        text = "Start (Part 1)",
+                        xanchor = "right",
+                        yanchor = "bottom",
+                        opacity = 0.7,
+                        font = dict(
+                            color = "red",
+                            size = 20
+                        ),
+                        arrowcolor = "red",
+                        arrowsize = 5,
+                        arrowwidth = 0.5,
+                        arrowhead = 2
+                    ),
+                    dict(
+                        showarrow=True,
+                        x = shortest_path_start_part2[0],
+                        y = shortest_path_start_part2[1],
+                        z = self.heightmap[shortest_path_start_part2],
+                        text = "Start (Part 2)",
                         xanchor = "right",
                         yanchor = "bottom",
                         opacity = 0.7,
@@ -145,7 +177,7 @@ class Solution(aoc.AbstractSolution):
             ),
             autosize = False,
             width = 2000,
-            height = 1200,
+            height = 1000,
             margin = dict(l=65, r=50, b=10, t=50),
             legend_orientation = "h"
         )
