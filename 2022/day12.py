@@ -22,20 +22,29 @@ class Solution(aoc.AbstractSolution):
         self.x_max = max([key[0] for key in self.heightmap.keys()])
         self.y_max = max([key[1] for key in self.heightmap.keys()])
 
-        if self.verbose:
-            table = prettytable.PrettyTable()
-            table.set_style(prettytable.DOUBLE_BORDER)
-            table.int_format="02"
-            table.align = "c"
+        self.weight_map_uphill = {coordinates: [(point, 1) for point in self.get_adjacent_points(*coordinates)] for coordinates in self.heightmap.keys()}
+        self.weight_map_downhill = {coordinates: [(point, 1) for point in self.get_adjacent_points(*coordinates, False)] for coordinates in self.heightmap.keys()}
 
-            table.field_names = [""] + list(range(self.x_max + 1))
+    def part1(self) -> tuple[str, (int | float | str | None)]:
+        _, costs = aoc.calculate_dijkstra(self.weight_map_uphill, self.start)
 
-            for y in range(self.y_max + 1):
-                table.add_row([y] + [self.heightmap[x, y] for x in range(self.x_max + 1)])
+        return f"Shortest path takes {aoc.ANSI_UNDERLINE + str(costs[self.end]) + aoc.ANSI_NOT_UNDERLINE} steps from {self.start} to {self.end}.", costs[self.end]
 
-            print(table)
+    def part2(self) -> tuple[str, (int | float | str | None)]:
+        _, costs = aoc.calculate_dijkstra(self.weight_map_uphill, self.end)
+
+        return f"Shortest path takes {aoc.ANSI_UNDERLINE + str(costs[self.end]) + aoc.ANSI_NOT_UNDERLINE} steps from {self.start} to {self.end}.", costs[self.end]
 
     def visualize(self) -> None:
+        # calculate shortest path with dijkstra
+        parents_map, _ = aoc.calculate_dijkstra(self.weight_map_uphill, self.start)
+
+        shortest_path = [self.end]
+        point = self.end
+        while point != self.start:
+            shortest_path.append(parents_map[point])
+            point = parents_map[point]
+
         # get arrays for height map
         z = [[self.heightmap[_x, _y] for _x in range(self.x_max + 1)] for _y in range(self.y_max + 1)]
         x = list(range(len(z[0])))
@@ -59,12 +68,23 @@ class Solution(aoc.AbstractSolution):
             x = [self.start[0], self.end[0]],
             y = [self.start[1], self.end[1]],
             z = [self.heightmap[self.start], self.heightmap[self.end]],
+            showlegend = False,
             mode = "markers",
             marker = dict(
                 size = 10,
-                color = [self.start[0], self.end[0]],
+                color = [0, 0],
                 colorscale = "Bluyl"
             )
+        )
+
+        # add line from start to end
+        fig.add_scatter3d(
+            x = [x for x, _ in shortest_path],
+            y = [y for _, y in shortest_path],
+            z = [self.heightmap[point] for point in shortest_path],
+            name = "Part 1",
+            mode = "lines",
+            line = dict(width=8)
         )
         
         # add title and set layout
@@ -117,7 +137,25 @@ class Solution(aoc.AbstractSolution):
             autosize = False,
             width = 2000,
             height = 1200,
-            margin = dict(l=65, r=50, b=10, t=50)
+            margin = dict(l=65, r=50, b=10, t=50),
+            legend_orientation = "h"
         )
 
         fig.show()
+
+    def get_adjacent_points(self, x: int, y: int, uphill: bool=True) -> list[tuple[int, int]]:
+        adjecent_points = []
+
+        if ((x - 1) >= 0) and (self.heightmap[x - 1, y] <= (self.heightmap[x, y] + 1)):
+            adjecent_points.append((x - 1, y))
+
+        if ((x + 1) <= self.x_max) and (self.heightmap[x + 1, y] <= (self.heightmap[x, y] + 1)):
+            adjecent_points.append((x + 1, y))
+
+        if ((y - 1) >= 0) and (self.heightmap[x, y - 1] <= (self.heightmap[x, y] + 1)):
+            adjecent_points.append((x, y - 1))
+
+        if ((y + 1) <= self.y_max) and (self.heightmap[x, y + 1] <= (self.heightmap[x, y] + 1)):
+            adjecent_points.append((x, y + 1))
+
+        return adjecent_points
