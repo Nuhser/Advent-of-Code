@@ -1,3 +1,7 @@
+import heapq as heap
+
+from collections import defaultdict
+
 ANSI_RESET = "\u001b[0m"
 
 ANSI_ITALIC = "\u001b[3m"
@@ -56,6 +60,32 @@ ANSI_LINE_BEGINNING = "\u001b[1F"
 
 ANSI_CLEAR_LINE = "\u001b[2K"
 ANSI_CLEAR_SCREEN = "\u001b[2J"
+
+class AbstractSolution:
+    def __init__(self, year: int, day: int, puzzle_input: list[str], verbose: bool=False) -> None:
+        self.year = year
+        self.day = day
+        self.verbose = verbose
+
+        if verbose:
+            print("Start parsing input...\n")
+
+        self.parse(puzzle_input)
+
+        if verbose:
+            print("Parsing complete.\n")
+
+    def parse(self, puzzle_input: list[str]) -> None:
+        raise NotImplementedError(f"The parser the puzzle input for day {self.day} of year {self.year} isn't implemented yet!")
+
+    def part1(self) -> tuple[str, (int | str | None)]:
+        raise NotImplementedError(f"Part 1 of the solution for day {self.day} of year {self.year} isn't implemented yet!")
+
+    def part2(self) -> tuple[str, (int | str | None)]:
+        raise NotImplementedError(f"Part 2 of the solution for day {self.day} of year {self.year} isn't implemented yet!")
+
+    def visualize(self) -> None:
+        raise NotImplementedError(f"The visualization for day {self.day} of year {self.year} isn't implemented yet!")
 
 def get_puzzle_input(year: int, day: int) -> tuple[list[str], None]:
     with open(f"./{year}/input{day:02d}.txt", "r") as puzzle_input:
@@ -116,28 +146,43 @@ def split_string_in_chunks(string: str, chunk_size: int, padding_size: int=0, ca
 def convert_hex_to_bin(hex_string: str) -> str:
     return str(bin(int(hex_string, base=16)))[2 :].zfill(4)
 
-class AbstractSolution:
-    def __init__(self, year: int, day: int, puzzle_input: list[str], verbose: bool=False) -> None:
-        self.year = year
-        self.day = day
-        self.verbose = verbose
+def calculate_dijkstra(map: dict[tuple[int, int], list[tuple[tuple[int, int], int]]], starting_point: tuple[int, int]) -> tuple[dict[tuple[int, int], tuple[int,int]], defaultdict[tuple[int, int], (int | float)]]:
+    """
+    This method calculates the lowest cost to get to every point on a map starting at starting_point as well as every points parent on the cheapest path from the starting point to that point.
 
-        if verbose:
-            print("Start parsing input...\n")
+    Parameter
+    ---------
+    map : dict[tuple[int, int], list[tuple[tuple[int, int], int]]]
+        A map of points where the key is a tuple of the points x- and y-coordinates and the value is a list of every adjacent point and the cost/weight to get to this point.
 
-        self.parse(puzzle_input)
+    starting_point : tuple[int, int]
+        The x- and y-coordinates of the starting point of the cost calculations.
 
-        if verbose:
-            print("Parsing complete.\n")
+    Returns
+    -------
+    parent_map, costs
+        Two dictionaries which both use the x- and y-coordinates of the points on the map as theier keys. parent_map has the parent of the individual point on the cheapest path beginning at the starting point as its value and costs the cost to get to this point.
+    """
 
-    def parse(self, puzzle_input: list[str]) -> None:
-        raise NotImplementedError(f"The parser the puzzle input for day {self.day} of year {self.year} isn't implemented yet!")
+    visited = set()
+    parents_map: dict[tuple[int, int], tuple[int,int]] = {}
+    costs: defaultdict[tuple[int, int], (int | float)] = defaultdict(lambda: float("inf"))
+    costs[starting_point] = 0
+    priority_queue = []
+    heap.heappush(priority_queue, (0, starting_point))
 
-    def part1(self) -> tuple[str, (int | str | None)]:
-        raise NotImplementedError(f"Part 1 of the solution for day {self.day} of year {self.year} isn't implemented yet!")
+    while priority_queue:
+        _, point = heap.heappop(priority_queue)
+        visited.add(point)
 
-    def part2(self) -> tuple[str, (int | str | None)]:
-        raise NotImplementedError(f"Part 2 of the solution for day {self.day} of year {self.year} isn't implemented yet!")
+        for adjacent_point, weight in map[point]:
+            if adjacent_point in visited:
+                continue
 
-    def visualize(self) -> None:
-        raise NotImplementedError(f"The visualization for day {self.day} of year {self.year} isn't implemented yet!")
+            new_cost = costs[point] + weight
+            if costs[point] > new_cost:
+                parents_map[adjacent_point] = point
+                costs[adjacent_point] = new_cost
+                heap.heappush(priority_queue, (new_cost, adjacent_point))
+
+    return parents_map, costs
