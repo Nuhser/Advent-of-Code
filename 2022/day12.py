@@ -24,7 +24,7 @@ class Solution(aoc.AbstractSolution):
 
     def part1(self) -> tuple[str, (int | float | str | None)]:
         weight_map_uphill = {coordinates: [(point, 1) for point in self.get_adjacent_points(*coordinates)] for coordinates in self.heightmap.keys()}
-        _, costs = aoc.calculate_dijkstra(weight_map_uphill, self.start)
+        _, costs = aoc.calculate_dijkstra(weight_map_uphill, self.start, self.end)
 
         return f"Shortest path takes {aoc.ANSI_UNDERLINE + str(costs[self.end]) + aoc.ANSI_NOT_UNDERLINE} steps from {self.start} to {self.end}.", costs[self.end]
 
@@ -44,15 +44,15 @@ class Solution(aoc.AbstractSolution):
         return f"Shortest path takes {aoc.ANSI_UNDERLINE + str(shortest_path_costs) + aoc.ANSI_NOT_UNDERLINE} steps from {shortest_path_start} to {self.end}.", shortest_path_costs
 
     def visualize(self) -> None:
-        # calculate shortest path with dijkstra
+        # calculate shortest path for part 1 with dijkstra
         weight_map_uphill = {coordinates: [(point, 1) for point in self.get_adjacent_points(*coordinates)] for coordinates in self.heightmap.keys()}
-        parents_map, _ = aoc.calculate_dijkstra(weight_map_uphill, self.start)
+        parents_map_part1, _ = aoc.calculate_dijkstra(weight_map_uphill, self.start, self.end)
 
-        shortest_path = [self.end]
-        point = self.end
-        while point != self.start:
-            shortest_path.append(parents_map[point])
-            point = parents_map[point]
+        shortest_path_part1 = [self.end]
+        _point = self.end
+        while _point != self.start:
+            shortest_path_part1.append(parents_map_part1[_point])
+            _point = parents_map_part1[_point]
 
         # get arrays for height map
         z = [[self.heightmap[_x, _y] for _x in range(self.x_max + 1)] for _y in range(self.y_max + 1)]
@@ -86,11 +86,11 @@ class Solution(aoc.AbstractSolution):
             )
         )
 
-        # add line from start to end
+        # add line from start to end for part 1
         fig.add_scatter3d(
-            x = [x for x, _ in shortest_path],
-            y = [y for _, y in shortest_path],
-            z = [self.heightmap[point] for point in shortest_path],
+            x = [x for x, _ in shortest_path_part1],
+            y = [y for _, y in shortest_path_part1],
+            z = [self.heightmap[point] for point in shortest_path_part1],
             name = "Part 1",
             mode = "lines",
             line = dict(width=8)

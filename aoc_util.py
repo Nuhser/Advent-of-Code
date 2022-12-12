@@ -146,7 +146,7 @@ def split_string_in_chunks(string: str, chunk_size: int, padding_size: int=0, ca
 def convert_hex_to_bin(hex_string: str) -> str:
     return str(bin(int(hex_string, base=16)))[2 :].zfill(4)
 
-def calculate_dijkstra(map: dict[tuple[int, int], list[tuple[tuple[int, int], int]]], starting_point: tuple[int, int]) -> tuple[dict[tuple[int, int], tuple[int,int]], defaultdict[tuple[int, int], (int | float)]]:
+def calculate_dijkstra(map: dict[tuple[int, int], list[tuple[tuple[int, int], int]]], starting_point: tuple[int, int], end_point: (None | tuple[int, int])=None) -> tuple[dict[tuple[int, int], tuple[int,int]], defaultdict[tuple[int, int], (int | float)]]:
     """
     This method calculates the lowest cost to get to every point on a map starting at starting_point as well as every points parent on the cheapest path from the starting point to that point.
 
@@ -184,5 +184,8 @@ def calculate_dijkstra(map: dict[tuple[int, int], list[tuple[tuple[int, int], in
                 parents_map[adjacent_point] = point
                 costs[adjacent_point] = new_cost
                 heap.heappush(priority_queue, (new_cost, adjacent_point))
+
+        if (end_point != None) and (end_point == point):
+            break
 
     return parents_map, costs
