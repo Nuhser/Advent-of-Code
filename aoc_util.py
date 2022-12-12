@@ -180,7 +180,7 @@ def calculate_dijkstra(map: dict[tuple[int, int], list[tuple[tuple[int, int], in
                 continue
 
             new_cost = costs[point] + weight
-            if costs[point] > new_cost:
+            if new_cost < costs[adjacent_point]:
                 parents_map[adjacent_point] = point
                 costs[adjacent_point] = new_cost
                 heap.heappush(priority_queue, (new_cost, adjacent_point))
