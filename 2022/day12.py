@@ -22,22 +22,31 @@ class Solution(aoc.AbstractSolution):
         self.x_max = max([key[0] for key in self.heightmap.keys()])
         self.y_max = max([key[1] for key in self.heightmap.keys()])
 
-        self.weight_map_uphill = {coordinates: [(point, 1) for point in self.get_adjacent_points(*coordinates)] for coordinates in self.heightmap.keys()}
-        self.weight_map_downhill = {coordinates: [(point, 1) for point in self.get_adjacent_points(*coordinates, False)] for coordinates in self.heightmap.keys()}
-
     def part1(self) -> tuple[str, (int | float | str | None)]:
-        _, costs = aoc.calculate_dijkstra(self.weight_map_uphill, self.start)
+        weight_map_uphill = {coordinates: [(point, 1) for point in self.get_adjacent_points(*coordinates)] for coordinates in self.heightmap.keys()}
+        _, costs = aoc.calculate_dijkstra(weight_map_uphill, self.start)
 
         return f"Shortest path takes {aoc.ANSI_UNDERLINE + str(costs[self.end]) + aoc.ANSI_NOT_UNDERLINE} steps from {self.start} to {self.end}.", costs[self.end]
 
     def part2(self) -> tuple[str, (int | float | str | None)]:
-        _, costs = aoc.calculate_dijkstra(self.weight_map_uphill, self.end)
+        weight_map_downhill = {coordinates: [(point, 1) for point in self.get_adjacent_points(*coordinates, False)] for coordinates in self.heightmap.keys()}
+        _, costs = aoc.calculate_dijkstra(weight_map_downhill, self.end)
 
-        return f"Shortest path takes {aoc.ANSI_UNDERLINE + str(costs[self.end]) + aoc.ANSI_NOT_UNDERLINE} steps from {self.start} to {self.end}.", costs[self.end]
+        min_cost = min([costs[coordinates] for coordinates in costs])
+
+        shortest_path_start = None
+        shortest_path_costs = float("inf")
+        for point in costs:
+            if (self.heightmap[point] == 0) and (costs[point] < shortest_path_costs):
+                shortest_path_costs = costs[point]
+                shortest_path_start = point
+
+        return f"Shortest path takes {aoc.ANSI_UNDERLINE + str(shortest_path_costs) + aoc.ANSI_NOT_UNDERLINE} steps from {shortest_path_start} to {self.end}.", shortest_path_costs
 
     def visualize(self) -> None:
         # calculate shortest path with dijkstra
-        parents_map, _ = aoc.calculate_dijkstra(self.weight_map_uphill, self.start)
+        weight_map_uphill = {coordinates: [(point, 1) for point in self.get_adjacent_points(*coordinates)] for coordinates in self.heightmap.keys()}
+        parents_map, _ = aoc.calculate_dijkstra(weight_map_uphill, self.start)
 
         shortest_path = [self.end]
         point = self.end
@@ -146,16 +155,30 @@ class Solution(aoc.AbstractSolution):
     def get_adjacent_points(self, x: int, y: int, uphill: bool=True) -> list[tuple[int, int]]:
         adjecent_points = []
 
-        if ((x - 1) >= 0) and (self.heightmap[x - 1, y] <= (self.heightmap[x, y] + 1)):
-            adjecent_points.append((x - 1, y))
+        if uphill:
+            if ((x - 1) >= 0) and (self.heightmap[x - 1, y] <= (self.heightmap[x, y] + 1)):
+                adjecent_points.append((x - 1, y))
 
-        if ((x + 1) <= self.x_max) and (self.heightmap[x + 1, y] <= (self.heightmap[x, y] + 1)):
-            adjecent_points.append((x + 1, y))
+            if ((x + 1) <= self.x_max) and (self.heightmap[x + 1, y] <= (self.heightmap[x, y] + 1)):
+                adjecent_points.append((x + 1, y))
 
-        if ((y - 1) >= 0) and (self.heightmap[x, y - 1] <= (self.heightmap[x, y] + 1)):
-            adjecent_points.append((x, y - 1))
+            if ((y - 1) >= 0) and (self.heightmap[x, y - 1] <= (self.heightmap[x, y] + 1)):
+                adjecent_points.append((x, y - 1))
 
-        if ((y + 1) <= self.y_max) and (self.heightmap[x, y + 1] <= (self.heightmap[x, y] + 1)):
-            adjecent_points.append((x, y + 1))
+            if ((y + 1) <= self.y_max) and (self.heightmap[x, y + 1] <= (self.heightmap[x, y] + 1)):
+                adjecent_points.append((x, y + 1))
+
+        else:
+            if ((x - 1) >= 0) and (self.heightmap[x - 1, y] >= (self.heightmap[x, y] - 1)):
+                adjecent_points.append((x - 1, y))
+
+            if ((x + 1) <= self.x_max) and (self.heightmap[x + 1, y] >= (self.heightmap[x, y] - 1)):
+                adjecent_points.append((x + 1, y))
+
+            if ((y - 1) >= 0) and (self.heightmap[x, y - 1] >= (self.heightmap[x, y] - 1)):
+                adjecent_points.append((x, y - 1))
+
+            if ((y + 1) <= self.y_max) and (self.heightmap[x, y + 1] >= (self.heightmap[x, y] - 1)):
+                adjecent_points.append((x, y + 1))
 
         return adjecent_points
