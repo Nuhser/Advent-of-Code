@@ -1,4 +1,4 @@
-# TODO: Selection, Quick, Merge, Shell, Heap, Stooge
+# TODO: Quick, Merge, Shell, Heap
 
 from typing import Any, Callable, TypeVar
 
@@ -19,6 +19,36 @@ def bubble_sort(sorting_list: list[T], comparison_function: Callable[[T, T], (bo
         
         if not swapped:
             break
+
+    return sorted_list
+
+def heap_sort(sorting_list: list[T], comparison_function: Callable[[T, T], (bool | None)]) -> list[T]:
+    # Avg.: O(n*log(n)), Best: O(n*log(n)), Worst: O(n*log(n))
+
+    def heapify(array: list[T], n: int, i: int) -> None:
+        largest = i
+        l = (2 * i) + 1
+        r = (2 * i) + 2
+
+        if (l < n) and comparison_function(array[largest], array[l]):
+            largest = l
+
+        if (r < n) and comparison_function(array[largest], array[r]):
+            largest = r
+
+        if largest != i:
+            array[i], array[largest] = array[largest], array[i]
+            heapify(array, n, largest)
+
+    sorted_list = sorting_list.copy()
+    n = len(sorted_list)
+
+    for i in range((n // 2) - 1, -1, -1):
+        heapify(sorted_list, n, i)
+
+    for i in range(n - 1, 0, -1):
+        sorted_list[i], sorted_list[0] = sorted_list[0], sorted_list[i]
+        heapify(sorted_list, i, 0)
 
     return sorted_list
 
