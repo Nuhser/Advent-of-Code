@@ -10,7 +10,7 @@ class Solution(aoc.AbstractSolution):
     def part1(self) -> tuple[str, (int | float | str | None)]:
         correct_pairs: list[int] = []
         for pair_idx, (left, right) in enumerate(self.pairs):
-            if self.compare_pair(left, right):
+            if self.compare_pairs(left, right):
                 correct_pairs.append(pair_idx + 1)
 
         solution = sum(correct_pairs)
@@ -20,7 +20,7 @@ class Solution(aoc.AbstractSolution):
         # TODO: Insertion, Selection, Quick, Merge, Shell, Heap
 
         packets = [packet for pair in self.pairs for packet in pair] + [[[2]], [[6]]]
-        ordered_packets = aoc.bubble_sort(packets, lambda a, b: self.compare_pair(a, b))
+        ordered_packets = aoc.bubble_sort(packets, lambda a, b: self.compare_pairs(a, b))
 
         divider_packets = [-1, -1]
         for idx, packet in enumerate(ordered_packets):
@@ -36,7 +36,7 @@ class Solution(aoc.AbstractSolution):
 
         return f"Decoder Key: {divider_packets[0] * divider_packets[1]}", divider_packets[0] * divider_packets[1]
 
-    def compare_pair(self, left, right) -> bool | None:
+    def compare_pairs(self, left, right) -> bool | None:
         if len(left) == 0:
             return True
 
@@ -53,14 +53,14 @@ class Solution(aoc.AbstractSolution):
                     continue
             
             elif (type(left[i]) == list) and (type(right[i]) == list):
-                comparison = self.compare_pair(left[i], right[i])
+                comparison = self.compare_pairs(left[i], right[i])
                 if (comparison == None):
                     continue
                 else:
                     return comparison
 
             else:
-                comparison = self.compare_pair(left[i] if type(left[i]) == list else [left[i]], right[i] if type(right[i]) == list else [right[i]])
+                comparison = self.compare_pairs(left[i] if type(left[i]) == list else [left[i]], right[i] if type(right[i]) == list else [right[i]])
                 if (comparison == None):
                     continue
                 else:
