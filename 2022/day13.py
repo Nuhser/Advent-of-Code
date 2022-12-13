@@ -18,8 +18,6 @@ class Solution(aoc.AbstractSolution):
         return f"Correct Pairs: {correct_pairs}\nThe sum is {aoc.ANSI_UNDERLINE + str(solution) + aoc.ANSI_NOT_UNDERLINE}", solution
 
     def part2(self) -> tuple[str, (int | float | str | None)]:
-        # TODO: Insertion, Selection, Quick, Merge, Shell, Heap, Stooge
-
         packets = [packet for pair in self.pairs for packet in pair] + [[[2]], [[6]]]
         ordered_packets = sorting.bubble_sort(packets, lambda a, b: self.compare_pairs(a, b))
 
