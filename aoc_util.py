@@ -1,7 +1,12 @@
 import heapq as heap
 
 from collections import defaultdict
+from typing import Any, Callable, TypeVar
 
+# used for generics
+T = TypeVar("T")
+
+# ANSI escapes
 ANSI_RESET = "\u001b[0m"
 
 ANSI_ITALIC = "\u001b[3m"
@@ -189,3 +194,18 @@ def calculate_dijkstra(map: dict[tuple[int, int], list[tuple[tuple[int, int], in
             break
 
     return parents_map, costs
+
+def bubble_sort(sorting_list: list[T], comparison_function: Callable[[T, T], (bool | None)]) -> list[T]:
+    sorted_list = sorting_list.copy()
+
+    swapped = False
+    for i in range(len(sorted_list) - 1):
+        for j in range(len(sorted_list) - 1 - i):
+            if not comparison_function(sorted_list[j], sorted_list[j + 1]):
+                swapped = True
+                sorted_list[j], sorted_list[j + 1] = sorted_list[j + 1], sorted_list[j]
+        
+        if not swapped:
+            break
+
+    return sorted_list
