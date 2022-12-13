@@ -2,6 +2,8 @@ import aoc_util as aoc
 import numpy as np
 import plotly.graph_objects as go
 
+from utility.path_finding import dijkstra
+
 class Solution(aoc.AbstractSolution):
     def parse(self, puzzle_input: list[str]) -> None:
         self.start = (-1, -1)
@@ -23,13 +25,13 @@ class Solution(aoc.AbstractSolution):
 
     def part1(self) -> tuple[str, (int | float | str | None)]:
         weight_map_uphill = {coordinates: [(point, 1) for point in self.get_adjacent_points(*coordinates)] for coordinates in self.heightmap.keys()}
-        _, costs = aoc.calculate_dijkstra(weight_map_uphill, self.start, self.end)
+        _, costs = dijkstra(weight_map_uphill, self.start, self.end)
 
         return f"Shortest path takes {aoc.ANSI_UNDERLINE + str(costs[self.end]) + aoc.ANSI_NOT_UNDERLINE} steps from {self.start} to {self.end}.", costs[self.end]
 
     def part2(self) -> tuple[str, (int | float | str | None)]:
         weight_map_downhill = {coordinates: [(point, 1) for point in self.get_adjacent_points(*coordinates, False)] for coordinates in self.heightmap.keys()}
-        _, costs = aoc.calculate_dijkstra(weight_map_downhill, self.end)
+        _, costs = dijkstra(weight_map_downhill, self.end)
 
         shortest_path_start = None
         shortest_path_costs = float("inf")
@@ -43,7 +45,7 @@ class Solution(aoc.AbstractSolution):
     def visualize(self) -> None:
         # calculate shortest path for part 1 with dijkstra
         weight_map_uphill = {coordinates: [(point, 1) for point in self.get_adjacent_points(*coordinates)] for coordinates in self.heightmap.keys()}
-        parents_map_part1, _ = aoc.calculate_dijkstra(weight_map_uphill, self.start, self.end)
+        parents_map_part1, _ = dijkstra(weight_map_uphill, self.start, self.end)
 
         shortest_path_part1 = [self.end]
         _point = self.end
@@ -53,7 +55,7 @@ class Solution(aoc.AbstractSolution):
 
         # calculate shortest path for part 1 with dijkstra
         weight_map_downhill = {coordinates: [(point, 1) for point in self.get_adjacent_points(*coordinates, False)] for coordinates in self.heightmap.keys()}
-        parents_map_part2, costs_part2 = aoc.calculate_dijkstra(weight_map_downhill, self.end)
+        parents_map_part2, costs_part2 = dijkstra(weight_map_downhill, self.end)
 
         shortest_path_start_part2 = None
         shortest_path_costs_part2 = float("inf")

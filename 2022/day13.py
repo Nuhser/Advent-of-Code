@@ -1,6 +1,6 @@
 import aoc_util as aoc
 import json
-import sorting
+import utility.sorting as sorting
 
 class Solution(aoc.AbstractSolution):
     def parse(self, puzzle_input: list[str]) -> None:
