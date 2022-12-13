@@ -19,10 +19,10 @@ class Solution(aoc.AbstractSolution):
 
     def part2(self) -> tuple[str, (int | float | str | None)]:
         packets = [packet for pair in self.pairs for packet in pair] + [[[2]], [[6]]]
-        ordered_packets = sorting.heap_sort(packets, lambda a, b: self.compare_pairs(a, b))
+        sorting.merge_sort(packets, lambda a, b: self.compare_pairs(a, b))
 
         divider_packets = [-1, -1]
-        for idx, packet in enumerate(ordered_packets):
+        for idx, packet in enumerate(packets):
             if packet == [[2]]:
                 divider_packets[0] = idx + 1
             if packet == [[6]]:
