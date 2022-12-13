@@ -35,6 +35,38 @@ class Solution(aoc.AbstractSolution):
 
         return f"Decoder Key: {divider_packets[0] * divider_packets[1]}", divider_packets[0] * divider_packets[1]
 
+    def visualize(self) -> None:
+        import matplotlib.pyplot as plt
+        from matplotlib.animation import FuncAnimation
+
+        figure = plt.figure()
+
+        # create subplots
+        _, ((ax_bubble, ax_heap), (ax_insertion, ax_merge), (ax_quick, ax_selection)) = plt.subplots(2, 3)
+
+        # bubble sort
+        ax_bubble.set_xticklabels([])
+        ax_bubble.set_yticklabels([])
+        points_bubble, = ax_bubble.plot([], [], "o", ms=10)
+
+        def init():
+            print()
+
+            points_bubble.set_data([0], [0])
+
+        def animate(i):
+            # bubble sort
+            ax_bubble.set_title(f"Bubble Sort - Step {i+1} of {}")
+            points_bubble.set_data([0], [0])
+
+        n_frames = 0
+
+        animation = FuncAnimation(figure, animate, init_func=init, frames=n_frames, interval=100, blit=True)
+        animation.save(
+            "2022/visualization13.gif",
+            progress_callback=lambda i, n: print(f"{aoc.ANSI_LINE_BEGINNING}Animating frame {i + 1} of {n_frames}..." + ("\nAnimation done. Saving GIF..." if (i+1) == n else ""))
+        )
+
     def compare_pairs(self, left, right) -> bool | None:
         if len(left) == 0:
             return True
