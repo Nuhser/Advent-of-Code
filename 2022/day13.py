@@ -16,6 +16,26 @@ class Solution(aoc.AbstractSolution):
         solution = sum(correct_pairs)
         return f"Correct Pairs: {correct_pairs}\nThe sum is {aoc.ANSI_UNDERLINE + str(solution) + aoc.ANSI_NOT_UNDERLINE}", solution
 
+    def part2(self) -> tuple[str, (int | float | str | None)]:
+        # TODO: Insertion, Selection, Quick, Merge, Shell, Heap
+
+        packets = [packet for pair in self.pairs for packet in pair] + [[[2]], [[6]]]
+        ordered_packets = aoc.bubble_sort(packets, lambda a, b: self.compare_pair(a, b))
+
+        divider_packets = [-1, -1]
+        for idx, packet in enumerate(ordered_packets):
+            if packet == [[2]]:
+                divider_packets[0] = idx + 1
+            if packet == [[6]]:
+                divider_packets[1] = idx + 1
+
+        if divider_packets[0] == -1:
+            raise RuntimeError("First divider packet '[[2]]' wasn't found in ordered packets!")
+        elif divider_packets[1] == -1:
+            raise RuntimeError("Second divider packet '[[6]]' wasn't found in ordered packets!")
+
+        return f"Decoder Key: {divider_packets[0] * divider_packets[1]}", divider_packets[0] * divider_packets[1]
+
     def compare_pair(self, left, right) -> bool | None:
         if len(left) == 0:
             return True
