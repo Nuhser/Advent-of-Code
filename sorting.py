@@ -1,5 +1,3 @@
-# TODO: Merge, Shell
-
 from typing import Any, Callable, TypeVar
 
 # used for generics
