@@ -41,7 +41,6 @@ class Solution(aoc.AbstractSolution):
 
     def part1(self) -> tuple[str, (int | float | str | None)]:
         sand_counter = 0
-
         while True:
             x, y = (500, 0)
             landed = False
@@ -62,6 +61,39 @@ class Solution(aoc.AbstractSolution):
                     break
 
             if not landed:
+                break
+
+        if self.verbose:
+            for y in range(self.y_min, self.y_max + 1):
+                print("".join([self.map[x, y] if (x, y) in self.map else " " for x in range(self.x_min, self.x_max + 1)]))
+
+        return f"{sand_counter} sand units landed.", sand_counter
+
+    def part2(self) -> tuple[str, (int | float | str | None)]:
+        self.y_max += 2
+
+        sand_counter = 0
+        while True:
+            x, y = (500, 0)
+
+            while True:
+                hit_gound = y >= self.y_max - 1
+                if not hit_gound and ((x, y + 1) not in self.map):
+                    y += 1
+                elif not hit_gound and ((x - 1, y + 1) not in self.map):
+                    x -= 1
+                    y += 1
+                elif not hit_gound and ((x + 1, y + 1) not in self.map):
+                    x += 1
+                    y += 1
+                else:
+                    self.map[x, y] = self.SAND_STR
+                    self.x_min = min(self.x_min, x)
+                    self.x_max = max(self.x_max, x)
+                    sand_counter += 1
+                    break
+
+            if (x, y) == (500, 0):
                 break
 
         if self.verbose:
