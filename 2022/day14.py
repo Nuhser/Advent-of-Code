@@ -113,7 +113,7 @@ class Solution(aoc.AbstractSolution):
             cave_image1.append([])
             for x in range(self.x_min, self.x_max + 1):
                 if (x, y) in self.map:
-                    cave_image1[-1].append([43, 43, 0] if self.map[x, y] == self.ROCK_STR else ([255, 0, 0] if self.map[x, y] == "o" else [252, 252, 144]))
+                    cave_image1[-1].append([66, 135, 245] if self.map[x, y] == self.ROCK_STR else ([255, 0, 0] if self.map[x, y] == "o" else [252, 252, 144]))
                 else:
                     cave_image1[-1].append([0, 0, 0])
 
@@ -125,7 +125,7 @@ class Solution(aoc.AbstractSolution):
             cave_image2.append([])
             for x in range(self.x_min, self.x_max + 1):
                 if (x, y) in self.map:
-                    cave_image2[-1].append([43, 43, 0] if self.map[x, y] == self.ROCK_STR else [252, 252, 144])
+                    cave_image2[-1].append([66, 135, 245] if self.map[x, y] == self.ROCK_STR else [252, 252, 144])
                 else:
                     cave_image2[-1].append([0, 0, 0])
 
