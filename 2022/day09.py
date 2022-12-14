@@ -103,7 +103,7 @@ class Solution(aoc.AbstractSolution):
         anim = FuncAnimation(fig, animate, init_func=init, frames=len(history), interval=50, blit=True)
 
         anim.save(
-            "2022/day09_visualization.gif",
+            "2022/visualization09.gif",
             progress_callback=lambda i, n: print(f"{aoc.ANSI_LINE_BEGINNING}Animating frame {i + 1} of {n}..." + ("\nAnimation done. Saving GIF..." if (i+1) == n else ""))
         )
 
