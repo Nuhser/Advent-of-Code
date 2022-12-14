@@ -19,3 +19,4 @@ Each day consists of one input file containing my personal randomly generated pu
 11. [Monkey in the Middle](https://github.com/Nuhser/Advent-of-Code/blob/master/2022/day11.py) (*[original task](https://adventofcode.com/2022/day/11)*)
 12. [Hill Climbing Algorithm](https://github.com/Nuhser/Advent-of-Code/blob/master/2022/day12.py) (*[original task](https://adventofcode.com/2022/day/12)*)
 13. [Distress Signal](https://github.com/Nuhser/Advent-of-Code/blob/master/2022/day13.py) (*[original task](https://adventofcode.com/2022/day/13)*)
+14. [Regolith Reservoir](https://github.com/Nuhser/Advent-of-Code/blob/master/2022/day14.py) (*[original task](https://adventofcode.com/2022/day/14)*)
