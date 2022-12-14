@@ -104,97 +104,42 @@ class Solution(aoc.AbstractSolution):
 
     def visualize(self) -> None:
         import matplotlib.pyplot as plt
-        import numpy as np
 
-        from matplotlib.animation import FuncAnimation
+        map_copy = self.map.copy()
 
-        # make map compatible with pyplot
-        self.map = {coordinates: 1 if (self.map[coordinates] == self.ROCK_STR) else 2 for coordinates in self.map if self.map[coordinates] != "o"}        
-        cave_image = np.array([[([46, 46, 46] if ((x, y) in self.map) else [0, 0, 0]) for x in range(self.x_min, self.x_max + 1)] for y in range(self.y_min, self.y_max + 1)])
-
-        # initialize plot
-        figure = plt.figure(figsize=[5, 10])
-
-        # initialize image
-        axes = plt.axes()
-        axes.axis("off")
-        axes.set_title("Advent of Code Day 14 Part 1 - Sand Falling")
-
-        # add layers
-        background = axes.imshow(cave_image)
-        axes.plot([500 - self.x_min], [0], "o", ms=3, color="r")
-        sand, = axes.plot([], [], "o", ms=3, color="y")
-
-        # get sand history
-        history = []
-
-        sand_counter = 0
-        while True:
-            x, y = (500, 0)
-            landed = False
-
-            while (x in range(self.x_min, self.x_max + 1)) and (y in range(self.y_min, self.y_max + 1)):
-                history.append((self.map, (x, y), sand_counter))
-                if (x, y + 1) not in self.map:
-                    y += 1
-                elif (x - 1, y + 1) not in self.map:
-                    x -= 1
-                    y += 1
-                elif (x + 1, y + 1) not in self.map:
-                    x += 1
-                    y += 1
+        self.part1()
+        cave_image1 = []
+        for y in range(self.y_min, self.y_max + 2):
+            cave_image1.append([])
+            for x in range(self.x_min, self.x_max + 1):
+                if (x, y) in self.map:
+                    cave_image1[-1].append([43, 43, 0] if self.map[x, y] == self.ROCK_STR else ([255, 0, 0] if self.map[x, y] == "o" else [252, 252, 144]))
                 else:
-                    self.map[x, y] = 2
-                    landed = True
-                    sand_counter += 1
-                    break
+                    cave_image1[-1].append([0, 0, 0])
 
-            history.append((self.map, None, sand_counter))
+        self.map = map_copy
 
-            if not landed:
-                break
-
-        # set frame length and number of frames
-        frame_length = 3
-        n_frames = len(history)
-        n_frames += (3000 // frame_length)
-
-        def init():
-            print()
-            return background,
-
-        def animate(i):
-            if (i == 0) or (history[i][0] != history[i - 1][0]):
-                background.set_data(np.array(
-                    [
-                        [
-                            (
-                                (
-                                    [46, 46, 46]
-                                    if self.map[x, y] == 1
-                                    else [255, 255, 0]
-                                )
-                                if ((x, y) in self.map)
-                                else [0, 0, 0]
-                            )
-                            for x in range(self.x_min, self.x_max + 1)
-                        ] for y in range(self.y_min, self.y_max + 1)
-                    ]
-                ))
-
-            if (i == 0) or (history[i][1] != history[i - 1][1]):
-                if history[i][1] == None:
-                    sand.set_data([], [])
+        self.part2()
+        cave_image2 = []
+        for y in range(self.y_min, self.y_max):
+            cave_image2.append([])
+            for x in range(self.x_min, self.x_max + 1):
+                if (x, y) in self.map:
+                    cave_image2[-1].append([43, 43, 0] if self.map[x, y] == self.ROCK_STR else [252, 252, 144])
                 else:
-                    sand.set_data([history[i][1][0]], [history[i][1][1]])
+                    cave_image2[-1].append([0, 0, 0])
 
-            if (i == 0) or (history[i][2] != history[i - 1][2]):
-                axes.set_title(f"Advent of Code Day 14 Part 1 - Sand #{history[i][2]} Falling")
+        figure, axes = plt.subplots(1, 2, width_ratios=[1, 4.25])
 
-            return background,
+        figure.tight_layout()
+        figure.suptitle("Advent of Code Day 14")
 
-        anim = FuncAnimation(figure, animate, init_func=init, frames=n_frames, interval=frame_length, blit=True)
-        anim.save(
-            "2022/visualization14.gif",
-            progress_callback=lambda i, n: print(f"{aoc.ANSI_LINE_BEGINNING}Animating frame {i + 1} of {n}..." + ("\nAnimation done. Saving GIF..." if (i+1) == n else "")),
-        )
+        axes[0].imshow(cave_image1)
+        axes[0].axis("off")
+        axes[0].set_title("Part 1")
+
+        axes[1].imshow(cave_image2)
+        axes[1].axis("off")
+        axes[1].set_title("Part 2")
+
+        plt.show()
