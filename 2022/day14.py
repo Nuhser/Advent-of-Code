@@ -5,7 +5,7 @@ class Solution(aoc.AbstractSolution):
     SAND_STR = "▒"
 
     def parse(self, puzzle_input: list[str]) -> None:
-        self.map: dict[tuple[int, int], str] = {}
+        self.map: dict[tuple[int, int], str] = {(500, 0): "o"}
 
         for line in aoc.parse_input(puzzle_input, " -> ", ",", cast_to=int):
             for idx in range(len(line) - 1):
@@ -27,9 +27,6 @@ class Solution(aoc.AbstractSolution):
                         for x in range(x2, x1 + 1):
                             self.map[x, y1] = self.ROCK_STR
 
-        if self.verbose:
-            print(self.map.keys())
-
         x_keys = [x for x, _ in self.map.keys()]
         y_keys = [y for _, y in self.map.keys()]
 
@@ -41,3 +38,34 @@ class Solution(aoc.AbstractSolution):
         if self.verbose:
             for y in range(self.y_min, self.y_max + 1):
                 print("".join([self.map[x, y] if (x, y) in self.map else " " for x in range(self.x_min, self.x_max + 1)]))
+
+    def part1(self) -> tuple[str, (int | float | str | None)]:
+        sand_counter = 0
+
+        while True:
+            x, y = (500, 0)
+            landed = False
+
+            while (x in range(self.x_min, self.x_max + 1)) and (y in range(self.y_min, self.y_max + 1)):
+                if (x, y + 1) not in self.map:
+                    y += 1
+                elif (x - 1, y + 1) not in self.map:
+                    x -= 1
+                    y += 1
+                elif (x + 1, y + 1) not in self.map:
+                    x += 1
+                    y += 1
+                else:
+                    self.map[x, y] = self.SAND_STR
+                    landed = True
+                    sand_counter += 1
+                    break
+
+            if not landed:
+                break
+
+        if self.verbose:
+            for y in range(self.y_min, self.y_max + 1):
+                print("".join([self.map[x, y] if (x, y) in self.map else " " for x in range(self.x_min, self.x_max + 1)]))
+
+        return f"{sand_counter} sand units landed.", sand_counter
