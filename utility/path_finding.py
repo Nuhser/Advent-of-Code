@@ -45,3 +45,6 @@ def dijkstra(map: dict[tuple[int, int], list[tuple[tuple[int, int], int]]], star
             break
 
     return parents_map, costs
+
+def is_in_manhattan_distance(x1: int, y1: int, x2: int, y2: int, manhattan_distance: int) -> bool:
+    return manhattan_distance >= (abs(x1 - x2) + abs(y1 - y2))
