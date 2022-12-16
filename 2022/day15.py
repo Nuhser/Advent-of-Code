@@ -4,23 +4,46 @@ from utility.path_finding import is_in_manhattan_distance
 
 class Solution(aoc.AbstractSolution):
     def parse(self, puzzle_input: list[str]) -> None:
-        self.sensors = [
-            {
-                "x": int(line[0][0].removeprefix("Sensor at x=")),
-                "y": int(line[0][1].removeprefix("y=")),
-                "beacon": {
-                    "x": int(line[1][0].removeprefix("closest beacon is at x=")),
-                    "y": int(line[1][1].removeprefix("y="))
-                }
-            }
-            for line in aoc.parse_input(puzzle_input, ": ", ", ")
-        ]
+        self.sensors: list[dict[str, (int | dict[str, int])]] = []
+        self.beacons: set[tuple[int, int]] = set()
 
-        for sensor in self.sensors:
-            sensor["distance"] = abs(sensor["x"] - sensor["beacon"]["x"]) + abs(sensor["y"] - sensor["beacon"]["y"])
+        for line in aoc.parse_input(puzzle_input, ": ", ", "):
+            sensor_x = int(line[0][0].removeprefix("Sensor at x="))
+            sensor_y = int(line[0][1].removeprefix("y="))
+            beacon_x = int(line[1][0].removeprefix("closest beacon is at x="))
+            beacon_y = int(line[1][1].removeprefix("y="))
+
+            self.beacons.add((beacon_x, beacon_y))
+
+            self.sensors.append({
+                "x": sensor_x,
+                "y": sensor_y,
+                "beacon": {
+                    "x": beacon_x,
+                    "y": beacon_y
+                },
+                "distance": abs(sensor_x - beacon_x) + abs(sensor_y - beacon_y)
+            })
 
         if self.verbose:
             print(f"Sensors:\n{json.dumps(self.sensors, indent=2)}\n")
+
+    def part1(self) -> tuple[str, (int | float | str | None)]:
+        inspection_row = 10 if self.is_test else 2000000
+
+        points: set[int, int] = set()
+        for sensor in self.sensors:
+            if inspection_row not in range(sensor["y"] - sensor["distance"], sensor["y"] + sensor["distance"] + 1):
+                continue
+
+            x_min = sensor["x"] - (sensor["distance"] - abs(inspection_row - sensor["y"]))
+            x_max = sensor["x"] + (sensor["distance"] - abs(inspection_row - sensor["y"]))
+
+            for x in range(x_min, x_max + 1):
+                if (x, inspection_row) not in self.beacons:
+                    points.add(x)
+
+        return f"{len(points)} points are covered by at least one beacon in row {inspection_row}.", len(points)
 
     def visualize(self) -> None:
         import matplotlib.pyplot as plt
