@@ -59,10 +59,12 @@ ANSI_CLEAR_LINE = "\u001b[2K"
 ANSI_CLEAR_SCREEN = "\u001b[2J"
 
 class AbstractSolution:
-    def __init__(self, year: int, day: int, puzzle_input: list[str], verbose: bool=False) -> None:
+    def __init__(self, year: int, day: int, puzzle_input: list[str], *params, is_test: bool=False, verbose: bool=False) -> None:
         self.year = year
         self.day = day
+        self.is_test = is_test
         self.verbose = verbose
+        self.params = params
 
         if verbose:
             print("Start parsing input...\n")

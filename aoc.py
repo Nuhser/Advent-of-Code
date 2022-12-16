@@ -14,6 +14,7 @@ if __name__ == "__main__":
 
     parser.add_argument("year", type=int, metavar="YEAR", help="year to use")
     parser.add_argument("day", type=int, metavar="DAY", help="day to use")
+    parser.add_argument("--params", metavar="PARAM", dest="params", nargs="+", help="additional parameter that may be used by some solutions")
     parser.add_argument("--time", action="store_true", dest="track_time", help="track the time it takes to parse the input and compute the solutions/visualization")
     parser.add_argument("-v", "--verbose", action="store_true", dest="verbose", help="show more logs while running")
 
@@ -64,7 +65,14 @@ if __name__ == "__main__":
         parse_time = time.time()
 
     try:
-        solution = importlib.import_module(f"{args.year}.day{args.day:02d}").Solution(args.year, args.day, puzzle_input, args.verbose)
+        solution = importlib.import_module(f"{args.year}.day{args.day:02d}").Solution(
+            args.year,
+            args.day,
+            puzzle_input,
+            *args.params if args.params != None else [],
+            is_test=run_is_test,
+            verbose=args.verbose
+        )
     except ModuleNotFoundError:
         raise ModuleNotFoundError(f"There is no solution module for day {args.day} of year {args.year}! Create a module named '{args.year}/day{args.day:02d}.py'")
 
