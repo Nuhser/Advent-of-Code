@@ -4,7 +4,7 @@ from utility.path_finding import is_in_manhattan_distance
 
 class Solution(aoc.AbstractSolution):
     def parse(self, puzzle_input: list[str]) -> None:
-        self.sensors: list[dict[str, (int | dict[str, int])]] = []
+        self.sensors: dict[tuple[int, int], int] = dict()
         self.beacons: set[tuple[int, int]] = set()
 
         for line in aoc.parse_input(puzzle_input, ": ", ", "):
@@ -14,30 +14,21 @@ class Solution(aoc.AbstractSolution):
             beacon_y = int(line[1][1].removeprefix("y="))
 
             self.beacons.add((beacon_x, beacon_y))
-
-            self.sensors.append({
-                "x": sensor_x,
-                "y": sensor_y,
-                "beacon": {
-                    "x": beacon_x,
-                    "y": beacon_y
-                },
-                "distance": abs(sensor_x - beacon_x) + abs(sensor_y - beacon_y)
-            })
+            self.sensors[sensor_x, sensor_y] = abs(sensor_x - beacon_x) + abs(sensor_y - beacon_y)
 
         if self.verbose:
             print(f"Sensors:\n{json.dumps(self.sensors, indent=2)}\n")
 
     def part1(self) -> tuple[str, (int | float | str | None)]:
-        inspection_row = 10 if self.is_test else 2000000
+        inspection_row = 10 if self.is_test else 2_000_000
 
         points: set[int, int] = set()
-        for sensor in self.sensors:
-            if inspection_row not in range(sensor["y"] - sensor["distance"], sensor["y"] + sensor["distance"] + 1):
+        for (x, y), distance in self.sensors.items():
+            if inspection_row not in range(y - distance, y + distance + 1):
                 continue
 
-            x_min = sensor["x"] - (sensor["distance"] - abs(inspection_row - sensor["y"]))
-            x_max = sensor["x"] + (sensor["distance"] - abs(inspection_row - sensor["y"]))
+            x_min = x - (distance - abs(inspection_row - y))
+            x_max = x + (distance - abs(inspection_row - y))
 
             for x in range(x_min, x_max + 1):
                 if (x, inspection_row) not in self.beacons:
@@ -52,21 +43,24 @@ class Solution(aoc.AbstractSolution):
 
         sensors_x = []
         sensors_y = []
+        distances = []
         beacons_x = []
         beacons_y = []
-        distances = []
-        for sensor in self.sensors:
-            sensors_x.append(sensor["x"])
-            sensors_y.append(sensor["y"])
-            beacons_x.append(sensor["beacon"]["x"])
-            beacons_y.append(sensor["beacon"]["y"])
-            distances.append(sensor["distance"])
+
+        for (x, y), distance in self.sensors.items():
+            sensors_x.append(x)
+            sensors_y.append(y)
+            distances.append(distance)
+
+        for beacon in self.beacons:
+            beacons_x.append(beacon[0])
+            beacons_y.append(beacon[1])
 
         figure, ax = plt.subplots(dpi=300)
 
         ax.plot(sensors_x, sensors_y, "o", label="Sensors")
         ax.plot(beacons_x, beacons_y, "o", marker="$\U0001f4e1$", label="Beacons")
-        line = ax.axhline(y=2000000, color="red", linestyle=":")
+        line = ax.axhline(y=2_000_000, color="red", linestyle=":")
 
         ax.set_xlim(min(sensors_x + beacons_x) - 1e5, max(sensors_x + beacons_x) + 1e5)
         ax.set_ylim(min(sensors_y + beacons_y) - 1e5, max(sensors_y + beacons_y) + 1e5)
