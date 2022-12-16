@@ -24,18 +24,6 @@ ANSI_COLOR = {
     "white": "\u001b[37;1m"
 }
 
-ANSI_COLOR = {
-    "default": "\u001b[39;1m",
-    "black": "\u001b[30;1m",
-    "blue": "\u001b[34;1m",
-    "cyan": "\u001b[36;1m",
-    "green": "\u001b[32;1m",
-    "magenta": "\u001b[35;1m",
-    "red": "\u001b[31;1m",
-    "yellow": "\u001b[33;1m",
-    "white": "\u001b[37;1m"
-}
-
 ANSI_BG_COLOR = {
     "default": "\u001b[49;1m",
     "black": "\u001b[40;1m",
