@@ -1,6 +1,5 @@
 import aoc_util as aoc
 import json
-from utility.path_finding import is_in_manhattan_distance
 
 class Solution(aoc.AbstractSolution):
     def parse(self, puzzle_input: list[str]) -> None:
@@ -35,6 +34,49 @@ class Solution(aoc.AbstractSolution):
                     points.add(x)
 
         return f"{len(points)} points are covered by at least one beacon in row {inspection_row}.", len(points)
+
+    def part2(self) -> tuple[str, (int | float | str | None)]:
+        # Based on https://github.com/noah-clements/AoC2022/blob/master/day15/day15.py
+
+        max_coordinate = 20 if self.is_test else 4_000_000
+
+        checked_points = set()
+        for (x, y), distance in self.sensors.items():
+            for side in range(4):
+                for i in range(distance+1):
+                    found = False
+
+                    if side == 0:
+                        cx = x + distance + 1 - i
+                        cy = y + i
+                    elif side == 1:
+                        cx = x - i
+                        cy = y + distance + 1 - i
+                    elif side == 2:
+                        cx = x - distance - 1 + i
+                        cy = y - i
+                    else:
+                        cx = x + i
+                        cy = y - distance - 1 + i
+
+                    if ((0 <= cx <= max_coordinate) and (0 <= cy <= max_coordinate) and ((cx, cy) not in checked_points)):
+                        found = all([(abs(cx - other_x) + abs(cy - other_y)) > other_distance for (other_x, other_y), other_distance in self.sensors.items()])
+
+                    if found:
+                        solution = 4_000_000 * cx + cy
+                        break
+                    else:
+                        checked_points.add((cx, cy))
+                
+                else:
+                    continue
+                break
+
+            else:
+                continue
+            break
+
+        return f"Only Possible Point: {cx}, {cy}\nTuning Frequency: {solution}", solution
 
     def visualize(self) -> None:
         import matplotlib.pyplot as plt
