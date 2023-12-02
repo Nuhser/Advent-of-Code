@@ -1,6 +1,6 @@
 # Advent of Code
 
-> **WARNING**
+> :warning: **WARNING**
 > This repository uses features that aren't available until Python version *3.12.0*. Using older version of python may result in errors.
 
 This repository is a collection of my solutions for the **Advent of Code** throughout the years.
