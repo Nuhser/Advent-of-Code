@@ -7,3 +7,4 @@ Each day consists of one input file containing my personal randomly generated pu
 ## This Year's Tasks
 
 1. [Trebuchet?!](https://github.com/Nuhser/Advent-of-Code/blob/master/2023/day01.py) (*[original task](https://adventofcode.com/2023/day/1)*)
+2. [Cube Conundrum](https://github.com/Nuhser/Advent-of-Code/blob/master/2023/day02.py) (*[original task](https://adventofcode.com/2023/day/2)*)
