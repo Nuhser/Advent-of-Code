@@ -38,8 +38,6 @@ class Solution(aoc.AbstractSolution):
 
     @override
     def part2(self) -> tuple[str, (int | float | str | None)]:
-        power_sum = 0
-        for game in self.games:
-            power_sum += max(game["red"]) * max(game["green"]) * max(game["blue"])
+        power_sum = sum([max(game["red"]) * max(game["green"]) * max(game["blue"]) for game in self.games])
 
         return f"Sum of all games powers: {power_sum}", power_sum
