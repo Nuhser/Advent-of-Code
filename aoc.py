@@ -126,8 +126,7 @@ class Solution(aoc.AbstractSolution):
 
     @override
     def part2(self) -> tuple[str, (int | float | str | None)]:
-        raise NotImplementedError(f"Part 2 of the solution for day {self.day} of year {self.year} isn't implemented yet!")
-"""
+        raise NotImplementedError(f"Part 2 of the solution for day {self.day} of year {self.year} isn't implemented yet!")"""
         )
 
     with open(f"./{args.year}/input{args.day:02d}.txt", "w") as input_file:
@@ -137,7 +136,6 @@ class Solution(aoc.AbstractSolution):
         test_file.write(
 """#!part1:?
 #!part2:?
-
 """
         )
 
