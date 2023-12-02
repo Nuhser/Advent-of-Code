@@ -1,5 +1,8 @@
 # Advent of Code
 
+> **WARNING**
+> This repository uses features that aren't available until Python version *3.12.0*. Using older version of python may result in errors.
+
 This repository is a collection of my solutions for the **Advent of Code** throughout the years.
 
 There is one folder per year. Each folder contains my puzzle inputs and solutions. The solutions make use of the code from [aoc_util.py](https://github.com/Nuhser/Advent-of-Code/blob/master/aoc_util.py). This a utility script I use for parsing the puzzle inputs. It also contains an class which I use as the parent class of my daily solutions.

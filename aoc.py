@@ -10,18 +10,60 @@ if __name__ == "__main__":
         description = "",
         epilog = "If you have problems or questions, contact me at mail@nuhser.com."
     )
-    subparsers = parser.add_subparsers(help="subcommands for running solution/tests or visualizing", dest="subcommand")
+    subparsers = parser.add_subparsers(
+        help="subcommands for running solution/tests, visualizing and creating a new blank day",
+        dest="subcommand"
+    )
 
-    parser.add_argument("year", type=int, metavar="YEAR", help="year to use")
-    parser.add_argument("day", type=int, metavar="DAY", help="day to use")
-    parser.add_argument("--params", metavar="PARAM", dest="params", nargs="+", help="additional parameter that may be used by some solutions")
-    parser.add_argument("--time", action="store_true", dest="track_time", help="track the time it takes to parse the input and compute the solutions/visualization")
-    parser.add_argument("-v", "--verbose", action="store_true", dest="verbose", help="show more logs while running")
+    parser.add_argument(
+        "year",
+        type=int,
+        metavar="YEAR",
+        help="year to use"
+    )
+    parser.add_argument(
+        "day",
+        type=int,
+        metavar="DAY",
+        help="day to use"
+    )
+    parser.add_argument(
+        "--params",
+        metavar="PARAM",
+        dest="params",
+        nargs="+",
+        help="additional parameter that may be used by some solutions"
+    )
+    parser.add_argument(
+        "--time",
+        action="store_true",
+        dest="track_time",
+        help="track the time it takes to parse the input and compute the solutions/visualization"
+    )
+    parser.add_argument(
+        "-v", "--verbose",
+        action="store_true",
+        dest="verbose",
+        help="show more logs while running"
+    )
 
     run_parser = subparsers.add_parser("run")
-    run_parser.add_argument("-t", "--test", type=int, dest="test_number", const=-1, nargs="?", metavar="TEST_NUMBER", help="run is a test and should use the test input and solution (add a number if you have multiple test files)")
-    # run_parser.add_argument("-t", "--test", action="store_true", dest="run_is_test", help="run is a test and should use the test input and solutions")
-    run_parser.add_argument("-p", "--part", type=int, dest="part", choices=[0, 1, 2], help="which part of the task should be executed (default: both), use 0 to test only the parser")
+    run_parser.add_argument(
+        "-t", "--test",
+        type=int,
+        dest="test_number",
+        const=-1,
+        nargs="?",
+        metavar="TEST_NUMBER",
+        help="run is a test and should use the test input and solution (add a number if you have multiple test files)"
+    )
+    run_parser.add_argument(
+        "-p", "--part",
+        type=int,
+        dest="part",
+        choices=[0, 1, 2],
+        help="which part of the task should be executed (default: both), use 0 to test only the parser"
+    )
 
     visualization_parser = subparsers.add_parser("visualize")
 
@@ -35,17 +77,18 @@ if __name__ == "__main__":
     # check if run is test
     run_is_test = (args.subcommand == "run") and (args.test_number != None)
 
-    if (args.subcommand == "run"):
-        print(f"{'Testing' if run_is_test else 'Executing'} year {args.year} day {args.day}...")
-    else:
-        print("Starting visualization...")
+    match args.subcommand:
+        case "run":
+            print(f"{"Testing" if run_is_test else "Executing"} year {args.year} day {args.day}...")
+        case "visualize":
+            print("Starting visualization...")
 
     # get puzzle/test input
     try:
         puzzle_input, expected_results = aoc.get_puzzle_input(args.year, args.day) if not run_is_test else aoc.get_test_input(args.year, args.day, args.test_number)
     except FileNotFoundError:
         if run_is_test:
-            raise FileNotFoundError(f"There is no test input for day {args.day} of year {args.year}! Create a text file named '{args.year}/test{args.day:02d}{f'-{args.test_number}' if (args.test_number > -1) else ''}.txt'")
+            raise FileNotFoundError(f"There is no test input for day {args.day} of year {args.year}! Create a text file named '{args.year}/test{args.day:02d}{f"-{args.test_number}" if (args.test_number > -1) else ""}.txt'")
         else:
             raise FileNotFoundError(f"There is no puzzle input for day {args.day} of year {args.year}! Create a text file named '{args.year}/input{args.day:02d}.txt'")
 
