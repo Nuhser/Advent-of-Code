@@ -1,4 +1,5 @@
 import aoc_util as aoc
+import utility.neighbors as neighbors
 
 from typing import override
 
@@ -32,9 +33,6 @@ class Solution(aoc.AbstractSolution):
 
                         part_numbers.append(int("".join([str(self.schematic[x, y_idx]) for x in range(x_idx, x_idx+consumed_chars+1)])))
 
-                        if(self.verbose):
-                            print(f"Found part number: {part_numbers[-1]}")
-
                     x_idx += consumed_chars
 
                 x_idx += 1
@@ -47,18 +45,20 @@ class Solution(aoc.AbstractSolution):
                 break
 
         if (self.verbose):
-            print(f"Part numbers: {part_numbers}")
+            print(f"Found part numbers: {part_numbers}")
             
         part_number_sum = sum(part_numbers)
         return f"Parts found: {len(part_numbers)}\nSum of part numbers: {part_number_sum}", part_number_sum
 
 
-    def check_for_symbol_recursively(self, x_idx: int, y_idx: int) -> tuple[bool, int]:
-        neighbors = [(x, y) for y in range(y_idx-1, y_idx+2) for x in range(x_idx-1, x_idx+2)]
+    @override
+    def part2(self) -> tuple[str, (int | float | str | None)]:
+        raise NotImplementedError(f"Part 2 of the solution for day {self.day} of year {self.year} isn't implemented yet!")
 
-        for coord in neighbors:
-            if (coord in self.schematic) and (isinstance(self.schematic[coord], str)):
-                return True, 0
+
+    def check_for_symbol_recursively(self, x_idx: int, y_idx: int) -> tuple[bool, int]:
+        if (neighbors.has_matching_neighbors(self.schematic, (x_idx, y_idx), (lambda n: isinstance(n, str)))):
+            return True, 0
             
         if ((x_idx+1, y_idx) in self.schematic) and (isinstance(self.schematic[x_idx+1, y_idx], int)):
             is_part_number, consumed_chars = self.check_for_symbol_recursively(x_idx+1, y_idx)
@@ -75,8 +75,3 @@ class Solution(aoc.AbstractSolution):
             additional_digits += 1
 
         return additional_digits
-
-
-    @override
-    def part2(self) -> tuple[str, (int | float | str | None)]:
-        raise NotImplementedError(f"Part 2 of the solution for day {self.day} of year {self.year} isn't implemented yet!")
