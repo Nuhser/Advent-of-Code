@@ -1,8 +1,8 @@
+from utility.path_finding import dijkstra
+from utility.terminal_formatting import Formatting
 import aoc_util as aoc
-import numpy as np
 import plotly.graph_objects as go
 
-from utility.path_finding import dijkstra
 
 class Solution(aoc.AbstractSolution):
     def parse(self, puzzle_input: list[str]) -> None:
@@ -27,7 +27,7 @@ class Solution(aoc.AbstractSolution):
         weight_map_uphill = {coordinates: [(point, 1) for point in self.get_adjacent_points(*coordinates)] for coordinates in self.heightmap.keys()}
         _, costs = dijkstra(weight_map_uphill, self.start, self.end)
 
-        return f"Shortest path takes {aoc.ANSI_UNDERLINE + str(costs[self.end]) + aoc.ANSI_NOT_UNDERLINE} steps from {self.start} to {self.end}.", costs[self.end]
+        return f"Shortest path takes {Formatting.UNDERLINE + str(costs[self.end]) + Formatting.NOT_UNDERLINE} steps from {self.start} to {self.end}.", costs[self.end]
 
     def part2(self) -> tuple[str, (int | float | str | None)]:
         weight_map_downhill = {coordinates: [(point, 1) for point in self.get_adjacent_points(*coordinates, False)] for coordinates in self.heightmap.keys()}
@@ -40,7 +40,7 @@ class Solution(aoc.AbstractSolution):
                 shortest_path_costs = costs[point]
                 shortest_path_start = point
 
-        return f"Shortest path takes {aoc.ANSI_UNDERLINE + str(shortest_path_costs) + aoc.ANSI_NOT_UNDERLINE} steps from {shortest_path_start} to {self.end}.", shortest_path_costs
+        return f"Shortest path takes {Formatting.UNDERLINE + str(shortest_path_costs) + Formatting.NOT_UNDERLINE} steps from {shortest_path_start} to {self.end}.", shortest_path_costs
 
     def visualize(self) -> None:
         # calculate shortest path for part 1 with dijkstra

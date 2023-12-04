@@ -1,3 +1,4 @@
+from utility.terminal_formatting import Color, Formatting
 import aoc_util as aoc
 import argparse
 import importlib
@@ -85,23 +86,23 @@ def create_new_day() -> None:
     print(f"Creating new blank day for {args.day:02d}.12.{args.year} '{args.name}'...")
 
     if not os.path.isdir(f"./{args.year}"):
-        print(f"{aoc.ANSI_COLOR["red"]}ERROR: There isn't a directory for the year {args.year} yet. Please create one including a file named {aoc.ANSI_ITALIC}README.md{aoc.ANSI_NOT_ITALIC}.{aoc.ANSI_RESET}")
+        print(f"{Color.RED}ERROR: There isn't a directory for the year {args.year} yet. Please create one including a file named {Formatting.ITALIC}README.md{Formatting.NOT_ITALIC}.{Formatting.RESET}")
         return
     
     if not os.path.isfile(f"./{args.year}/README.md"):
-        print(f"{aoc.ANSI_COLOR["red"]}ERROR: There isn't a {aoc.ANSI_ITALIC}README.md{aoc.ANSI_NOT_ITALIC} for the year {args.year} yet. Please create the file.{aoc.ANSI_RESET}")
+        print(f"{Color.RED}ERROR: There isn't a {Formatting.ITALIC}README.md{Formatting.NOT_ITALIC} for the year {args.year} yet. Please create the file.{Formatting.RESET}")
         return
     
     if os.path.isfile(f"./{args.year}/day{args.day:02d}.py"):
-        print(f"{aoc.ANSI_COLOR["red"]}ERROR: A solution file already exists for day {args.day} of year {args.year}.{aoc.ANSI_RESET}")
+        print(f"{Color.RED}ERROR: A solution file already exists for day {args.day} of year {args.year}.{Formatting.RESET}")
         return
     
     if os.path.isfile(f"./{args.year}/input{args.day:02d}.txt"):
-        print(f"{aoc.ANSI_COLOR["red"]}ERROR: A input file already exists for day {args.day} of year {args.year}.{aoc.ANSI_RESET}")
+        print(f"{Color.RED}ERROR: A input file already exists for day {args.day} of year {args.year}.{Formatting.RESET}")
         return
     
     if os.path.isfile(f"./{args.year}/test{args.day:02d}.txt") or os.path.isfile(f"./{args.year}/test{args.day:02d}-1.txt") or os.path.isfile(f"./{args.year}/test{args.day:02d}-2.txt"):
-        print(f"{aoc.ANSI_COLOR["red"]}ERROR: One or more test file(s) already exists for day {args.day} of year {args.year}.{aoc.ANSI_RESET}")
+        print(f"{Color.RED}ERROR: One or more test file(s) already exists for day {args.day} of year {args.year}.{Formatting.RESET}")
         return
     
     with open(f"./{args.year}/README.md", "a") as readme_file:
@@ -137,7 +138,7 @@ def parse_input() -> tuple:
 
     if args.track_time:
         parse_time = time.time() - parse_time
-        print(aoc.ANSI_INVERTED + f"Parsing took {aoc.ANSI_ITALIC}{parse_time:.5f} seconds{aoc.ANSI_NOT_ITALIC} to complete" + aoc.ANSI_RESET)
+        print(Formatting.INVERTED + f"Parsing took {Formatting.ITALIC}{parse_time:.5f} seconds{Formatting.NOT_ITALIC} to complete" + Formatting.RESET)
 
     return solution, parse_time
 
@@ -156,24 +157,24 @@ def run() -> float:
         try:
             solution_string, raw_solution = solution.part1()
         except (NotImplementedError, RuntimeError) as error:
-            print(aoc.ANSI_COLOR["red"] + f"ERROR: {error}" + aoc.ANSI_RESET)
+            print(Color.RED + f"ERROR: {error}" + Formatting.RESET)
         else:
-            print(aoc.ANSI_COLOR["blue"] + solution_string + aoc.ANSI_RESET)
+            print(Color.BLUE + solution_string + Formatting.RESET)
 
             # check if solutions equals the expected test result
             if run_is_test:
                 assert expected_results != None
 
                 if expected_results["part1"] == None:
-                    print(aoc.ANSI_COLOR["yellow"] + "Solution not testable." + aoc.ANSI_RESET)
+                    print(Color.YELLOW + "Solution not testable." + Formatting.RESET)
                 elif expected_results["part1"] == str(raw_solution):
-                    print(aoc.ANSI_COLOR["green"] + "This solution is correct!" + aoc.ANSI_RESET)
+                    print(Color.GREEN + "This solution is correct!" + Formatting.RESET)
                 else:
-                    print(aoc.ANSI_COLOR["red"] + "This solution is incorrect! Expected solution: " + aoc.ANSI_UNDERLINE + expected_results["part1"] + aoc.ANSI_RESET)
+                    print(Color.RED + "This solution is incorrect! Expected solution: " + Formatting.UNDERLINE + expected_results["part1"] + Formatting.RESET)
 
         if args.track_time:
             part1_time = time.time() - part1_time
-            print(aoc.ANSI_INVERTED + f"Part 1 took {aoc.ANSI_ITALIC}{part1_time:.5f} seconds{aoc.ANSI_NOT_ITALIC} to complete" + aoc.ANSI_RESET)
+            print(Formatting.INVERTED + f"Part 1 took {Formatting.ITALIC}{part1_time:.5f} seconds{Formatting.NOT_ITALIC} to complete" + Formatting.RESET)
 
     # run part 2
     if (args.part == None) or (args.part == 2):
@@ -185,24 +186,24 @@ def run() -> float:
         try:
             solution_string, raw_solution = solution.part2()
         except (NotImplementedError, RuntimeError) as error:
-            print(aoc.ANSI_COLOR["red"] + f"ERROR: {error}" + aoc.ANSI_RESET)
+            print(Color.RED + f"ERROR: {error}" + Formatting.RESET)
         else:
-            print(aoc.ANSI_COLOR["blue"] + solution_string + aoc.ANSI_RESET)
+            print(Color.BLUE + solution_string + Formatting.RESET)
 
             # check if solutions equals the expected test result
             if run_is_test:
                 assert expected_results != None
 
                 if expected_results["part2"] == None:
-                    print(aoc.ANSI_COLOR["yellow"] + "Solution not testable." + aoc.ANSI_RESET)
+                    print(Color.YELLOW + "Solution not testable." + Formatting.RESET)
                 elif expected_results["part2"] == str(raw_solution):
-                    print(aoc.ANSI_COLOR["green"] + "This solution is correct!" + aoc.ANSI_RESET)
+                    print(Color.GREEN + "This solution is correct!" + Formatting.RESET)
                 else:
-                    print(aoc.ANSI_COLOR["red"] + "This solution is incorrect! Expected solution: " + aoc.ANSI_UNDERLINE + expected_results["part2"] + aoc.ANSI_RESET)
+                    print(Color.RED + "This solution is incorrect! Expected solution: " + Formatting.UNDERLINE + expected_results["part2"] + Formatting.RESET)
 
         if args.track_time:
             part2_time = time.time() - part2_time
-            print(aoc.ANSI_INVERTED + f"Part 2 took {aoc.ANSI_ITALIC}{part2_time:.5f} seconds{aoc.ANSI_NOT_ITALIC} to complete" + aoc.ANSI_RESET)
+            print(Formatting.INVERTED + f"Part 2 took {Formatting.ITALIC}{part2_time:.5f} seconds{Formatting.NOT_ITALIC} to complete" + Formatting.RESET)
 
     return part1_time + part2_time
 
@@ -218,7 +219,7 @@ def visualize() -> float:
 
     if args.track_time:
         visualization_time = time.time() - visualization_time
-        print(aoc.ANSI_INVERTED + f"Visualization took {aoc.ANSI_ITALIC}{visualization_time:.5f} seconds{aoc.ANSI_NOT_ITALIC} to complete" + aoc.ANSI_RESET)
+        print(Formatting.INVERTED + f"Visualization took {Formatting.ITALIC}{visualization_time:.5f} seconds{Formatting.NOT_ITALIC} to complete" + Formatting.RESET)
 
     return visualization_time
 
@@ -276,6 +277,6 @@ if __name__ == "__main__":
             run_time = run()
 
     if args.track_time:
-        print(f"\n{aoc.ANSI_INVERTED}Total compute time: {aoc.ANSI_ITALIC}{(parse_time + run_time + visualization_time):.5f} seconds" + aoc.ANSI_RESET)
+        print(f"\n{Formatting.INVERTED}Total compute time: {Formatting.ITALIC}{(parse_time + run_time + visualization_time):.5f} seconds" + Formatting.RESET)
 
     print()

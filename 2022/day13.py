@@ -1,3 +1,4 @@
+from utility.terminal_formatting import Formatting, Navigation
 import aoc_util as aoc
 import json
 import utility.sorting as sorting
@@ -15,7 +16,7 @@ class Solution(aoc.AbstractSolution):
                 correct_pairs.append(pair_idx + 1)
 
         solution = sum(correct_pairs)
-        return f"Correct Pairs: {correct_pairs}\nThe sum is {aoc.ANSI_UNDERLINE + str(solution) + aoc.ANSI_NOT_UNDERLINE}", solution
+        return f"Correct Pairs: {correct_pairs}\nThe sum is {Formatting.UNDERLINE + str(solution) + Formatting.NOT_UNDERLINE}", solution
 
     def part2(self) -> tuple[str, (int | float | str | None)]:
         packets = [packet for pair in self.pairs for packet in pair] + [[[2]], [[6]]]
@@ -132,7 +133,7 @@ class Solution(aoc.AbstractSolution):
         animation = FuncAnimation(figure, animate, init_func=init, frames=n_frames, interval=frame_time, blit=True)
         animation.save(
             "2022/visualization13.gif",
-            progress_callback=lambda i, n: print(f"{aoc.ANSI_LINE_BEGINNING}Animating frame {i + 1} of {n_frames}..." + ("\nAnimation done. Saving GIF..." if (i+1) == n else ""))
+            progress_callback=lambda i, n: print(f"{Navigation.LINE_BEGINNING}Animating frame {i + 1} of {n_frames}..." + ("\nAnimation done. Saving GIF..." if (i+1) == n else ""))
         )
 
     def compare_pairs(self, left, right) -> bool | None:

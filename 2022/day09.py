@@ -1,6 +1,7 @@
+from operator import add
+from utility.terminal_formatting import Navigation
 import aoc_util as aoc
 
-from operator import add
 
 class Solution(aoc.AbstractSolution):
     def parse(self, puzzle_input: list[str]) -> None:
@@ -104,7 +105,7 @@ class Solution(aoc.AbstractSolution):
 
         anim.save(
             "2022/visualization09.gif",
-            progress_callback=lambda i, n: print(f"{aoc.ANSI_LINE_BEGINNING}Animating frame {i + 1} of {n}..." + ("\nAnimation done. Saving GIF..." if (i+1) == n else ""))
+            progress_callback=lambda i, n: print(f"{Navigation.LINE_BEGINNING}Animating frame {i + 1} of {n}..." + ("\nAnimation done. Saving GIF..." if (i+1) == n else ""))
         )
 
     def move_rope(self, knots: list[list[int]], save_history: bool=False) -> tuple[set[tuple[int, int]], (list[tuple[list[list[int]], list[list[int]]]] | None)]:

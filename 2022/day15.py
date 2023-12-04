@@ -1,3 +1,4 @@
+from utility.terminal_formatting import Navigation
 import aoc_util as aoc
 import json
 
@@ -150,5 +151,5 @@ class Solution(aoc.AbstractSolution):
         animation = FuncAnimation(figure, animate, init_func=init, frames=n_frames, interval=frame_time, blit=True)
         animation.save(
             "2022/visualization15.gif",
-            progress_callback=lambda i, n: print(f"{aoc.ANSI_LINE_BEGINNING}Animating frame {i + 1} of {n}..." + ("\nAnimation done. Saving GIF..." if (i+1) == n else ""))
+            progress_callback=lambda i, n: print(f"{Navigation.LINE_BEGINNING}Animating frame {i + 1} of {n}..." + ("\nAnimation done. Saving GIF..." if (i+1) == n else ""))
         )
