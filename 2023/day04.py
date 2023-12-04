@@ -50,7 +50,6 @@ class Solution(aoc.AbstractSolution):
             for i in range(idx + 1, idx + 1 + numbers_found):
                 card_amounts[i] += card_amounts[idx]
 
-        # added 1 for the first card
         total_card_amount: int = sum(card_amounts.values())
 
         return f"Total amount of cards: {total_card_amount}", total_card_amount
