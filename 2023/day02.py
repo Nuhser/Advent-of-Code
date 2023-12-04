@@ -19,7 +19,7 @@ class Solution(aoc.AbstractSolution):
                     self.games[-1][color.split(" ")[1]].append(int(color.split(" ")[0]))
 
         if (self.verbose):
-            print(f"Game Records: {self.games}")
+            print(f"Game Records: {self.games}\n")
 
 
     @override

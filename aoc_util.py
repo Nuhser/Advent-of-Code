@@ -1,3 +1,6 @@
+from utility.terminal_formatting import Color
+
+
 class AbstractSolution:
     def __init__(self, year: int, day: int, puzzle_input: list[str], *params, is_test: bool=False, verbose: bool=False) -> None:
         self.year = year
@@ -7,12 +10,12 @@ class AbstractSolution:
         self.params = params
 
         if verbose:
-            print("Start parsing input...\n")
+            print("\nStart parsing input...\n")
 
         self.parse(puzzle_input)
 
         if verbose:
-            print("Parsing complete.\n")
+            print(f"{Color.GREEN}Parsing complete.{Color.DEFAULT}")
 
     def parse(self, puzzle_input: list[str]) -> None:
         raise NotImplementedError(f"The parser the puzzle input for day {self.day} of year {self.year} isn't implemented yet!")

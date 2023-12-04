@@ -17,7 +17,7 @@ class Solution(aoc.AbstractSolution):
             numbers.append(int(digits[0] + digits[-1]))
 
         if (self.verbose):
-            print(f"Numbers: {", ".join(str(number) for number in numbers)}")
+            print(f"Numbers: {", ".join(str(number) for number in numbers)}\n")
 
         return f"The sum of all the calibration values is {sum(numbers)}", sum(numbers)
 

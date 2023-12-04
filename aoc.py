@@ -116,6 +116,8 @@ def create_new_day() -> None:
 
     shutil.copy("templates/test.txt", f"./{args.year}/test{args.day:02d}.txt")
 
+    print(f"{Color.GREEN}Day creation successful!{Color.DEFAULT}")
+
 
 def parse_input() -> tuple:
     parse_time = 0
@@ -233,7 +235,7 @@ if __name__ == "__main__":
     # check which subparser is used
     match args.subcommand:
         case "run":
-            print(f"{"Testing" if run_is_test else "Executing"} year {args.year} day {args.day}...")
+            print(f"{Formatting.UNDERLINE}{"Testing" if run_is_test else "Executing"} year {args.year} day {args.day}...{Formatting.NOT_UNDERLINE}")
         case "visualize":
             print("Starting visualization...")
         case "new":
