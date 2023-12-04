@@ -37,4 +37,20 @@ class Solution(aoc.AbstractSolution):
 
     @override
     def part2(self) -> tuple[str, (int | float | str | None)]:
-        raise NotImplementedError(f"Part 2 of the solution for day {self.day} of year {self.year} isn't implemented yet!")
+        card_amounts: defaultdict[int, int] = defaultdict(lambda: 0)
+
+        for idx, card in enumerate(self.cards):
+            card_amounts[idx] += 1
+            numbers_found: int = 0
+
+            for number in card[1]:
+                if (card[0][number]):
+                    numbers_found += 1
+
+            for i in range(idx + 1, idx + 1 + numbers_found):
+                card_amounts[i] += card_amounts[idx]
+
+        # added 1 for the first card
+        total_card_amount: int = sum(card_amounts.values())
+
+        return f"Total amount of cards: {total_card_amount}", total_card_amount
