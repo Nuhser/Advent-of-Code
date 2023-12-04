@@ -11,8 +11,8 @@ import time
 def parse_args():
     # create parser and parse console arguments
     parser = argparse.ArgumentParser(
-        prog = "python3 run.py",
-        description = "",
+        prog = "python aoc.py",
+        description = "This tool can be used to create new Advent of Code days from templates. You can run and test your solutions and even visualize them.",
         epilog = "If you have problems or questions, contact me at mail@nuhser.com."
     )
     subparsers = parser.add_subparsers(
@@ -46,7 +46,7 @@ def parse_args():
         help="track the time it takes to parse the input and compute the solutions/visualization"
     )
     parser.add_argument(
-        "-v", "--verbose",
+        "--verbose",
         action="store_true",
         dest="verbose",
         help="show more logs while running"
