@@ -2,6 +2,7 @@ import aoc_util as aoc
 import argparse
 import importlib
 import os
+import shutil
 import sys
 import time
 
@@ -108,38 +109,11 @@ def create_new_day() -> None:
             f"{args.day}. [{args.name}](https://github.com/Nuhser/Advent-of-Code/blob/master/{args.year}/day{args.day:02d}.py) (*[original task](https://adventofcode.com/{args.year}/day/{args.day})*)\n"
         )
     
-    with open(f"./{args.year}/day{args.day:02d}.py", "w") as solution_file:
-        solution_file.write(
-"""import aoc_util as aoc
+    shutil.copy("templates/day.py", f"./{args.year}/day{args.day:02d}.py")
 
-from typing import override
+    shutil.copy("templates/input.txt", f"./{args.year}/input{args.day:02d}.txt")
 
-
-class Solution(aoc.AbstractSolution):
-    @override
-    def parse(self, puzzle_input: list[str]) -> None:
-        pass
-
-
-    @override
-    def part1(self) -> tuple[str, (int | float | str | None)]:
-        raise NotImplementedError(f"Part 1 of the solution for day {self.day} of year {self.year} isn't implemented yet!")
-
-
-    @override
-    def part2(self) -> tuple[str, (int | float | str | None)]:
-        raise NotImplementedError(f"Part 2 of the solution for day {self.day} of year {self.year} isn't implemented yet!")"""
-        )
-
-    with open(f"./{args.year}/input{args.day:02d}.txt", "w") as input_file:
-        input_file.write("")
-
-    with open(f"./{args.year}/test{args.day:02d}.txt", "w") as test_file:
-        test_file.write(
-"""#!part1:?
-#!part2:?
-"""
-        )
+    shutil.copy("templates/test.txt", f"./{args.year}/test{args.day:02d}.txt")
 
 
 def parse_input() -> tuple:
