@@ -10,3 +10,4 @@ Each day consists of one input file containing my personal randomly generated pu
 2. [Cube Conundrum](https://github.com/Nuhser/Advent-of-Code/blob/master/2023/day02.py) (*[original task](https://adventofcode.com/2023/day/2)*)
 3. [Gear Ratios](https://github.com/Nuhser/Advent-of-Code/blob/master/2023/day03.py) (*[original task](https://adventofcode.com/2023/day/3)*)
 4. [Scratchcards](https://github.com/Nuhser/Advent-of-Code/blob/master/2023/day04.py) (*[original task](https://adventofcode.com/2023/day/4)*)
+5. [If You Give A Seed A Fertilizer](https://github.com/Nuhser/Advent-of-Code/blob/master/2023/day05.py) (*[original task](https://adventofcode.com/2023/day/5)*)
