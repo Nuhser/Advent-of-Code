@@ -19,9 +19,6 @@ class Solution(aoc.AbstractSolution):
             for entry in map[1:]:
                 self.maps[map_key].append({"from": int(entry[1]), "to": int(entry[0]), "range": int(entry[2])-1})
 
-            # without sorting the mapping by their start, the run with the real input data fails...
-            self.maps[map_key] = sorted(self.maps[map_key], key=lambda mapping: mapping["from"])
-
         if (self.verbose):
             print(f"Seeds: {", ".join(str(seed) for seed in self.seeds)}")
             print(f"Maps:\n{"\n".join(str(value) for value in self.maps.values())}\n")
@@ -98,7 +95,7 @@ class Solution(aoc.AbstractSolution):
             for mapping in map:
                 start_diff = seed_range["from"] - mapping["from"]
                 
-                if (start_diff < 0):    # seed start left of mapping start
+                if (start_diff < 0): # seed start left of mapping start
                     start_diff = abs(start_diff)
 
                     # case 1
@@ -117,12 +114,12 @@ class Solution(aoc.AbstractSolution):
                     else:
                         new_seed_ranges.append({"from": seed_range["from"], "range": start_diff - 1}) # left of mapping
                         mapped_seed_ranges.append({"from": mapping["to"], "range": mapping["range"]}) # inside mapping
-                        new_seed_ranges.append({"from": seed_range["from"] + mapping["range"], "range": seed_range["range"] - (mapping["range"] + start_diff) + 1}) # right of mapping
+                        new_seed_ranges.append({"from": mapping["from"] + mapping["range"] + 1, "range": seed_range["range"] - (mapping["range"] + start_diff + 1)}) # right of mapping
 
                         mapping_found = True
                         break
 
-                elif (start_diff >= 0):    # seed start right of (or same as) mapping start
+                elif (start_diff >= 0): # seed start right of (or same as) mapping start
                     # case 2
                     if (start_diff > mapping["range"]):
                         continue
