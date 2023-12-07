@@ -12,3 +12,4 @@ Each day consists of one input file containing my personal randomly generated pu
 4. [Scratchcards](https://github.com/Nuhser/Advent-of-Code/blob/master/2023/day04.py) (*[original task](https://adventofcode.com/2023/day/4)*)
 5. [If You Give A Seed A Fertilizer](https://github.com/Nuhser/Advent-of-Code/blob/master/2023/day05.py) (*[original task](https://adventofcode.com/2023/day/5)*)
 6. [Wait For It](https://github.com/Nuhser/Advent-of-Code/blob/master/2023/day06.py) (*[original task](https://adventofcode.com/2023/day/6)*)
+7. [Camel Cards](https://github.com/Nuhser/Advent-of-Code/blob/master/2023/day07.py) (*[original task](https://adventofcode.com/2023/day/7)*)
