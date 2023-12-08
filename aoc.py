@@ -87,6 +87,8 @@ def create_new_day() -> None:
 
     if not os.path.isdir(f"./{args.year}"):
         os.makedirs(f"./{args.year}")
+        with open(f"./{args.year}/__init__.py", "w") as init_file:
+            pass
     
     if not os.path.isfile(f"./{args.year}/README.md"):
         with open("./templates/README.md", "r") as readme_template_file:
