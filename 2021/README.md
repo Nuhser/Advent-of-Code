@@ -22,5 +22,3 @@ Each day consists of one input file containing my personal randomly generated pu
 14. [Extended Polimerization](https://adventofcode.com/2021/day/14)
 15. [Chiton](https://adventofcode.com/2021/day/15)
 16. [Packet Decoder](https://adventofcode.com/2021/day/16)
-
-*More tasks will be added as advent moves on...*

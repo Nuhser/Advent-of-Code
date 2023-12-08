@@ -86,12 +86,14 @@ def create_new_day() -> None:
     print(f"Creating new blank day for {args.day:02d}.12.{args.year} '{args.name}'...")
 
     if not os.path.isdir(f"./{args.year}"):
-        print(f"{Color.RED}ERROR: There isn't a directory for the year {args.year} yet. Please create one including a file named {Formatting.ITALIC}README.md{Formatting.NOT_ITALIC}.{Formatting.RESET}")
-        return
+        os.makedirs(f"./{args.year}")
     
     if not os.path.isfile(f"./{args.year}/README.md"):
-        print(f"{Color.RED}ERROR: There isn't a {Formatting.ITALIC}README.md{Formatting.NOT_ITALIC} for the year {args.year} yet. Please create the file.{Formatting.RESET}")
-        return
+        with open("./templates/README.md", "r") as readme_template_file:
+            readme_template = readme_template_file.read()
+
+        with open(f"./{args.year}/README.md", "w") as readme_file:
+            readme_file.write(replace_placeholders(readme_template, args.year, args.day))
     
     if os.path.isfile(f"./{args.year}/day{args.day:02d}.py"):
         print(f"{Color.RED}ERROR: A solution file already exists for day {args.day} of year {args.year}.{Formatting.RESET}")
@@ -117,6 +119,10 @@ def create_new_day() -> None:
     shutil.copy("templates/test.txt", f"./{args.year}/test{args.day:02d}.txt")
 
     print(f"{Color.GREEN}Day creation successful!{Color.DEFAULT}")
+
+
+def replace_placeholders(original_string: str, year: int, day: int) -> str:
+    return original_string.replace("$$YEAR", str(year)).replace("$$DAY", str(day))
 
 
 def parse_input() -> tuple:
