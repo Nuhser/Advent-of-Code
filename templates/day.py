@@ -10,9 +10,9 @@ class Solution(aoc.AbstractSolution):
 
     @override
     def part1(self) -> tuple[str, (int | float | str | None)]:
-        raise NotImplementedError(f"Part 1 of the solution isn't implemented yet!")
+        return super().part1()
 
 
     @override
     def part2(self) -> tuple[str, (int | float | str | None)]:
-        raise NotImplementedError(f"Part 2 of the solution isn't implemented yet!")
+        return super().part2()
