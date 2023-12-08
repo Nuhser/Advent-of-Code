@@ -7,27 +7,17 @@ import aoc_util as aoc
 class Solution(aoc.AbstractSolution):
     @override
     def parse(self, puzzle_input: list[str]) -> None:
-        self.card_order = ["2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"]
-
-        self.hands: list[dict[str, (str | int | defaultdict[str, int])]] = []
+        self.hands: list['Solution.Hand'] = []
 
         for hand in aoc.parse_input(puzzle_input, " "):
-
-            hand_dict: dict[str, (str | int | defaultdict[str, int])] = {
-                "raw": hand[0],
-                "bid": int(hand[1]),
-                "cards": defaultdict(lambda: int(0))
-            }
-
-            for card in hand[0]:
-                hand_dict["cards"][card] += 1
-
-            self.hands.append(hand_dict)
+            self.hands.append(self.Hand(hand))
 
 
     @override
     def part1(self) -> tuple[str, (int | float | str | None)]:
-        hands = self.hands.copy()
+        self.card_order = ["2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"]
+
+        hands: list['Solution.Hand'] = self.hands.copy()
         merge_sort(
             hands,
             self.compare_hands
@@ -35,7 +25,7 @@ class Solution(aoc.AbstractSolution):
 
         total_winnings: int = 0
         for idx, hand in enumerate(hands):
-            total_winnings += (idx + 1) * hand["bid"]
+            total_winnings += (idx + 1) * hand.bid
 
         return f"Total winnings: {total_winnings}", total_winnings
 
@@ -47,8 +37,8 @@ class Solution(aoc.AbstractSolution):
 
     def compare_hands(
         self,
-        hand1: dict[str, (str | int | defaultdict[str, int])],
-        hand2: dict[str, (str | int | defaultdict[str, int])]
+        hand1: 'Solution.Hand',
+        hand2: 'Solution.Hand'
     ) -> bool:
         
         hand1_value: int = self.get_hand_value(hand1)
@@ -58,18 +48,18 @@ class Solution(aoc.AbstractSolution):
             return hand1_value < hand2_value
         
         for idx in range(5):
-            card1_value: int = self.card_order.index(hand1["raw"][idx])
-            card2_value: int = self.card_order.index(hand2["raw"][idx])
+            card1_value: int = self.card_order.index(hand1.hand_string[idx])
+            card2_value: int = self.card_order.index(hand2.hand_string[idx])
 
             if card1_value == card2_value:
                 continue
 
             return card1_value < card2_value
         
-        raise RuntimeError(f"ERROR: Hands '{hand1["raw"]}' and '{hand2["raw"]} are not comparable.")
+        raise RuntimeError(f"ERROR: Hands '{hand1.hand_string}' and '{hand2.hand_string} are not comparable.")
 
 
-    def get_hand_value(self, hand: dict[str, (str | int | defaultdict[str, int])]) -> int:
+    def get_hand_value(self, hand: 'Solution.Hand') -> int:
         """
         Value Order:
 
@@ -82,16 +72,16 @@ class Solution(aoc.AbstractSolution):
         - high card
         """
 
-        unique_cards: int = len(hand["cards"])
+        unique_cards: int = len(hand.cards)
 
         match unique_cards:
-            # 5 of a kind
             case 1:
+                # 5 of a kind
                 return 6
 
             case 2:
                 # 4 of a kind
-                if any(value == 4 for value in hand["cards"].values()):
+                if any(value == 4 for value in hand.cards.values()):
                     return 5
 
                 # full house
@@ -99,7 +89,7 @@ class Solution(aoc.AbstractSolution):
 
             case 3:
                 # 3 of a kind
-                if any(value == 3 for value in hand["cards"].values()):
+                if any(value == 3 for value in hand.cards.values()):
                     return 3
 
                 # 2 pairs
@@ -107,7 +97,17 @@ class Solution(aoc.AbstractSolution):
 
             case _:
                 # 1 pair
-                if any(value == 2 for value in hand["cards"].values()):
+                if any(value == 2 for value in hand.cards.values()):
                     return 1
 
                 return 0
+
+    
+    class Hand:
+        def __init__(self, hand_data: list[str]):
+            self.hand_string: str = hand_data[0]
+            self.bid: int = int(hand_data[1])
+            self.cards: defaultdict[str, int] = defaultdict(lambda: int(0))
+
+            for card in hand_data[0]:
+                self.cards[card] += 1
