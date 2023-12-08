@@ -20,7 +20,7 @@ class Solution(aoc.AbstractSolution):
         hands: list['Solution.Hand'] = self.hands.copy()
         merge_sort(
             hands,
-            self.compare_hands
+            self.compare_hands_without_joker
         )
 
         total_winnings: int = 0
@@ -32,17 +32,38 @@ class Solution(aoc.AbstractSolution):
 
     @override
     def part2(self) -> tuple[str, (int | float | str | None)]:
-        raise NotImplementedError(f"Part 2 of the solution isn't implemented yet!")
+        self.card_order = ["J", "2", "3", "4", "5", "6", "7", "8", "9", "T", "Q", "K", "A"]
+
+        hands: list['Solution.Hand'] = self.hands.copy()
+        merge_sort(
+            hands,
+            self.compare_hands_with_joker
+        )
+
+        total_winnings: int = 0
+        for idx, hand in enumerate(hands):
+            total_winnings += (idx + 1) * hand.bid
+
+        return f"Total winnings: {total_winnings}", total_winnings
     
+
+    def compare_hands_with_joker(self, hand1: 'Solution.Hand', hand2: 'Solution.Hand') -> bool:
+        return self.compare_hands(hand1, hand2, True)
+    
+
+    def compare_hands_without_joker(self, hand1: 'Solution.Hand', hand2: 'Solution.Hand') -> bool:
+        return self.compare_hands(hand1, hand2, False)
+
 
     def compare_hands(
         self,
         hand1: 'Solution.Hand',
-        hand2: 'Solution.Hand'
+        hand2: 'Solution.Hand',
+        with_joker: bool
     ) -> bool:
         
-        hand1_value: int = self.get_hand_value(hand1)
-        hand2_value: int = self.get_hand_value(hand2)
+        hand1_value: int = self.get_hand_value(hand1, with_joker)
+        hand2_value: int = self.get_hand_value(hand2, with_joker)
 
         if hand1_value != hand2_value:
             return hand1_value < hand2_value
@@ -59,7 +80,7 @@ class Solution(aoc.AbstractSolution):
         raise RuntimeError(f"ERROR: Hands '{hand1.hand_string}' and '{hand2.hand_string} are not comparable.")
 
 
-    def get_hand_value(self, hand: 'Solution.Hand') -> int:
+    def get_hand_value(self, hand: 'Solution.Hand', with_joker: bool) -> int:
         """
         Value Order:
 
@@ -73,6 +94,7 @@ class Solution(aoc.AbstractSolution):
         """
 
         unique_cards: int = len(hand.cards)
+        joker_number: int = hand.cards.get("J") if hand.cards.get("J") != None else 0 # type: ignore
 
         match unique_cards:
             case 1:
@@ -80,29 +102,56 @@ class Solution(aoc.AbstractSolution):
                 return 6
 
             case 2:
-                # 4 of a kind
                 if any(value == 4 for value in hand.cards.values()):
-                    return 5
+                    if with_joker and (joker_number > 0):
+                        # 5 of a kind
+                        return 6
+                    else:
+                        # 4 of a kind
+                        return 5
 
-                # full house
-                return 4
+                if with_joker and (joker_number > 0):
+                    # 5 of a kind
+                    return 6
+                else:
+                    # full house
+                    return 4
 
             case 3:
-                # 3 of a kind
                 if any(value == 3 for value in hand.cards.values()):
+                    if with_joker and (joker_number > 0):
+                        # 4 of a kind
+                        return 5
+                    else:
+                        # 3 of a kind
+                        return 3
+
+                if with_joker and (joker_number == 2):
+                    # 4 of a kind
+                    return 5
+                elif with_joker and (joker_number == 1):
+                    # full house
+                    return 4
+                else:
+                    # 2 pairs
+                    return 2
+
+            case 4:
+                if with_joker and (joker_number > 0):
+                    # 3 of a kind
                     return 3
-
-                # 2 pairs
-                return 2
-
-            case _:
-                # 1 pair
-                if any(value == 2 for value in hand.cards.values()):
+                else:
+                    # 1 pair
                     return 1
 
-                return 0
+            case _:
+                if with_joker and (joker_number == 1):
+                    # 1 pair
+                    return 1
+                else:
+                    # high card
+                    return 0
 
-    
     class Hand:
         def __init__(self, hand_data: list[str]):
             self.hand_string: str = hand_data[0]
