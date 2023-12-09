@@ -14,3 +14,4 @@ Each day consists of one input file containing my personal randomly generated pu
 6. [Wait For It](https://github.com/Nuhser/Advent-of-Code/blob/master/2023/day06.py) (*[original task](https://adventofcode.com/2023/day/6)*)
 7. [Camel Cards](https://github.com/Nuhser/Advent-of-Code/blob/master/2023/day07.py) (*[original task](https://adventofcode.com/2023/day/7)*)
 8. [Haunted Wasteland](https://github.com/Nuhser/Advent-of-Code/blob/master/2023/day08.py) (*[original task](https://adventofcode.com/2023/day/8)*)
+9. [Mirage Maintenance](https://github.com/Nuhser/Advent-of-Code/blob/master/2023/day09.py) (*[original task](https://adventofcode.com/2023/day/9)*)
