@@ -7,3 +7,4 @@ Each day consists of one input file containing my personal randomly generated pu
 ## This Year's Tasks
 
 1. [The Tyranny of the Rocket Equation](https://github.com/Nuhser/Advent-of-Code/blob/master/2019/day01.py) (*[original task](https://adventofcode.com/2019/day/1)*)
+2. [1202 Program Alarm](https://github.com/Nuhser/Advent-of-Code/blob/master/2019/day02.py) (*[original task](https://adventofcode.com/2019/day/2)*)
