@@ -264,12 +264,17 @@ if __name__ == "__main__":
     if run_is_test:
         if expected_results == None:
             raise AttributeError("No expected results found in the test file ({args.year}/test{args.day:02d}.txt)! Make sure that the correct number of expected results is given at the start of the file (e.g.: #!part1:<RESULT>).")
-        elif (args.part == None) and (("part1" not in expected_results) or ("part2" not in expected_results)):
-            raise AttributeError("Two expected test results are needed when testing both parts of the solution! Make sure that the correct number of expected results is given at the start of the file (e.g.: #!part1:<RESULT>).")
         elif (args.part == 1) and ("part1" not in expected_results):
             raise AttributeError("No expected test result found in your test file for part 1 of the solution! Make sure that the correct number of expected results is given at the start of the file (e.g.: #!part1:<RESULT>).")
         elif (args.part == 2) and ("part2" not in expected_results):
             raise AttributeError("No expected test result found in your test file for part 2 of the solution! Make sure that the correct number of expected results is given at the start of the file (e.g.: #!part2:<RESULT>).")
+        elif (args.part == None):
+            if ("part1" not in expected_results):
+                print(f"\n{Color.YELLOW}Couldn't find an expected solution for test part 1. Therefore, only running part 2.{Color.DEFAULT}")
+                args.part = 2
+            elif ("part2" not in expected_results):
+                print(f"\n{Color.YELLOW}Couldn't find an expected solution for test part 2. Therefore, only running part 1.{Color.DEFAULT}")
+                args.part = 1
 
     parse_time = 0
     run_time = 0
