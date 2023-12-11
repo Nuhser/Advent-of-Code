@@ -27,7 +27,7 @@ class Solution(aoc.AbstractSolution):
         while (True):
             while (True):
                 if (isinstance(self.schematic[x_idx, y_idx], int)):
-                    is_part_number, consumed_chars, _ = self.check_for_symbol_recursively(x_idx, y_idx, (lambda n: isinstance(n, str)))
+                    is_part_number, consumed_chars, _ = self.check_for_symbol_recursively(x_idx, y_idx, (lambda _, n: isinstance(n[1], str)))
 
                     if (is_part_number):
                         consumed_chars += self.check_for_more_digits(x_idx+consumed_chars+1, y_idx)
@@ -60,7 +60,7 @@ class Solution(aoc.AbstractSolution):
         while (True):
             while (True):
                 if (isinstance(self.schematic[x_idx, y_idx], int)):
-                    has_gear, consumed_chars, gear_coords = self.check_for_symbol_recursively(x_idx, y_idx, (lambda n: n == "*"))
+                    has_gear, consumed_chars, gear_coords = self.check_for_symbol_recursively(x_idx, y_idx, (lambda _, n: n[1] == "*"))
 
                     if (has_gear):
                         consumed_chars += self.check_for_more_digits(x_idx+consumed_chars+1, y_idx)
@@ -87,7 +87,7 @@ class Solution(aoc.AbstractSolution):
         return f"Gears found: {len(gears)}\nSum of gear ratios: {gear_ratio_sum}", gear_ratio_sum
 
 
-    def check_for_symbol_recursively(self, x_idx: int, y_idx: int, matching_function: Callable[[Any], bool]) -> tuple[bool, int, list[tuple[int, int]]]:
+    def check_for_symbol_recursively(self, x_idx: int, y_idx: int, matching_function: Callable[[Any, Any], bool]) -> tuple[bool, int, list[tuple[int, int]]]:
         matching_neighbors = neighbors.get_matching_neighbors(self.schematic, (x_idx, y_idx), matching_function)
         
         if (len(matching_neighbors) > 0):
