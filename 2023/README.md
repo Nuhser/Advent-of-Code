@@ -17,3 +17,4 @@ Each day consists of one input file containing my personal randomly generated pu
 9. [Mirage Maintenance](https://github.com/Nuhser/Advent-of-Code/blob/master/2023/day09.py) (*[original task](https://adventofcode.com/2023/day/9)*)
 10. [Pipe Maze](https://github.com/Nuhser/Advent-of-Code/blob/master/2023/day10.py) (*[original task](https://adventofcode.com/2023/day/10)*)
 11. [Cosmic Expansion](https://github.com/Nuhser/Advent-of-Code/blob/master/2023/day11.py) (*[original task](https://adventofcode.com/2023/day/11)*)
+12. [Hot Springs](https://github.com/Nuhser/Advent-of-Code/blob/master/2023/day12.py) (*[original task](https://adventofcode.com/2023/day/12)*)
