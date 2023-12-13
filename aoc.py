@@ -2,9 +2,9 @@ from utility.terminal_formatting import Color, Formatting
 import aoc_util as aoc
 import argparse
 import importlib
+import glob
 import os
 import shutil
-import sys
 import time
 
 
@@ -55,12 +55,12 @@ def parse_args():
     run_parser = subparsers.add_parser("run")
     run_parser.add_argument(
         "-t", "--test",
+        action="append",
         type=int,
-        dest="test_number",
-        const=-1,
         nargs="?",
+        dest="test_numbers",
         metavar="TEST_NUMBER",
-        help="run is a test and should use the test input and solution (add a number if you have multiple test files)"
+        help="run is a test and should use the test input and solution (add a number if you have multiple test files); you can use this argument multiple times per execution"
     )
     run_parser.add_argument(
         "-p", "--part",
@@ -82,7 +82,7 @@ def parse_args():
     return parser.parse_args()
 
 
-def create_new_day() -> None:
+def create_new_day(args) -> None:
     print(f"Creating new blank day for {args.day:02d}.12.{args.year} '{args.name}'...")
 
     if not os.path.isdir(f"./{args.year}"):
@@ -120,14 +120,14 @@ def create_new_day() -> None:
 
     shutil.copy("templates/test.txt", f"./{args.year}/test{args.day:02d}.txt")
 
-    print(f"{Color.GREEN}Day creation successful!{Color.DEFAULT}")
+    print(f"{Color.GREEN}Day creation successful!{Color.DEFAULT}\n")
 
 
 def replace_placeholders(original_string: str, year: int, day: int) -> str:
     return original_string.replace("$$YEAR", str(year)).replace("$$DAY", str(day))
 
 
-def parse_input() -> tuple:
+def parse_input(args, puzzle_input: list[str], run_is_test: bool) -> tuple:
     parse_time = 0
 
     if args.track_time:
@@ -153,7 +153,57 @@ def parse_input() -> tuple:
     return solution, parse_time
 
 
-def run() -> float:
+def validate_expected_solutions(args, expected_results: dict[str, (str | None)]) -> None:
+    if expected_results == None:
+        raise AttributeError(f"No expected results found in the test file ({args.year}/test{args.day:02d}.txt)! Make sure that the correct number of expected results is given at the start of the file (e.g.: #!part1:<RESULT>).")
+    elif (args.part == 1) and ("part1" not in expected_results):
+        raise AttributeError("No expected test result found in your test file for part 1 of the solution! Make sure that the correct number of expected results is given at the start of the file (e.g.: #!part1:<RESULT>).")
+    elif (args.part == 2) and ("part2" not in expected_results):
+        raise AttributeError("No expected test result found in your test file for part 2 of the solution! Make sure that the correct number of expected results is given at the start of the file (e.g.: #!part2:<RESULT>).")
+    elif (args.part == None):
+        if ("part1" not in expected_results):
+            print(f"\n{Color.YELLOW}Couldn't find an expected solution for test part 1. Therefore, only running part 2.{Color.DEFAULT}")
+            args.part = 2
+        elif ("part2" not in expected_results):
+            print(f"\n{Color.YELLOW}Couldn't find an expected solution for test part 2. Therefore, only running part 1.{Color.DEFAULT}")
+            args.part = 1
+
+
+def run(args) -> None:
+    puzzle_input, expected_results = aoc.get_puzzle_input(args.year, args.day)
+    solution, parse_time = parse_input(args, puzzle_input, False)
+    run_time = solve(args, solution, expected_results, False)
+
+    if args.track_time:
+        print(f"\n{Formatting.INVERTED}Total compute time: {Formatting.ITALIC}{(parse_time + run_time):.5f} seconds" + Formatting.RESET)
+
+
+def test(args) -> None:
+    original_part: int | None = args.part
+
+    if (args.test_numbers == [None]):
+        test_files = glob.glob(f"./{args.year}/test{args.day:02d}-*.txt")
+
+        if (len(test_files) > 0):
+            args.test_numbers = []
+            for test_file in test_files:
+                args.test_numbers.append(test_file.split("-")[-1].removesuffix(".txt"))
+
+    for test_number in args.test_numbers:
+        if (len(args.test_numbers) > 1) and (test_number != None):
+            print(f"\n{Color.YELLOW}Running test case #{test_number}...{Color.DEFAULT}", end="")
+
+        args.part = original_part
+        puzzle_input, expected_results = aoc.get_test_input(args.year, args.day, test_number)
+        validate_expected_solutions(args, expected_results) # check if the correct test solutions are provided
+        solution, parse_time = parse_input(args, puzzle_input, True)
+        run_time = solve(args, solution, expected_results, True)
+
+        if args.track_time:
+            print(f"\n{Formatting.INVERTED}Total compute time: {Formatting.ITALIC}{(parse_time + run_time):.5f} seconds" + Formatting.RESET)
+
+
+def solve(args, solution, expected_results: (dict[str, (str | None)] | None), run_is_test: bool) -> float:
     part1_time = 0
     part2_time = 0
 
@@ -218,8 +268,11 @@ def run() -> float:
     return part1_time + part2_time
 
 
-def visualize() -> float:
-    visualization_time = 0
+def visualize(args) -> None:
+    print("Starting visualization...")
+
+    puzzle_input, _ = aoc.get_puzzle_input(args.year, args.day)
+    solution, parse_time = parse_input(args, puzzle_input, False)
 
     if args.track_time:
         visualization_time = time.time()
@@ -230,68 +283,29 @@ def visualize() -> float:
     if args.track_time:
         visualization_time = time.time() - visualization_time
         print(Formatting.INVERTED + f"Visualization took {Formatting.ITALIC}{visualization_time:.5f} seconds{Formatting.NOT_ITALIC} to complete" + Formatting.RESET)
-
-    return visualization_time
+        print(f"\n{Formatting.INVERTED}Total compute time: {Formatting.ITALIC}{(parse_time + visualization_time):.5f} seconds" + Formatting.RESET)
 
 
 if __name__ == "__main__":
     args = parse_args()
 
-    # check if run is test
-    run_is_test = (args.subcommand == "run") and (args.test_number != None)
-
-    # check which subparser is used
     match args.subcommand:
-        case "run":
-            print(f"{Formatting.UNDERLINE}{"Testing" if run_is_test else "Executing"} year {args.year} day {args.day}...{Formatting.NOT_UNDERLINE}")
-        case "visualize":
-            print("Starting visualization...")
         case "new":
-            create_new_day()
-            print()
-            sys.exit()
+            create_new_day(args)
 
-    # get puzzle/test input
-    try:
-        puzzle_input, expected_results = aoc.get_puzzle_input(args.year, args.day) if not run_is_test else aoc.get_test_input(args.year, args.day, args.test_number)
-    except FileNotFoundError:
-        if run_is_test:
-            raise FileNotFoundError(f"There is no test input for day {args.day} of year {args.year}! Create a text file named '{args.year}/test{args.day:02d}{f"-{args.test_number}" if (args.test_number > -1) else ""}.txt'")
-        else:
-            raise FileNotFoundError(f"There is no puzzle input for day {args.day} of year {args.year}! Create a text file named '{args.year}/input{args.day:02d}.txt'")
-
-    # check if the correct test solutions are provided
-    if run_is_test:
-        if expected_results == None:
-            raise AttributeError("No expected results found in the test file ({args.year}/test{args.day:02d}.txt)! Make sure that the correct number of expected results is given at the start of the file (e.g.: #!part1:<RESULT>).")
-        elif (args.part == 1) and ("part1" not in expected_results):
-            raise AttributeError("No expected test result found in your test file for part 1 of the solution! Make sure that the correct number of expected results is given at the start of the file (e.g.: #!part1:<RESULT>).")
-        elif (args.part == 2) and ("part2" not in expected_results):
-            raise AttributeError("No expected test result found in your test file for part 2 of the solution! Make sure that the correct number of expected results is given at the start of the file (e.g.: #!part2:<RESULT>).")
-        elif (args.part == None):
-            if ("part1" not in expected_results):
-                print(f"\n{Color.YELLOW}Couldn't find an expected solution for test part 1. Therefore, only running part 2.{Color.DEFAULT}")
-                args.part = 2
-            elif ("part2" not in expected_results):
-                print(f"\n{Color.YELLOW}Couldn't find an expected solution for test part 2. Therefore, only running part 1.{Color.DEFAULT}")
-                args.part = 1
-
-    parse_time = 0
-    run_time = 0
-    visualization_time = 0
-
-    solution, parse_time = parse_input()
-
-    match args.subcommand:
-        # run visualization
         case "visualize":
-            visualization_time = visualize()
+            visualize(args)
 
-        # run solutions and tests
         case "run":
-            run_time = run()
+            # check if run is test
+            run_is_test = (args.subcommand == "run") and (args.test_numbers != None)
 
-    if args.track_time:
-        print(f"\n{Formatting.INVERTED}Total compute time: {Formatting.ITALIC}{(parse_time + run_time + visualization_time):.5f} seconds" + Formatting.RESET)
+            print(f"{Formatting.UNDERLINE}{"Testing" if run_is_test else "Executing"} year {args.year} day {args.day}...{Formatting.NOT_UNDERLINE}")
+
+            # get puzzle/test input
+            if run_is_test:
+                test(args)
+            else:
+                run(args)
 
     print()

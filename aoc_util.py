@@ -30,27 +30,35 @@ class AbstractSolution:
         raise NotImplementedError(f"The visualization for day {self.day} of year {self.year} isn't implemented yet!")
 
 def get_puzzle_input(year: int, day: int) -> tuple[list[str], None]:
-    with open(f"./{year}/input{day:02d}.txt", "r") as puzzle_input:
-        return [line for line in puzzle_input.readlines()], None
+    try:
+        with open(f"./{year}/input{day:02d}.txt", "r") as puzzle_input:
+            return [line for line in puzzle_input.readlines()], None
+
+    except FileNotFoundError:
+            raise FileNotFoundError(f"There is no puzzle input for day {day} of year {year}! Create a text file named '{year}/input{day:02d}.txt'")
 
 def get_test_input(year: int, day: int, test_number: int) -> tuple[list[str], dict[str, (str | None)]]:
-    with open(f"./{year}/test{day:02d}{f'-{test_number}' if (test_number > -1) else ''}.txt", "r") as test_input:
-        expected_results = {}
+    try:
+        with open(f"./{year}/test{day:02d}{f'-{test_number}' if (test_number != None) else ''}.txt", "r") as test_input:
+            expected_results = {}
 
-        while (True):
-            last_position = test_input.tell()
-            line = test_input.readline()
-            
-            if (not line.strip().startswith("#!")):
-                break
+            while (True):
+                last_position = test_input.tell()
+                line = test_input.readline()
+                
+                if (not line.strip().startswith("#!")):
+                    break
 
-            line = line.strip().removeprefix("#!").split(":")
+                line = line.strip().removeprefix("#!").split(":")
 
-            expected_results[line[0]] = line[1] if not line[1] == "None" else None
+                expected_results[line[0]] = line[1] if not line[1] == "None" else None
 
-        test_input.seek(last_position)
+            test_input.seek(last_position)
 
-        return [line for line in test_input.readlines()], expected_results
+            return [line for line in test_input.readlines()], expected_results
+
+    except FileNotFoundError:
+            raise FileNotFoundError(f"There is no test input for day {day} of year {year}! Create a text file named '{year}/test{day:02d}{f"-{test_number}" if (test_number > -1) else ""}.txt'")
 
 def parse_input(puzzle_input: list[str], *delimiters: str, strip_lines: bool=True, cast_to: type=str) -> list:
     if len(delimiters) == 0:
