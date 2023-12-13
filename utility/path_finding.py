@@ -46,5 +46,10 @@ def dijkstra(map: dict[tuple[int, int], list[tuple[tuple[int, int], int]]], star
 
     return parents_map, costs
 
-def is_in_manhattan_distance(x1: int, y1: int, x2: int, y2: int, manhattan_distance: int) -> bool:
-    return manhattan_distance >= (abs(x1 - x2) + abs(y1 - y2))
+
+def is_in_manhattan_distance(point1: tuple[int, int], point2: tuple[int, int], max_manhattan_distance: int) -> bool:
+    return max_manhattan_distance >= get_manhatten_distance(point1, point2)
+
+
+def get_manhatten_distance(point1: tuple[int, int], point2: tuple[int, int]) -> int:
+    return abs(point1[0] - point2[0]) + abs(point1[1] - point2[1])
