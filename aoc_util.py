@@ -51,7 +51,7 @@ def get_test_input(year: int, day: int, test_number: int) -> tuple[list[str], di
 
                 line = line.strip().removeprefix("#!").split(":")
 
-                expected_results[line[0]] = line[1] if not line[1] == "None" else None
+                expected_results[line[0]] = line[1] if not line[1] == "?" else None
 
             test_input.seek(last_position)
 

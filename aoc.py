@@ -241,7 +241,7 @@ def solve(args, solution, expected_results: (dict[str, (str | None)] | None), ru
                 assert expected_results != None
 
                 if expected_results["part1"] == None:
-                    print(Color.YELLOW + "Solution not testable." + Formatting.RESET)
+                    print(Color.YELLOW + "Not testable. Expected solution is unknown." + Formatting.RESET)
                 elif expected_results["part1"] == str(part1_solution):
                     print(Color.GREEN + "This solution is correct!" + Formatting.RESET)
                 else:
@@ -270,7 +270,7 @@ def solve(args, solution, expected_results: (dict[str, (str | None)] | None), ru
                 assert expected_results != None
 
                 if expected_results["part2"] == None:
-                    print(Color.YELLOW + "Solution not testable." + Formatting.RESET)
+                    print(Color.YELLOW + "Not testable. Expected solution is unknown." + Formatting.RESET)
                 elif expected_results["part2"] == str(part2_solution):
                     print(Color.GREEN + "This solution is correct!" + Formatting.RESET)
                 else:
