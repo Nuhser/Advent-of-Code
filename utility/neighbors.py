@@ -1,4 +1,3 @@
-from math import nan
 from typing import Any, Callable, TypeVar
 
 
@@ -99,6 +98,7 @@ def has_matching_neighbors(
 ) -> bool:
     
     return len(get_matching_neighbors(map, current_coords, matching_function, horizontal, vertical, diagonal)) > 0
+
 
 def flood_fill_area(
         map: dict[tuple[int, int], T],
