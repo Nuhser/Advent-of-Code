@@ -46,7 +46,8 @@ class Solution(aoc.AbstractSolution):
     @override
     def part2(self) -> tuple[str, (int | float | str | None)]:
         """
-        Due to the iterativ flood fill algorithm, this part isn't very efficient. The calculation took ~140s. Unfortunately, the recursive flood fill algorithm needed to much recursion depth.
+        Due to the iterativ flood fill algorithm, this part isn't very efficient. The calculation took ~140s.
+        Unfortunately, the recursive flood fill algorithm needed to much recursion depth.
         """
 
         main_loop = self.find_main_loop()
