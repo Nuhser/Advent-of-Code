@@ -121,7 +121,7 @@ def create_new_day(args) -> None:
 
     shutil.copy("templates/test.txt", f"./{args.year}/test{args.day:02d}.txt")
 
-    print(f"{Color.GREEN}Day creation successful!{Color.DEFAULT}\n")
+    print(f"{Color.GREEN}Day creation successful!{Color.DEFAULT}")
 
 
 def replace_placeholders(original_string: str, year: int, day: int) -> str:
