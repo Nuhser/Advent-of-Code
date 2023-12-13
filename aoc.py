@@ -1,3 +1,4 @@
+from prettytable import PrettyTable
 from utility.terminal_formatting import Color, Formatting
 import aoc_util as aoc
 import argparse
@@ -172,7 +173,7 @@ def validate_expected_solutions(args, expected_results: dict[str, (str | None)])
 def run(args) -> None:
     puzzle_input, expected_results = aoc.get_puzzle_input(args.year, args.day)
     solution, parse_time = parse_input(args, puzzle_input, False)
-    run_time = solve(args, solution, expected_results, False)
+    run_time, _, _ = solve(args, solution, expected_results, False)
 
     if args.track_time:
         print(f"\n{Formatting.INVERTED}Total compute time: {Formatting.ITALIC}{(parse_time + run_time):.5f} seconds" + Formatting.RESET)
@@ -189,6 +190,8 @@ def test(args) -> None:
             for test_file in test_files:
                 args.test_numbers.append(test_file.split("-")[-1].removesuffix(".txt"))
 
+    test_results: list[list[str | int | float | None]] = []
+
     for test_number in args.test_numbers:
         if (len(args.test_numbers) > 1) and (test_number != None):
             print(f"\n{Color.YELLOW}Running test case #{test_number}...{Color.DEFAULT}", end="")
@@ -197,15 +200,27 @@ def test(args) -> None:
         puzzle_input, expected_results = aoc.get_test_input(args.year, args.day, test_number)
         validate_expected_solutions(args, expected_results) # check if the correct test solutions are provided
         solution, parse_time = parse_input(args, puzzle_input, True)
-        run_time = solve(args, solution, expected_results, True)
+        run_time, part1_solution, part2_solution = solve(args, solution, expected_results, True)
 
         if args.track_time:
             print(f"\n{Formatting.INVERTED}Total compute time: {Formatting.ITALIC}{(parse_time + run_time):.5f} seconds" + Formatting.RESET)
 
+        if (len(args.test_numbers) > 1):
+            test_results.append([test_number, part1_solution, part2_solution] + ([parse_time + run_time] if args.track_time else []))
 
-def solve(args, solution, expected_results: (dict[str, (str | None)] | None), run_is_test: bool) -> float:
-    part1_time = 0
-    part2_time = 0
+    if (len(args.test_numbers) > 1):
+        table = PrettyTable()
+        table.field_names = ["Test #", "Part 1", "Part 2"] + (["Compute Time"] if args.track_time else [])
+        table.align = "r"
+        table.float_format = "0.5"
+        table.add_rows(test_results)
+
+        print(f"\n{Formatting.UNDERLINE}Summary:{Formatting.NOT_UNDERLINE}\n{table}")
+
+
+def solve(args, solution, expected_results: (dict[str, (str | None)] | None), run_is_test: bool) -> tuple[float, (int|float|str|None), (int|float|str|None)]:
+    part1_time, part2_time = 0, 0
+    part1_solution, part2_solution = None, None
 
     # run part 1
     if (args.part == None) or (args.part == 1):
@@ -215,7 +230,7 @@ def solve(args, solution, expected_results: (dict[str, (str | None)] | None), ru
             part1_time = time.time()
 
         try:
-            solution_string, raw_solution = solution.part1()
+            solution_string, part1_solution = solution.part1()
         except (NotImplementedError, RuntimeError) as error:
             print(Color.RED + f"ERROR: {error}" + Formatting.RESET)
         else:
@@ -227,7 +242,7 @@ def solve(args, solution, expected_results: (dict[str, (str | None)] | None), ru
 
                 if expected_results["part1"] == None:
                     print(Color.YELLOW + "Solution not testable." + Formatting.RESET)
-                elif expected_results["part1"] == str(raw_solution):
+                elif expected_results["part1"] == str(part1_solution):
                     print(Color.GREEN + "This solution is correct!" + Formatting.RESET)
                 else:
                     print(Color.RED + "This solution is incorrect! Expected solution: " + Formatting.UNDERLINE + expected_results["part1"] + Formatting.RESET)
@@ -244,7 +259,7 @@ def solve(args, solution, expected_results: (dict[str, (str | None)] | None), ru
             part2_time = time.time()
 
         try:
-            solution_string, raw_solution = solution.part2()
+            solution_string, part2_solution = solution.part2()
         except (NotImplementedError, RuntimeError) as error:
             print(Color.RED + f"ERROR: {error}" + Formatting.RESET)
         else:
@@ -256,7 +271,7 @@ def solve(args, solution, expected_results: (dict[str, (str | None)] | None), ru
 
                 if expected_results["part2"] == None:
                     print(Color.YELLOW + "Solution not testable." + Formatting.RESET)
-                elif expected_results["part2"] == str(raw_solution):
+                elif expected_results["part2"] == str(part2_solution):
                     print(Color.GREEN + "This solution is correct!" + Formatting.RESET)
                 else:
                     print(Color.RED + "This solution is incorrect! Expected solution: " + Formatting.UNDERLINE + expected_results["part2"] + Formatting.RESET)
@@ -265,12 +280,13 @@ def solve(args, solution, expected_results: (dict[str, (str | None)] | None), ru
             part2_time = time.time() - part2_time
             print(Formatting.INVERTED + f"Part 2 took {Formatting.ITALIC}{part2_time:.5f} seconds{Formatting.NOT_ITALIC} to complete" + Formatting.RESET)
 
-    return part1_time + part2_time
+    return part1_time + part2_time, part1_solution, part2_solution
 
 
 def visualize(args) -> None:
     print("Starting visualization...")
 
+    visualization_time = 0
     puzzle_input, _ = aoc.get_puzzle_input(args.year, args.day)
     solution, parse_time = parse_input(args, puzzle_input, False)
 
