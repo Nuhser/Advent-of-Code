@@ -141,4 +141,4 @@ def flood_fill_area_recursively(
     matching_neighbors = get_matching_neighbors(map, start_coords, matching_function, diagonal=diagonal)
 
     for coords in [coords for coords, _ in matching_neighbors if coords not in filled_area]:
-        flood_fill_area(map, coords, matching_function, filled_area, diagonal)
+        flood_fill_area_recursively(map, coords, matching_function, filled_area, diagonal)
