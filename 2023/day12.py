@@ -20,6 +20,12 @@ class Solution(aoc.AbstractSolution):
 
     @override
     def part1(self) -> tuple[str, (int | float | str | None)]:
+        def is_record_valid(record: str, actual_group_sizes: list[int]) -> bool:
+            groups = re.findall(r"#+", record)
+            group_sizes: list[int] = [len(group) for group in groups]
+            return group_sizes == actual_group_sizes
+
+
         total_solutions: int = 0
 
         for record in self.records:
@@ -34,7 +40,7 @@ class Solution(aoc.AbstractSolution):
                 for position in assignment:
                     new_record[position] = "#"
 
-                if self.is_record_valid("".join(new_record), record.spring_groups):
+                if is_record_valid("".join(new_record), record.spring_groups):
                     total_solutions += 1
 
         return f"Total number of solutions: {total_solutions}", total_solutions
@@ -42,16 +48,52 @@ class Solution(aoc.AbstractSolution):
 
     @override
     def part2(self) -> tuple[str, (int | float | str | None)]:
-        return super().part2()
+        """
+        This solution was based on https://github.com/clrfl/AdventOfCode2023/blob/master/12/part2.py.
+        """
+
+        def count_solutions(record: str, group_sizes: list[int]) -> int:
+            states: str = "."
+            for n in group_sizes:
+                states += "#" * n + "."
+
+            states_dict: dict[int, int] = {0: 1}
+            new_dict: dict[int, int] = {}
+            for char in record:
+                for state in states_dict:
+                    if char == "?":
+                        if state + 1 < len(states):
+                            new_dict[state + 1] = new_dict.get(state + 1, 0) + states_dict[state]
+                        if states[state] == ".":
+                            new_dict[state] = new_dict.get(state, 0) + states_dict[state]
+
+                    elif char == ".":
+                        if state + 1 < len(states) and states[state + 1] == ".":
+                            new_dict[state + 1] = new_dict.get(state + 1, 0) + states_dict[state]
+                        if states[state] == ".":
+                            new_dict[state] = new_dict.get(state, 0) + states_dict[state]
+
+                    elif char == "#":
+                        if state + 1 < len(states) and states[state + 1] == "#":
+                            new_dict[state + 1] = new_dict.get(state + 1, 0) + states_dict[state]
+
+                states_dict = new_dict
+                new_dict = {}
+
+            return states_dict.get(len(states) - 1, 0) + states_dict.get(len(states) - 2, 0)
+
+
+        total_solutions: int = 0
+        for record in self.records:
+            record.record_string = "?".join([record.record_string] * 5)
+            record.spring_groups = record.spring_groups * 5
+
+            total_solutions += count_solutions(record.record_string, record.spring_groups)
+
+        return f"Total number of solutions: {total_solutions}", total_solutions
     
 
     @dataclass
     class Record:
         record_string: str
         spring_groups: list[int]
-
-    
-    def is_record_valid(self, record: str, actual_group_sizes: list[int]) -> bool:
-        groups = re.findall(r"#+", record)
-        group_sizes: list[int] = [len(group) for group in groups]
-        return group_sizes == actual_group_sizes
