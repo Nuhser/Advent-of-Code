@@ -1,7 +1,47 @@
-from typing import Any, Callable, TypeVar
+from typing import Any, Callable, Type, TypeVar
 
 
 T = TypeVar("T")
+
+
+def generate_map_with_coordinates(map_list: list[list[Any] | str], cast_to: Type[T]=str) -> dict[tuple[int, int], T]:
+    map: dict[tuple[int, int], T] = {}
+
+    for y, row in enumerate(map_list):
+        for x, element in enumerate(row):
+            map[x, y] = cast_to(element)
+
+    return map
+
+
+def get_map_dimensions(map: dict[tuple[int, int], Any]) -> tuple[int, int]:
+    x_coords: set[int] = set()
+    y_coords: set[int] = set()
+
+    for x, y in map.keys():
+        x_coords.add(x)
+        y_coords.add(y)
+
+    return max(x_coords) + 1, max(y_coords) + 1
+
+
+def get_row_of_map(map: dict[tuple[int, int], T], row: int) -> list[tuple[tuple[int, int], T]]:
+    return [((x, y), element) for (x, y), element in map.items() if (y == row)]
+
+
+def get_column_of_map(map: dict[tuple[int, int], T], column: int) -> list[tuple[tuple[int, int], T]]:
+    return [((x, y), element) for (x, y), element in map.items() if (x == column)]
+
+
+def print_map(map: dict[tuple[int, int], Any], end: str="") -> None:
+    for y in range(get_map_dimensions(map)[1]):
+        row: str = ""
+        for _, element in sorted([element for element in get_row_of_map(map, y)], key=lambda element: element[0][0]):
+            row += str(element)
+
+        print(row)
+
+    print(end=end)
 
 
 def get_neighbor_coords_with_specific_directions(
