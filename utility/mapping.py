@@ -25,18 +25,18 @@ def get_map_dimensions(map: dict[tuple[int, int], Any]) -> tuple[int, int]:
     return max(x_coords) + 1, max(y_coords) + 1
 
 
-def get_row_of_map(map: dict[tuple[int, int], T], row: int) -> list[tuple[tuple[int, int], T]]:
+def get_map_row(map: dict[tuple[int, int], T], row: int) -> list[tuple[tuple[int, int], T]]:
     return [((x, y), element) for (x, y), element in map.items() if (y == row)]
 
 
-def get_column_of_map(map: dict[tuple[int, int], T], column: int) -> list[tuple[tuple[int, int], T]]:
+def get_map_column(map: dict[tuple[int, int], T], column: int) -> list[tuple[tuple[int, int], T]]:
     return [((x, y), element) for (x, y), element in map.items() if (x == column)]
 
 
 def print_map(map: dict[tuple[int, int], Any], end: str="") -> None:
     for y in range(get_map_dimensions(map)[1]):
         row: str = ""
-        for _, element in sorted([element for element in get_row_of_map(map, y)], key=lambda element: element[0][0]):
+        for _, element in sorted([element for element in get_map_row(map, y)], key=lambda element: element[0][0]):
             row += str(element)
 
         print(row)

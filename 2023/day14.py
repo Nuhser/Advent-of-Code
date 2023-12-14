@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import override
-from utility.mapping import generate_map_with_coordinates, get_map_dimensions, get_row_of_map, print_map
+from utility.mapping import generate_map_with_coordinates, get_map_dimensions, get_map_row, print_map
 import aoc_util as aoc
 
 
@@ -12,11 +12,11 @@ class Solution(aoc.AbstractSolution):
 
     @override
     def part1(self) -> tuple[str, (int | float | str | None)]:
-        most_north_rocks: list[int] = [-1 if (rock == self.RockType.NONE) else 0 for _, rock in get_row_of_map(self.platform, 0)]
+        most_north_rocks: list[int] = [-1 if (rock == self.RockType.NONE) else 0 for _, rock in get_map_row(self.platform, 0)]
         _, y_len = get_map_dimensions(self.platform)
 
         for y in range(1, y_len):
-            for (x, _), rock in get_row_of_map(self.platform, y):
+            for (x, _), rock in get_map_row(self.platform, y):
                 match rock:
                     case self.RockType.NONE:
                         continue
@@ -33,7 +33,7 @@ class Solution(aoc.AbstractSolution):
 
         weight: int = 0
         for y in range(y_len):
-            for _, rock in get_row_of_map(self.platform, y):
+            for _, rock in get_map_row(self.platform, y):
                 if rock == self.RockType.ROUND:
                     weight += y_len - y
 
