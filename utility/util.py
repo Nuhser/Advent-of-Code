@@ -19,7 +19,18 @@ def flip_2d_list(original_list: list[list[T]]) -> list[list[T]]:
 
     return flipped_list
 
+
 def flip_list_of_string(original_list: list[str]) -> list[str]:
     flipped_list = flip_2d_list([[c for c in s] for s in original_list])
 
     return ["".join(l) for l in flipped_list]
+
+
+def get_diff_between_strings(string1: str, string2: str) -> int:
+    diff: int = abs(len(string1) - len(string2))
+
+    for i in range(min(len(string1), len(string2))):
+        if (string1[i] != string2[i]):
+            diff += 1
+
+    return diff
