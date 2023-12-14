@@ -1,6 +1,6 @@
 from typing import override
 import aoc_util as aoc
-from utility.neighbors import flood_fill_area, get_matching_neighbors
+from utility.mapping import flood_fill_area, get_matching_neighbors
 from utility.terminal_formatting import Color
 
 

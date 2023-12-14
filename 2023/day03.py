@@ -1,6 +1,6 @@
 from collections import defaultdict
 import aoc_util as aoc
-import utility.neighbors as neighbors
+import utility.mapping as mapping
 
 from typing import Any, Callable, override
 
@@ -88,7 +88,7 @@ class Solution(aoc.AbstractSolution):
 
 
     def check_for_symbol_recursively(self, x_idx: int, y_idx: int, matching_function: Callable[[Any, Any], bool]) -> tuple[bool, int, list[tuple[int, int]]]:
-        matching_neighbors = neighbors.get_matching_neighbors(self.schematic, (x_idx, y_idx), matching_function)
+        matching_neighbors = mapping.get_matching_neighbors(self.schematic, (x_idx, y_idx), matching_function)
         
         if (len(matching_neighbors) > 0):
             return True, 0, [coords for coords, _ in matching_neighbors]
