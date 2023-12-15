@@ -2,12 +2,12 @@ from utility.terminal_formatting import Color
 
 
 class AbstractSolution:
-    def __init__(self, year: int, day: int, puzzle_input: list[str], *params, is_test: bool=False, verbose: bool=False) -> None:
-        self.year = year
-        self.day = day
-        self.is_test = is_test
-        self.verbose = verbose
-        self.params = params
+    def __init__(self, year: int, day: int, puzzle_input: list[str], params: list[str]=[], is_test: bool=False, verbose: bool=False) -> None:
+        self.year: int = year
+        self.day: int = day
+        self.is_test: bool = is_test
+        self.verbose: bool = verbose
+        self.params: list[str] = params
 
         if verbose:
             print("\nStart parsing input...\n")

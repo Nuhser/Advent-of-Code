@@ -34,10 +34,10 @@ def parse_args():
         help="day to use"
     )
     parser.add_argument(
-        "--params",
-        metavar="PARAM",
+        "--param",
+        action="append",
         dest="params",
-        nargs="+",
+        metavar="PARAM",
         help="additional parameter that may be used by some solutions"
     )
     parser.add_argument(
@@ -66,8 +66,8 @@ def parse_args():
     run_parser.add_argument(
         "-p", "--part",
         type=int,
-        dest="part",
         choices=[0, 1, 2],
+        dest="part",
         help="which part of the task should be executed (default: both), use 0 to test only the parser"
     )
 
@@ -140,7 +140,7 @@ def parse_input(args, puzzle_input: list[str], run_is_test: bool) -> tuple:
             args.year,
             args.day,
             puzzle_input,
-            *args.params if args.params != None else [],
+            args.params if args.params != None else [],
             is_test = run_is_test,
             verbose = args.verbose
         )
