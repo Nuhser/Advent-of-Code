@@ -20,3 +20,4 @@ Each day consists of one input file containing my personal randomly generated pu
 12. [Hot Springs](https://github.com/Nuhser/Advent-of-Code/blob/master/2023/day12.py) (*[original task](https://adventofcode.com/2023/day/12)*)
 13. [Point of Incidence](https://github.com/Nuhser/Advent-of-Code/blob/master/2023/day13.py) (*[original task](https://adventofcode.com/2023/day/13)*)
 14. [Parabolic Reflector Dish](https://github.com/Nuhser/Advent-of-Code/blob/master/2023/day14.py) (*[original task](https://adventofcode.com/2023/day/14)*)
+15. [Lens Library](https://github.com/Nuhser/Advent-of-Code/blob/master/2023/day15.py) (*[original task](https://adventofcode.com/2023/day/15)*)
