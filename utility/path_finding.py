@@ -2,7 +2,12 @@ import heapq as heap
 
 from collections import defaultdict
 
-def dijkstra(map: dict[tuple[int, int], list[tuple[tuple[int, int], int]]], starting_point: tuple[int, int], end_point: (None | tuple[int, int])=None) -> tuple[dict[tuple[int, int], tuple[int,int]], defaultdict[tuple[int, int], (int | float)]]:
+def dijkstra(
+        map: dict[tuple[int, int], list[tuple[tuple[int, int], int]]],
+        starting_point: tuple[int, int],
+        end_point: (None | tuple[int, int]) = None,
+        max_length_same_direction: (int | float) = float("inf")
+) -> tuple[dict[tuple[int, int], tuple[int,int]], defaultdict[tuple[int, int], (int | float)]]:
     """
     This method calculates the lowest cost to get to every point on a map starting at starting_point as well as every points parent on the cheapest path from the starting point to that point.
 
@@ -14,32 +19,51 @@ def dijkstra(map: dict[tuple[int, int], list[tuple[tuple[int, int], int]]], star
     starting_point : tuple[int, int]
         The x- and y-coordinates of the starting point of the cost calculations.
 
+    end_point : (None | tuple[int, int]) = None
+        The x- and y-coordinates of the end point of the cost calculations. If set to None, the calculation won't stop until the costs to get to all points in the map are calculated.
+
     Returns
     -------
     parent_map, costs
         Two dictionaries which both use the x- and y-coordinates of the points on the map as theier keys. parent_map has the parent of the individual point on the cheapest path beginning at the starting point as its value and costs the cost to get to this point.
     """
 
-    visited = set()
+    visited: set[tuple[tuple[int, int], tuple[int, int], int]] = set()
     parents_map: dict[tuple[int, int], tuple[int,int]] = {}
+
     costs: defaultdict[tuple[int, int], (int | float)] = defaultdict(lambda: float("inf"))
     costs[starting_point] = 0
+
     priority_queue = []
-    heap.heappush(priority_queue, (0, starting_point))
+    heap.heappush(priority_queue, (0, starting_point, (0, 0), 0))
 
     while priority_queue:
-        _, point = heap.heappop(priority_queue)
-        visited.add(point)
+        _, point, point_direction, point_moved_blocks = heap.heappop(priority_queue)
+
+        if (point, point_direction, point_moved_blocks) in visited:
+            continue
+
+        visited.add((point, point_direction, point_moved_blocks))
 
         for adjacent_point, weight in map[point]:
-            if adjacent_point in visited:
-                continue
+            direction = (adjacent_point[0] - point[0], adjacent_point[1] - point[1])
+
+            if (direction == point_direction):
+                moved_blocks = point_moved_blocks + 1
+
+                if (moved_blocks > max_length_same_direction):
+                    continue
+
+            else:
+                moved_blocks = 1
 
             new_cost = costs[point] + weight
-            if new_cost < costs[adjacent_point]:
-                parents_map[adjacent_point] = point
-                costs[adjacent_point] = new_cost
-                heap.heappush(priority_queue, (new_cost, adjacent_point))
+            if new_cost >= costs[adjacent_point]:
+                continue
+
+            parents_map[adjacent_point] = point
+            costs[adjacent_point] = new_cost
+            heap.heappush(priority_queue, (new_cost, adjacent_point, direction, moved_blocks))
 
         if (end_point != None) and (end_point == point):
             break
