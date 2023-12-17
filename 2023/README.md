@@ -22,3 +22,4 @@ Each day consists of one input file containing my personal randomly generated pu
 14. [Parabolic Reflector Dish](https://github.com/Nuhser/Advent-of-Code/blob/master/2023/day14.py) (*[original task](https://adventofcode.com/2023/day/14)*)
 15. [Lens Library](https://github.com/Nuhser/Advent-of-Code/blob/master/2023/day15.py) (*[original task](https://adventofcode.com/2023/day/15)*)
 16. [The Floor Will Be Lava](https://github.com/Nuhser/Advent-of-Code/blob/master/2023/day16.py) (*[original task](https://adventofcode.com/2023/day/16)*)
+17. [Clumsy Crucible](https://github.com/Nuhser/Advent-of-Code/blob/master/2023/day17.py) (*[original task](https://adventofcode.com/2023/day/17)*)
