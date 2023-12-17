@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import override
+from utility.mapping import generate_map_with_coordinates, get_map_dimensions
 import aoc_util as aoc
-from utility.mapping import generate_map_with_coordinates
 
 
 class Solution(aoc.AbstractSolution):
@@ -12,9 +12,35 @@ class Solution(aoc.AbstractSolution):
 
     @override
     def part1(self) -> tuple[str, (int | float | str | None)]:
+        energized_tiles: int = self.energize_tiles_for_beam(((0, 0), (1, 0)))
+
+        return f"Number of energized tiles: {energized_tiles}", energized_tiles
+
+
+    @override
+    def part2(self) -> tuple[str, (int | float | str | None)]:
+        """
+        This solution isn't very smart but more of a brute force approach. It took ~1.90491s to compute.
+        """
+
+        max_energized_tiles: int = 0
+        x_len, y_len = get_map_dimensions(self.map)
+
+        for x in range(x_len):
+            max_energized_tiles = max(max_energized_tiles, self.energize_tiles_for_beam(((x, 0), (0, 1))))
+            max_energized_tiles = max(max_energized_tiles, self.energize_tiles_for_beam(((x, y_len - 1), (0, -1))))
+
+        for y in range(y_len):
+            max_energized_tiles = max(max_energized_tiles, self.energize_tiles_for_beam(((0, y), (1, 0))))
+            max_energized_tiles = max(max_energized_tiles, self.energize_tiles_for_beam(((x_len - 1, y), (-1, 0))))
+
+        return f"Largest number of energized tiles: {max_energized_tiles}", max_energized_tiles
+
+
+    def energize_tiles_for_beam(self, start_beam: tuple[tuple[int, int], tuple[int, int]]) -> int:
         energized_tiles: set[tuple[int, int]] = set()
-        beam_history: set[tuple[tuple[int, int], tuple[int, int]]] = {((0, 0), (1, 0))}
-        beams: list[tuple[tuple[int, int], tuple[int, int]]] = [((0, 0), (1, 0))]
+        beam_history: set[tuple[tuple[int, int], tuple[int, int]]] = {start_beam}
+        beams: list[tuple[tuple[int, int], tuple[int, int]]] = [start_beam]
 
         while (len(beams) > 0):
             # get next beam from list
@@ -46,12 +72,7 @@ class Solution(aoc.AbstractSolution):
                 else:
                     beam_history.add(beam)
 
-        return f"Number of energized tiles: {len(energized_tiles)}", len(energized_tiles)
-
-
-    @override
-    def part2(self) -> tuple[str, (int | float | str | None)]:
-        return super().part2()
+        return len(energized_tiles)
 
 
 class Mirror(Enum):
