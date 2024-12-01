@@ -1,4 +1,4 @@
-from typing import TypeVar
+from typing import Any, TypeVar
 
 
 T = TypeVar("T")
@@ -34,3 +34,15 @@ def get_diff_between_strings(string1: str, string2: str) -> int:
             diff += 1
 
     return diff
+
+
+def count_elements_in_list(list: list[Any]) -> dict[Any, int]:
+    count_map: dict[Any, int] = dict()
+
+    for element in list:
+        if element not in count_map:
+            count_map[element] = 1
+        else:
+            count_map[element] += 1
+
+    return count_map
