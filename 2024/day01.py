@@ -38,4 +38,13 @@ class Solution(aoc.AbstractSolution):
 
     @override
     def part2(self) -> tuple[str, (int | float | str | None)]:
-        return super().part2()
+        left_list, right_list = self.puzzle_input[0].copy(), self.puzzle_input[1].copy()
+
+        right_list_counts = util.count_elements_in_list(right_list)
+
+        similarity_score: int = 0
+        for element in left_list:
+            if element in right_list_counts:
+                similarity_score += element * right_list_counts[element]
+
+        return f"The similarity score of the lists is {similarity_score}", similarity_score
