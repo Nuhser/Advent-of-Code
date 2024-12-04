@@ -37,4 +37,45 @@ class Solution(aoc.AbstractSolution):
 
     @override
     def part2(self) -> tuple[str, (int | float | str | None)]:
-        return super().part2()
+        xmas_found: int = 0
+
+        for coords, letter in self.puzzle_input.items():
+            # only look at As and their neighbors
+            if (letter != "A"):
+                continue
+
+            # check if two Ms are neighboring diagonally
+            letter_m_list = mapping.get_matching_neighbors(
+                self.puzzle_input,
+                coords,
+                lambda _, neighbor: neighbor[1] == "M",
+                horizontal=False,
+                vertical=False
+            )
+
+            if (len(letter_m_list) != 2):
+                continue
+
+            # check if two Ss are neighboring diagonally
+            letter_s_list = mapping.get_matching_neighbors(
+                self.puzzle_input,
+                coords,
+                lambda _, neighbor: neighbor[1] == "S",
+                horizontal=False,
+                vertical=False
+            )
+
+            if (len(letter_s_list) != 2):
+                continue
+
+            # check if the two Ms are not diagonal two each other
+            m_direction: tuple[int, int] = (0, 0)
+            for (x, y), _ in letter_m_list:
+                m_direction = (m_direction[0] + (x - coords[0]), m_direction[1] + (y - coords[1]))
+
+            if (m_direction == (0, 0)):
+                continue
+
+            xmas_found += 1
+
+        return f"XMASs found: {xmas_found}", xmas_found
