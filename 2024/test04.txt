@@ -1,5 +1,5 @@
 #!part1:18
-#!part2:?
+#!part2:9
 MMMSXXMASM
 MSAMXMSMSA
 AMXSXMAAMM
