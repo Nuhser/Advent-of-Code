@@ -5,6 +5,22 @@ T = TypeVar("T")
 
 
 def generate_map_with_coordinates(map_list: list[list[Any] | str], cast_to: Type[T]=str) -> dict[tuple[int, int], T]:
+    """
+    Takes a list of lists or strings and generates a map which uses coordinates as the keys and the inner list elements or the strings individual characters as the values.
+
+    Parameters
+    ----------
+    map_list: list[list[Any] | str]
+        The list that should be converted into a map with coordinates. The indices of the list elements will be the y-coordinates. If the list elements are lists themselves, their indices will be the x-coordinates. If the list elements are strings, then the indices of the chars in the string will become the x-coordinates.
+    cast_to: Type[T] = str
+        The type to which the final map's elements should be casted (e.g. to convert a list of strings to a map with coords containing integers).
+
+    Returns
+    -------
+    dict[tuple[int, int], T]
+        A dictionary which keys are tuple containing the x- and y-coords of the map and which values are the corresponding values at those coords. The values have the type of the `cast_to`-parameter.
+    """
+
     map: dict[tuple[int, int], T] = {}
 
     for y, row in enumerate(map_list):
