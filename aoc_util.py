@@ -80,7 +80,7 @@ def parse_input_with_blocks(puzzle_input: list[str], *line_delimiters: str, bloc
 
     return blocks
 
-def recursive_split(item: str, delimiters: tuple, cast_to: type) -> list:
+def recursive_split(item: str, delimiters: tuple[str, *tuple[str, ...]], cast_to: type) -> list:
     if len(delimiters) <= 1:
         return [cast_to(subitem) for subitem in (item.split(delimiters[0]) if delimiters[0] != "" else item.split())]
     else:
@@ -92,6 +92,3 @@ def split_string_in_chunks(string: str, chunk_size: int, padding_size: int=0, ca
         chunks.append(cast_to(string[i : i+chunk_size]))
 
     return chunks
-
-def convert_hex_to_bin(hex_string: str) -> str:
-    return str(bin(int(hex_string, base=16)))[2 :].zfill(4)
