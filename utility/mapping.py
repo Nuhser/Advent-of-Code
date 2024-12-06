@@ -38,11 +38,11 @@ def get_map_dimensions(map: dict[tuple[int, int], Any]) -> tuple[int, int]:
     return max(x_coords) + 1, max(y_coords) + 1
 
 
-def get_map_row(map: dict[tuple[int, int], T], row: int) -> list[tuple[tuple[int, int], T]]:
+def get_map_row[T](map: dict[tuple[int, int], T], row: int) -> list[tuple[tuple[int, int], T]]:
     return [((x, y), element) for (x, y), element in map.items() if (y == row)]
 
 
-def get_map_column(map: dict[tuple[int, int], T], column: int) -> list[tuple[tuple[int, int], T]]:
+def get_map_column[T](map: dict[tuple[int, int], T], column: int) -> list[tuple[tuple[int, int], T]]:
     return [((x, y), element) for (x, y), element in map.items() if (x == column)]
 
 
@@ -99,7 +99,7 @@ def get_neighbor_coords_with_specific_directions(
     return neighbor_coords
 
 
-def get_neighbors(
+def get_neighbors[T](
         map: dict[tuple[int, int], T],
         current_coords: tuple[int, int],
         horizontal: bool=True,
@@ -110,7 +110,7 @@ def get_neighbors(
     return get_neighbors_with_specific_directions(map, current_coords, horizontal, horizontal, vertical, vertical, diagonal, diagonal, diagonal, diagonal)
 
 
-def get_neighbors_with_specific_directions(
+def get_neighbors_with_specific_directions[T](
         map: dict[tuple[int, int], T],
         current_coords: tuple[int, int],
         left: bool,
@@ -128,7 +128,7 @@ def get_neighbors_with_specific_directions(
     return [(coords, map[coords]) for coords in neighbor_coords]
 
 
-def get_matching_neighbors(
+def get_matching_neighbors[T](
         map: dict[tuple[int, int], T],
         current_coords: tuple[int, int],
         matching_function: Callable[[tuple[int, int], tuple[tuple[int, int], T]], bool],
@@ -141,7 +141,7 @@ def get_matching_neighbors(
     return [neighbor for neighbor in neighbors if matching_function(current_coords, neighbor)]
 
 
-def has_matching_neighbors(
+def has_matching_neighbors[T](
         map: dict[tuple[int, int], T],
         current_coords: tuple[int, int],
         matching_function: Callable[[tuple[int, int], tuple[tuple[int, int], T]], bool],
@@ -153,7 +153,7 @@ def has_matching_neighbors(
     return len(get_matching_neighbors(map, current_coords, matching_function, horizontal, vertical, diagonal)) > 0
 
 
-def flood_fill_area(
+def flood_fill_area[T](
         map: dict[tuple[int, int], T],
         start_coords: tuple[int, int],
         matching_function: Callable[[tuple[int, int], tuple[tuple[int, int], T]], bool],
@@ -178,7 +178,7 @@ def flood_fill_area(
     return filled_area
 
 
-def flood_fill_area_recursively(
+def flood_fill_area_recursively[T](
         map: dict[tuple[int, int], T],
         start_coords: tuple[int, int],
         matching_function: Callable[[tuple[int, int], tuple[tuple[int, int], T]], bool],
