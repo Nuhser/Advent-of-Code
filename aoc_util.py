@@ -29,6 +29,7 @@ class AbstractSolution:
     def visualize(self) -> None:
         raise NotImplementedError(f"The visualization for day {self.day} of year {self.year} isn't implemented yet!")
 
+
 def get_puzzle_input(year: int, day: int) -> tuple[list[str], None]:
     try:
         with open(f"./{year}/input{day:02d}.txt", "r") as puzzle_input:
@@ -36,6 +37,7 @@ def get_puzzle_input(year: int, day: int) -> tuple[list[str], None]:
 
     except FileNotFoundError:
             raise FileNotFoundError(f"There is no puzzle input for day {day} of year {year}! Create a text file named '{year}/input{day:02d}.txt'")
+
 
 def get_test_input(year: int, day: int, test_number: int) -> tuple[list[str], dict[str, (str | None)]]:
     try:
@@ -60,11 +62,13 @@ def get_test_input(year: int, day: int, test_number: int) -> tuple[list[str], di
     except FileNotFoundError:
             raise FileNotFoundError(f"There is no test input for day {day} of year {year}! Create a text file named '{year}/test{day:02d}{f"-{test_number}" if (test_number > -1) else ""}.txt'")
 
+
 def parse_input(puzzle_input: list[str], *delimiters: str, strip_lines: bool=True, cast_to: type=str) -> list:
     if len(delimiters) == 0:
         return [cast_to(line.strip() if strip_lines else line) for line in puzzle_input]
     else:
         return [recursive_split(line.strip() if strip_lines else line, delimiters, cast_to) for line in puzzle_input]
+
 
 def parse_input_with_blocks(puzzle_input: list[str], *line_delimiters: str, block_delimiter: str="", strip_lines: bool=True, cast_to: type=str) -> list[list]:
     blocks: list[list] = [[]]
@@ -80,11 +84,45 @@ def parse_input_with_blocks(puzzle_input: list[str], *line_delimiters: str, bloc
 
     return blocks
 
-def recursive_split(item: str, delimiters: tuple, cast_to: type) -> list:
+
+def parse_input_with_blocks_and_block_specific_line_delimiters(
+        puzzle_input: list[str],
+        *line_delimiters: tuple[str],
+        block_delimiter: str="",
+        strip_lines: bool=True,
+        cast_to: type=str
+) -> list[list]:
+    
+    block_idx = 0
+    blocks: list[list] = [[]]
+
+    if (block_idx >= len(line_delimiters)):
+        raise ValueError("There are more blocks in your puzzle input than defined groups of line delimiters.")
+
+    for line in [line.strip() if strip_lines else line for line in puzzle_input]:
+        if line == block_delimiter:
+            blocks.append(list())
+            block_idx += 1
+
+            if (block_idx >= len(line_delimiters)):
+                raise ValueError("There are more blocks in your puzzle input than defined groups of line delimiters.")
+
+            continue
+
+        if len(line_delimiters[block_idx]) == 0:
+            blocks[-1].append(cast_to(line))
+        else:
+            blocks[-1].append(recursive_split(line, line_delimiters[block_idx], cast_to))
+    
+    return blocks
+
+
+def recursive_split(item: str, delimiters: tuple[str, *tuple[str, ...]], cast_to: type) -> list:
     if len(delimiters) == 1:
         return [cast_to(subitem) for subitem in (item.split(delimiters[0]) if delimiters[0] != "" else item.split())]
     else:
         return [recursive_split(subitem, delimiters[1:], cast_to) for subitem in (item.split(delimiters[0]) if delimiters[0] != "" else item.split())]
+
 
 def split_string_in_chunks(string: str, chunk_size: int, padding_size: int=0, cast_to: type=str) -> list:
     chunks = []
@@ -92,6 +130,3 @@ def split_string_in_chunks(string: str, chunk_size: int, padding_size: int=0, ca
         chunks.append(cast_to(string[i : i+chunk_size]))
 
     return chunks
-
-def convert_hex_to_bin(hex_string: str) -> str:
-    return str(bin(int(hex_string, base=16)))[2 :].zfill(4)

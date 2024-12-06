@@ -1,10 +1,15 @@
-from typing import Any, TypeVar
+from typing import Any
 
 
-T = TypeVar("T")
+def convert_hex_to_bin(hex_string: str) -> str:
+    return str(bin(int(hex_string, base=16)))[2 :].zfill(4)
 
 
-def flip_2d_list(original_list: list[list[T]]) -> list[list[T]]:
+def count_elements_in_list(list: list[Any]) -> dict[Any, int]:
+    return {key: list.count(key) for key in list}
+
+
+def flip_2d_list[T](original_list: list[list[T]]) -> list[list[T]]:
     if (len(set(len(row) for row in original_list)) > 1):
         raise ValueError("ERROR: All rows of 'original_list' need to have the same number of elements.")
 
@@ -34,15 +39,3 @@ def get_diff_between_strings(string1: str, string2: str) -> int:
             diff += 1
 
     return diff
-
-
-def count_elements_in_list(list: list[Any]) -> dict[Any, int]:
-    count_map: dict[Any, int] = dict()
-
-    for element in list:
-        if element not in count_map:
-            count_map[element] = 1
-        else:
-            count_map[element] += 1
-
-    return count_map

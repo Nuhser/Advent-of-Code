@@ -1,12 +1,13 @@
 import aoc_util as aoc
 import operator
+import utility.util as util
 
 from functools import reduce
 
 class Solution(aoc.AbstractSolution):
     def parse(self, puzzle_input: list[str]) -> None:
         hex_code = aoc.parse_input(puzzle_input)[0]
-        bin_code = "".join(aoc.convert_hex_to_bin(char) for char in hex_code)
+        bin_code = "".join(util.convert_hex_to_bin(char) for char in hex_code)
 
         self.packets, _ = self.parse_packets(bin_code)
 
