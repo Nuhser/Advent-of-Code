@@ -67,7 +67,7 @@ def parse_input(puzzle_input: list[str], *delimiters: str, strip_lines: bool=Tru
         return [recursive_split(line.strip() if strip_lines else line, delimiters, cast_to) for line in puzzle_input]
 
 def parse_input_with_blocks(puzzle_input: list[str], *line_delimiters: str, block_delimiter: str="", strip_lines: bool=True, cast_to: type=str) -> list[list]:
-    blocks = [[]]
+    blocks: list[list] = [[]]
     for line in [line.strip() if strip_lines else line for line in puzzle_input]:
         if line == block_delimiter:
             blocks.append([])
@@ -81,7 +81,7 @@ def parse_input_with_blocks(puzzle_input: list[str], *line_delimiters: str, bloc
     return blocks
 
 def recursive_split(item: str, delimiters: tuple, cast_to: type) -> list:
-    if len(delimiters) <= 1:
+    if len(delimiters) == 1:
         return [cast_to(subitem) for subitem in (item.split(delimiters[0]) if delimiters[0] != "" else item.split())]
     else:
         return [recursive_split(subitem, delimiters[1:], cast_to) for subitem in (item.split(delimiters[0]) if delimiters[0] != "" else item.split())]
