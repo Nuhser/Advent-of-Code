@@ -31,10 +31,12 @@ def dijkstra(
     visited: set[tuple[tuple[int, int], tuple[int, int], int]] = set()
     parents_map: dict[tuple[int, int], tuple[int,int]] = {}
 
+    direction_map: dict[tuple[int, int], tuple[tuple[int, int], int]] = {(0, 0): ((0, 0), 0)}
+
     costs: defaultdict[tuple[int, int], (int | float)] = defaultdict(lambda: float("inf"))
     costs[starting_point] = 0
 
-    priority_queue = []
+    priority_queue: list = []
     heap.heappush(priority_queue, (0, starting_point, (0, 0), 0))
 
     while priority_queue:
@@ -48,8 +50,8 @@ def dijkstra(
         for adjacent_point, weight in map[point]:
             direction = (adjacent_point[0] - point[0], adjacent_point[1] - point[1])
 
-            if (direction == point_direction):
-                moved_blocks = point_moved_blocks + 1
+            if (direction == direction_map[point][0]):
+                moved_blocks = direction_map[point][1] + 1
 
                 if (moved_blocks > max_length_same_direction):
                     continue
@@ -62,6 +64,7 @@ def dijkstra(
                 continue
 
             parents_map[adjacent_point] = point
+            direction_map[adjacent_point] = (direction, moved_blocks)
             costs[adjacent_point] = new_cost
             heap.heappush(priority_queue, (new_cost, adjacent_point, direction, moved_blocks))
 
