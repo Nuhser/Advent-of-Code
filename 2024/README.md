@@ -11,3 +11,4 @@ Each day consists of one input file containing my personal randomly generated pu
 3. [Mull It Over](https://github.com/Nuhser/Advent-of-Code/blob/master/2024/day03.py) (*[original task](https://adventofcode.com/2024/day/3)*)
 4. [Ceres Search](https://github.com/Nuhser/Advent-of-Code/blob/master/2024/day04.py) (*[original task](https://adventofcode.com/2024/day/4)*)
 5. [Print Queue](https://github.com/Nuhser/Advent-of-Code/blob/master/2024/day05.py) (*[original task](https://adventofcode.com/2024/day/5)*)
+6. [Guard Gallivant](https://github.com/Nuhser/Advent-of-Code/blob/master/2024/day06.py) (*[original task](https://adventofcode.com/2024/day/6)*)
