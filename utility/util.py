@@ -1,7 +1,4 @@
-from typing import Any, TypeVar
-
-
-T = TypeVar("T")
+from typing import Any
 
 
 def convert_hex_to_bin(hex_string: str) -> str:
@@ -12,7 +9,7 @@ def count_elements_in_list(list: list[Any]) -> dict[Any, int]:
     return {key: list.count(key) for key in list}
 
 
-def flip_2d_list(original_list: list[list[T]]) -> list[list[T]]:
+def flip_2d_list[T](original_list: list[list[T]]) -> list[list[T]]:
     if (len(set(len(row) for row in original_list)) > 1):
         raise ValueError("ERROR: All rows of 'original_list' need to have the same number of elements.")
 

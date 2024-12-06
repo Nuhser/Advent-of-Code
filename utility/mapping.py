@@ -1,10 +1,7 @@
-from typing import Any, Callable, Type, TypeVar
+from typing import Any, Callable, Type
 
 
-T = TypeVar("T")
-
-
-def generate_map_with_coordinates(map_list: list[list[Any] | str], cast_to: Type[T]=str) -> dict[tuple[int, int], T]:
+def generate_map_with_coordinates[T](map_list: list[list[Any] | str], cast_to: Type[T]=str) -> dict[tuple[int, int], T]:
     """
     Takes a list of lists or strings and generates a map which uses coordinates as the keys and the inner list elements or the strings individual characters as the values.
 

@@ -1,9 +1,7 @@
-from typing import Callable, TypeVar
+from typing import Callable
 
-# used for generics
-T = TypeVar("T")
 
-def bubble_sort(sorting_list: list[T], comparison_function: Callable[[T, T], (bool | None)], save_history: bool=False) -> (None | list[list[T]]):
+def bubble_sort[T](sorting_list: list[T], comparison_function: Callable[[T, T], (bool | None)], save_history: bool=False) -> (None | list[list[T]]):
     # Avg.: O(n^2), Best: O(n), Worst: O(n^2)
 
     history: list[list[T]] = list()
@@ -30,7 +28,7 @@ def bubble_sort(sorting_list: list[T], comparison_function: Callable[[T, T], (bo
     return history if save_history else None
 
 
-def heap_sort(sorting_list: list[T], comparison_function: Callable[[T, T], (bool | None)], save_history: bool=False) -> (None | list[list[T]]):
+def heap_sort[T](sorting_list: list[T], comparison_function: Callable[[T, T], (bool | None)], save_history: bool=False) -> (None | list[list[T]]):
     # Avg.: O(n*log(n)), Best: O(n*log(n)), Worst: O(n*log(n))
 
     history: list[list[T]] = list()
@@ -69,7 +67,7 @@ def heap_sort(sorting_list: list[T], comparison_function: Callable[[T, T], (bool
     return history if save_history else None
 
 
-def insertion_sort(sorting_list: list[T], comparison_function: Callable[[T, T], (bool | None)], save_history: bool=False) -> (None | list[list[T]]):
+def insertion_sort[T](sorting_list: list[T], comparison_function: Callable[[T, T], (bool | None)], save_history: bool=False) -> (None | list[list[T]]):
     # Avg.: O(n^2), Best: O(n), Worst: O(n^2)
 
     history: list[list[T]] = list()
@@ -93,7 +91,7 @@ def insertion_sort(sorting_list: list[T], comparison_function: Callable[[T, T], 
     return history if save_history else None
 
 
-def merge_sort(sorting_list: list[T], comparison_function: Callable[[T, T], (bool | None)], save_history: bool=False) -> (None | list[list[T]]):
+def merge_sort[T](sorting_list: list[T], comparison_function: Callable[[T, T], (bool | None)], save_history: bool=False) -> (None | list[list[T]]):
     # Avg.: O(n*log(n)), Best: O(n*log(n)), Worst: O(n*log(n))
 
     history: list[list[T]] = list()
@@ -142,7 +140,7 @@ def merge_sort(sorting_list: list[T], comparison_function: Callable[[T, T], (boo
 
     return history if save_history else None
 
-def quick_sort(sorting_list: list[T], comparison_function: Callable[[T, T], (bool | None)], low: int=0, high: (int | None)=None, save_history: bool=False) -> (None | list[list[T]]):
+def quick_sort[T](sorting_list: list[T], comparison_function: Callable[[T, T], (bool | None)], low: int=0, high: (int | None)=None, save_history: bool=False) -> (None | list[list[T]]):
     # Avg.: O(n*log(n)), Best: O(n*log(n)), Worst: O(n^2)
 
     history: list[list[T]] = list()
@@ -180,7 +178,7 @@ def quick_sort(sorting_list: list[T], comparison_function: Callable[[T, T], (boo
     return history if save_history else None
 
 
-def selection_sort(sorting_list: list[T], comparison_function: Callable[[T, T], (bool | None)], save_history: bool=False) -> (None | list[list[T]]):
+def selection_sort[T](sorting_list: list[T], comparison_function: Callable[[T, T], (bool | None)], save_history: bool=False) -> (None | list[list[T]]):
     # Avg.: O(n^2), Best: O(n^2), Worst: O(n^2)
 
     history: list[list[T]] = list()
