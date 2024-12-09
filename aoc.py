@@ -4,7 +4,6 @@ import importlib
 import os
 import shutil
 import time
-from typing import Type
 
 from prettytable import PrettyTable
 
