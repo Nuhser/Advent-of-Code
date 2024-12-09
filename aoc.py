@@ -270,7 +270,8 @@ def solve(
     expected_results: dict[str, (str | None)] | None,
     run_is_test: bool,
 ) -> tuple[float, (int | float | str | None), (int | float | str | None)]:
-    part1_time, part2_time = 0, 0
+    part1_time: float = 0.0
+    part2_time: float = 0.0
     part1_solution, part2_solution = None, None
 
     # run part 1

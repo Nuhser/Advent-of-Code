@@ -74,9 +74,9 @@ def get_test_input(
                 if not line.strip().startswith("#!"):
                     break
 
-                line = line.strip().removeprefix("#!").split(":")
+                splitted_line = line.strip().removeprefix("#!").split(":")
 
-                expected_results[line[0]] = line[1] if not line[1] == "?" else None
+                expected_results[splitted_line[0]] = splitted_line[1] if not splitted_line[1] == "?" else None
 
             test_input.seek(last_position)
 
