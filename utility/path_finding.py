@@ -1,13 +1,15 @@
 import heapq as heap
-
 from collections import defaultdict
 
+
 def dijkstra(
-        map: dict[tuple[int, int], list[tuple[tuple[int, int], int]]],
-        starting_point: tuple[int, int],
-        end_point: (None | tuple[int, int]) = None,
-        max_length_same_direction: (int | float) = float("inf")
-) -> tuple[dict[tuple[int, int], tuple[int,int]], defaultdict[tuple[int, int], (int | float)]]:
+    map: dict[tuple[int, int], list[tuple[tuple[int, int], int]]],
+    starting_point: tuple[int, int],
+    end_point: None | tuple[int, int] = None,
+    max_length_same_direction: int | float = float("inf"),
+) -> tuple[
+    dict[tuple[int, int], tuple[int, int]], defaultdict[tuple[int, int], (int | float)]
+]:
     """
     This method calculates the lowest cost to get to every point on a map starting at starting_point as well as every points parent on the cheapest path from the starting point to that point.
 
@@ -29,11 +31,15 @@ def dijkstra(
     """
 
     visited: set[tuple[tuple[int, int], tuple[int, int], int]] = set()
-    parents_map: dict[tuple[int, int], tuple[int,int]] = {}
+    parents_map: dict[tuple[int, int], tuple[int, int]] = {}
 
-    direction_map: dict[tuple[int, int], tuple[tuple[int, int], int]] = {(0, 0): ((0, 0), 0)}
+    direction_map: dict[tuple[int, int], tuple[tuple[int, int], int]] = {
+        (0, 0): ((0, 0), 0)
+    }
 
-    costs: defaultdict[tuple[int, int], (int | float)] = defaultdict(lambda: float("inf"))
+    costs: defaultdict[tuple[int, int], (int | float)] = defaultdict(
+        lambda: float("inf")
+    )
     costs[starting_point] = 0
 
     priority_queue: list = []
@@ -50,10 +56,10 @@ def dijkstra(
         for adjacent_point, weight in map[point]:
             direction = (adjacent_point[0] - point[0], adjacent_point[1] - point[1])
 
-            if (direction == direction_map[point][0]):
+            if direction == direction_map[point][0]:
                 moved_blocks = direction_map[point][1] + 1
 
-                if (moved_blocks > max_length_same_direction):
+                if moved_blocks > max_length_same_direction:
                     continue
 
             else:
@@ -66,7 +72,9 @@ def dijkstra(
             parents_map[adjacent_point] = point
             direction_map[adjacent_point] = (direction, moved_blocks)
             costs[adjacent_point] = new_cost
-            heap.heappush(priority_queue, (new_cost, adjacent_point, direction, moved_blocks))
+            heap.heappush(
+                priority_queue, (new_cost, adjacent_point, direction, moved_blocks)
+            )
 
         if (end_point != None) and (end_point == point):
             break
@@ -74,7 +82,9 @@ def dijkstra(
     return parents_map, costs
 
 
-def is_in_manhattan_distance(point1: tuple[int, int], point2: tuple[int, int], max_manhattan_distance: int) -> bool:
+def is_in_manhattan_distance(
+    point1: tuple[int, int], point2: tuple[int, int], max_manhattan_distance: int
+) -> bool:
     return max_manhattan_distance >= get_manhatten_distance(point1, point2)
 
 

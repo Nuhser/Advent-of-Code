@@ -15,6 +15,7 @@ class Formatting:
     STRIKEOUT = "\033[9m"
     NOT_STRIKEOUT = "\033[29m"
 
+
 class Color:
     BLACK = "\033[30m"
     RED = "\033[31m"
@@ -25,6 +26,7 @@ class Color:
     CYAN = "\033[36m"
     WHITE = "\033[37m"
     DEFAULT = "\033[39m"
+
 
 class BackgroundColor:
     BLACK = "\033[40m"
@@ -37,6 +39,7 @@ class BackgroundColor:
     WHITE = "\033[47m"
     DEFAULT = "\033[49m"
 
+
 class Navigation:
     UP = "\033[1A"
     DOWN = "\033[1B"
@@ -44,6 +47,7 @@ class Navigation:
     LEFT = "\033[1D"
     SCREEN_BEGINNING = "\033[H"
     LINE_BEGINNING = "\033[1F"
+
 
 class Clear:
     LINE = "\033[2K"
