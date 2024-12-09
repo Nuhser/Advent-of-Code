@@ -22,7 +22,7 @@ def generate_map_with_coordinates[T](map_list: list[list[Any] | str], cast_to: T
 
     for y, row in enumerate(map_list):
         for x, element in enumerate(row):
-            map[x, y] = cast_to(element)
+            map[x, y] = cast_to(element) # type: ignore
 
     return map
 
