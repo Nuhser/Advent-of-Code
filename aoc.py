@@ -65,7 +65,7 @@ def parse_args():
         help="which part of the task should be executed (default: both), use 0 to test only the parser",
     )
 
-    visualization_parser = subparsers.add_parser("visualize")
+    subparsers.add_parser("visualize")
 
     new_day_parser = subparsers.add_parser("new")
     new_day_parser.add_argument(
