@@ -1,12 +1,15 @@
-from prettytable import PrettyTable
-from utility.terminal_formatting import Color, Formatting
-import aoc_util as aoc
 import argparse
-import importlib
 import glob
+import importlib
 import os
 import shutil
 import time
+from typing import Type
+
+from prettytable import PrettyTable
+
+import aoc_util as aoc
+from utility.terminal_formatting import Color, Formatting
 
 
 def parse_args():
@@ -128,15 +131,15 @@ def replace_placeholders(original_string: str, year: int, day: int) -> str:
     return original_string.replace("$$YEAR", str(year)).replace("$$DAY", str(day))
 
 
-def parse_input(args, puzzle_input: list[str], run_is_test: bool) -> tuple:
-    parse_time = 0
+def parse_input(args, puzzle_input: list[str], run_is_test: bool) -> tuple[aoc.AbstractSolution, float]:
+    parse_time: float = 0
 
     if args.track_time:
         parse_time = time.time()
 
     # create solution object for given day and year
     try:
-        solution = importlib.import_module(f"{args.year}.day{args.day:02d}").Solution(
+        solution: aoc.AbstractSolution = importlib.import_module(f"{args.year}.day{args.day:02d}").Solution(
             args.year,
             args.day,
             puzzle_input,
@@ -218,7 +221,7 @@ def test(args) -> None:
         print(f"\n{Formatting.UNDERLINE}Summary:{Formatting.NOT_UNDERLINE}\n{table}")
 
 
-def solve(args, solution, expected_results: (dict[str, (str | None)] | None), run_is_test: bool) -> tuple[float, (int|float|str|None), (int|float|str|None)]:
+def solve(args, solution: aoc.AbstractSolution, expected_results: (dict[str, (str | None)] | None), run_is_test: bool) -> tuple[float, (int|float|str|None), (int|float|str|None)]:
     part1_time, part2_time = 0, 0
     part1_solution, part2_solution = None, None
 
