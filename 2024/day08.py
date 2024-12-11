@@ -39,4 +39,31 @@ class Solution(aoc.AbstractSolution):
 
     @override
     def part2(self) -> tuple[str, (int | float | str | None)]:
-        return super().part2()
+        antinodes: set[tuple[int, int]] = set()
+
+        for _, coords in self.antennas.items():
+            for coord in coords:
+                antinodes.add(coord)
+
+            for pair in list(itertools.combinations(coords, 2)):
+                vector = (pair[1][0] - pair[0][0], pair[1][1] - pair[0][1])
+
+                antinode = pair[0]
+                while True:
+                    antinode = (antinode[0] - vector[0], antinode[1] - vector[1])
+
+                    if not mapping.is_coord_in_map(self.map, antinode):
+                        break
+
+                    antinodes.add(antinode)
+
+                antinode = pair[0]
+                while True:
+                    antinode = (antinode[0] + vector[0], antinode[1] + vector[1])
+
+                    if not mapping.is_coord_in_map(self.map, antinode):
+                        break
+
+                    antinodes.add(antinode)
+
+        return f"There are {len(antinodes)} inside the bounds.", len(antinodes)
