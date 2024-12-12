@@ -199,7 +199,7 @@ def validate_expected_solutions(
 def run(args) -> None:
     puzzle_input, expected_results = aoc.get_puzzle_input(args.year, args.day)
     solution, parse_time = parse_input(args, puzzle_input, False)
-    run_time, _, _ = solve(args, solution, expected_results, False)
+    run_time, _, _, _, _ = solve(args, solution, expected_results, False)
 
     if args.track_time:
         print(
@@ -236,7 +236,7 @@ def test(args) -> None:
             args, expected_results
         )  # check if the correct test solutions are provided
         solution, parse_time = parse_input(args, puzzle_input, True)
-        run_time, part1_solution, part2_solution = solve(
+        run_time, part1_solution, part1_correctness, part2_solution, part2_correctness = solve(
             args, solution, expected_results, True
         )
 
@@ -247,8 +247,11 @@ def test(args) -> None:
             )
 
         if len(args.test_numbers) > 1:
+            part1_correctness_string: str = " ❓" if (part1_correctness == None) else " ✅" if part1_correctness else " ❌"
+            part2_correctness_string: str = " ❓" if (part2_correctness == None) else " ✅" if part2_correctness else " ❌"
+
             test_results.append(
-                [test_number, part1_solution, part2_solution]
+                [test_number, str(part1_solution) + part1_correctness_string, str(part2_solution) + part2_correctness_string]
                 + ([parse_time + run_time] if args.track_time else [])
             )
 
@@ -269,10 +272,13 @@ def solve(
     solution: aoc.AbstractSolution,
     expected_results: dict[str, (str | None)] | None,
     run_is_test: bool,
-) -> tuple[float, (int | float | str | None), (int | float | str | None)]:
+) -> tuple[float, (int | float | str | None), (bool | None), (int | float | str | None), (bool | None)]:
     part1_time: float = 0.0
     part2_time: float = 0.0
-    part1_solution, part2_solution = None, None
+    part1_solution: int | float | str | None = None
+    part1_correctness: bool | None = None
+    part2_solution: int | float | str | None = None
+    part2_correctness: bool | None = None
 
     # run part 1
     if (args.part == None) or (args.part == 1):
@@ -299,8 +305,10 @@ def solve(
                         + Formatting.RESET
                     )
                 elif expected_results["part1"] == str(part1_solution):
+                    part1_correctness = True
                     print(Color.GREEN + "This solution is correct!" + Formatting.RESET)
                 else:
+                    part1_correctness = False
                     print(
                         Color.RED
                         + "This solution is incorrect! Expected solution: "
@@ -342,8 +350,10 @@ def solve(
                         + Formatting.RESET
                     )
                 elif expected_results["part2"] == str(part2_solution):
+                    part2_correctness = True
                     print(Color.GREEN + "This solution is correct!" + Formatting.RESET)
                 else:
+                    part2_correctness = False
                     print(
                         Color.RED
                         + "This solution is incorrect! Expected solution: "
@@ -360,7 +370,7 @@ def solve(
                 + Formatting.RESET
             )
 
-    return part1_time + part2_time, part1_solution, part2_solution
+    return part1_time + part2_time, part1_solution, part1_correctness, part2_solution, part2_correctness
 
 
 def visualize(args) -> None:
