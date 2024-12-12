@@ -1,7 +1,276 @@
 from typing import Any, Callable
 
 
-def generate_map_with_coordinates[T](map_list: list[list[Any] | str], cast_to: type[T]=str) -> dict[tuple[int, int], T]:
+class Map[T]:
+    def __init__(
+        self,
+        map_list: list[list[Any] | str],
+        cast_to: type[T] = str,
+        filter: None | Callable[[tuple[int, int], Any], bool] = None,
+    ):
+        self.map: dict[tuple[int, int], T] = {}
+
+        for y, row in enumerate(map_list):
+            for x, element in enumerate(row):
+                if (filter == None) or filter((x, y), element):
+                    self.map[x, y] = cast_to(element)  # type: ignore
+
+    def __add__(self, other: "Map[T]") -> "Map[T]":
+        new_map: dict[tuple[int, int], T] = self.map.copy()
+        for coords, value in other.map.items():
+            if coords in new_map:
+                if value != new_map[coords]:
+                    raise KeyError(
+                        f"Both maps contain different values at coords {coords}. The values need to be the same or at least one of the maps can't contain a value for the coords."
+                    )
+            else:
+                new_map[coords] = value
+
+        return Map.from_dict(new_map)
+
+    def __eq__(self, other) -> bool:
+        return self.map == other.map
+
+    def __len__(self) -> int:
+        return len(self.map)
+
+    def __str__(self) -> str:
+        rows: list[str] = []
+
+        dim_x, dim_y = self.get_dimensions()
+        for y in range(dim_y):
+            rows.append("")
+            for x in range(dim_x):
+                rows[-1] += str(self.map[x, y]) if (x, y) in self.map else " "
+
+        return "\n".join(rows)
+
+    @classmethod
+    def from_dict(cls, dictionary: dict[tuple[int, int], T]) -> "Map[T]":
+        obj = cls.__new__(cls)
+        obj.map = dictionary.copy()
+        return obj
+
+    def get(self, coords: tuple[int, int]) -> T | None:
+        if not coords in self.map:
+            return None
+
+        return self.map[coords]
+
+    def set(self, coords: tuple[int, int], value: T) -> T | None:
+        old_value: T | None = self.get(coords)
+        self.map[coords] = value
+        return old_value
+
+    def get_row(self, row_number: int) -> list[tuple[tuple[int, int], T]]:
+        return [
+            ((x, y), value) for (x, y), value in self.map.items() if (y == row_number)
+        ]
+
+    def get_column(self, column_number: int) -> list[tuple[tuple[int, int], T]]:
+        return [
+            ((x, y), value)
+            for (x, y), value in self.map.items()
+            if (x == column_number)
+        ]
+
+    def get_all_coords(self) -> list[tuple[int, int]]:
+        return [coords for coords, _ in self.map.items()]
+
+    def get_all_values(self) -> list[T]:
+        return [value for _, value in self.map.items()]
+
+    def get_dimensions(self) -> tuple[int, int]:
+        x_coords: set[int] = set()
+        y_coords: set[int] = set()
+
+        for x, y in self.map.keys():
+            x_coords.add(x)
+            y_coords.add(y)
+
+        return max(x_coords) + 1, max(y_coords) + 1
+
+    def get_inverted_map(self) -> dict[T, list[tuple[int, int]]]:
+        inverted_map: dict[T, list[tuple[int, int]]] = dict()
+
+        for key, value in self.map.items():
+            if value not in inverted_map:
+                inverted_map[value] = []
+
+            inverted_map[value].append(key)
+
+        return inverted_map
+
+    def contains_coords(self, coords: tuple[int, int]) -> bool:
+        if (coords[0] < 0) or (coords[1] < 0):
+            return False
+
+        dimensions = self.get_dimensions()
+
+        if (coords[0] >= dimensions[0]) or (coords[1] >= dimensions[1]):
+            return False
+
+        return True
+
+    def get_neighbor_coords_for_specific_directions(
+        self,
+        coords: tuple[int, int],
+        left: bool = True,
+        right: bool = True,
+        up: bool = True,
+        down: bool = True,
+        up_left: bool = True,
+        up_right: bool = True,
+        down_left: bool = True,
+        down_right: bool = True,
+    ) -> list[tuple[int, int]]:
+
+        if coords not in self.map:
+            raise KeyError(f"Coords {coords} are not in map.")
+
+        neighbor_coords: list[tuple[int, int]] = []
+
+        if left:
+            neighbor_coords += (
+                [(coords[0] - 1, coords[1])]
+                if (coords[0] - 1, coords[1]) in self.map
+                else []
+            )
+
+        if right:
+            neighbor_coords += (
+                [(coords[0] + 1, coords[1])]
+                if (coords[0] + 1, coords[1]) in self.map
+                else []
+            )
+
+        if up:
+            neighbor_coords += (
+                [(coords[0], coords[1] - 1)]
+                if (coords[0], coords[1] - 1) in self.map
+                else []
+            )
+
+        if down:
+            neighbor_coords += (
+                [(coords[0], coords[1] + 1)]
+                if (coords[0], coords[1] + 1) in self.map
+                else []
+            )
+
+        if up_left:
+            neighbor_coords += (
+                [(coords[0] - 1, coords[1] - 1)]
+                if (coords[0] - 1, coords[1] - 1) in self.map
+                else []
+            )
+
+        if up_right:
+            neighbor_coords += (
+                [(coords[0] + 1, coords[1] - 1)]
+                if (coords[0] + 1, coords[1] - 1) in self.map
+                else []
+            )
+
+        if down_left:
+            neighbor_coords += (
+                [(coords[0] - 1, coords[1] + 1)]
+                if (coords[0] - 1, coords[1] + 1) in self.map
+                else []
+            )
+
+        if down_right:
+            neighbor_coords += (
+                [(coords[0] + 1, coords[1] + 1)]
+                if (coords[0] + 1, coords[1] + 1) in self.map
+                else []
+            )
+
+        return neighbor_coords
+
+    def get_neighbors(
+        self,
+        coords: tuple[int, int],
+        horizontal: bool = True,
+        vertical: bool = True,
+        diagonal: bool = True,
+    ) -> list[tuple[tuple[int, int], T]]:
+
+        return self.get_neighbors_with_specific_directions(
+            coords,
+            horizontal,
+            horizontal,
+            vertical,
+            vertical,
+            diagonal,
+            diagonal,
+            diagonal,
+            diagonal,
+        )
+
+    def get_neighbors_with_specific_directions(
+        self,
+        coords: tuple[int, int],
+        left: bool,
+        right: bool,
+        up: bool,
+        down: bool,
+        up_left: bool,
+        up_right: bool,
+        down_left: bool,
+        down_right: bool,
+    ) -> list[tuple[tuple[int, int], T]]:
+
+        neighbor_coords = self.get_neighbor_coords_for_specific_directions(
+            coords,
+            left,
+            right,
+            up,
+            down,
+            up_left,
+            up_right,
+            down_left,
+            down_right,
+        )
+
+        return [(coords, self.map[coords]) for coords in neighbor_coords]
+
+    def get_matching_neighbors(
+        self,
+        coords: tuple[int, int],
+        matching_function: Callable[[tuple[int, int], tuple[tuple[int, int], T]], bool],
+        horizontal: bool = True,
+        vertical: bool = True,
+        diagonal: bool = True,
+    ) -> list[tuple[tuple[int, int], T]]:
+
+        neighbors = self.get_neighbors(coords, horizontal, vertical, diagonal)
+        return [
+            neighbor for neighbor in neighbors if matching_function(coords, neighbor)
+        ]
+
+    def has_matching_neighbors(
+        self,
+        coords: tuple[int, int],
+        matching_function: Callable[[tuple[int, int], tuple[tuple[int, int], T]], bool],
+        horizontal: bool = True,
+        vertical: bool = True,
+        diagonal: bool = True,
+    ) -> bool:
+
+        return (
+            len(
+                self.get_matching_neighbors(
+                    coords, matching_function, horizontal, vertical, diagonal
+                )
+            )
+            > 0
+        )
+
+
+def generate_map_with_coordinates[
+    T
+](map_list: list[list[Any] | str], cast_to: type[T] = str) -> dict[tuple[int, int], T]:
     """
     Takes a list of lists or strings and generates a map which uses coordinates as the keys and the inner list elements or the strings individual characters as the values.
 
@@ -22,7 +291,7 @@ def generate_map_with_coordinates[T](map_list: list[list[Any] | str], cast_to: t
 
     for y, row in enumerate(map_list):
         for x, element in enumerate(row):
-            map[x, y] = cast_to(element) # type: ignore
+            map[x, y] = cast_to(element)  # type: ignore
 
     return map
 
@@ -53,20 +322,24 @@ def get_map_dimensions[T](map: dict[tuple[int, int], T]) -> tuple[int, int]:
 def is_coord_in_map[T](map: dict[tuple[int, int], T], coord: tuple[int, int]) -> bool:
     if (coord[0] < 0) or (coord[1] < 0):
         return False
-    
+
     dimensions = get_map_dimensions(map)
 
     if (coord[0] >= dimensions[0]) or (coord[1] >= dimensions[1]):
         return False
-    
+
     return True
 
 
-def get_map_row[T](map: dict[tuple[int, int], T], row: int) -> list[tuple[tuple[int, int], T]]:
+def get_map_row[
+    T
+](map: dict[tuple[int, int], T], row: int) -> list[tuple[tuple[int, int], T]]:
     return [((x, y), element) for (x, y), element in map.items() if (y == row)]
 
 
-def get_map_column[T](map: dict[tuple[int, int], T], column: int) -> list[tuple[tuple[int, int], T]]:
+def get_map_column[
+    T
+](map: dict[tuple[int, int], T], column: int) -> list[tuple[tuple[int, int], T]]:
     return [((x, y), element) for (x, y), element in map.items() if (x == column)]
 
 
@@ -158,7 +431,9 @@ def get_neighbor_coords_with_specific_directions(
     return neighbor_coords
 
 
-def get_neighbors[T](
+def get_neighbors[
+    T
+](
     map: dict[tuple[int, int], T],
     current_coords: tuple[int, int],
     horizontal: bool = True,
@@ -180,7 +455,9 @@ def get_neighbors[T](
     )
 
 
-def get_neighbors_with_specific_directions[T](
+def get_neighbors_with_specific_directions[
+    T
+](
     map: dict[tuple[int, int], T],
     current_coords: tuple[int, int],
     left: bool,
@@ -209,7 +486,9 @@ def get_neighbors_with_specific_directions[T](
     return [(coords, map[coords]) for coords in neighbor_coords]
 
 
-def get_matching_neighbors[T](
+def get_matching_neighbors[
+    T
+](
     map: dict[tuple[int, int], T],
     current_coords: tuple[int, int],
     matching_function: Callable[[tuple[int, int], tuple[tuple[int, int], T]], bool],
@@ -226,7 +505,9 @@ def get_matching_neighbors[T](
     ]
 
 
-def has_matching_neighbors[T](
+def has_matching_neighbors[
+    T
+](
     map: dict[tuple[int, int], T],
     current_coords: tuple[int, int],
     matching_function: Callable[[tuple[int, int], tuple[tuple[int, int], T]], bool],
@@ -245,7 +526,9 @@ def has_matching_neighbors[T](
     )
 
 
-def flood_fill_area[T](
+def flood_fill_area[
+    T
+](
     map: dict[tuple[int, int], T],
     start_coords: tuple[int, int],
     matching_function: Callable[[tuple[int, int], tuple[tuple[int, int], T]], bool],
@@ -274,7 +557,9 @@ def flood_fill_area[T](
     return filled_area
 
 
-def flood_fill_area_recursively[T](
+def flood_fill_area_recursively[
+    T
+](
     map: dict[tuple[int, int], T],
     start_coords: tuple[int, int],
     matching_function: Callable[[tuple[int, int], tuple[tuple[int, int], T]], bool],
