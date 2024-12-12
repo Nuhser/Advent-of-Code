@@ -2,16 +2,16 @@ import itertools
 from typing import override
 
 import aoc_util as aoc
-import utility.mapping as mapping
+from utility.mapping import Map
 
 
 class Solution(aoc.AbstractSolution):
     @override
     def parse(self, puzzle_input: list[str]) -> None:
-        self.map = mapping.generate_map_with_coordinates(aoc.parse_input(puzzle_input))
-        self.antennas = mapping.invert_map(
-            {key: value for key, value in self.map.items() if value != "."}
-        )
+        self.map = Map(aoc.parse_input(puzzle_input))
+        self.antennas = Map.filtered(
+            self.map.copy(), lambda _, value: value != "."
+        ).get_inverted()
 
     @override
     def part1(self) -> tuple[str, (int | float | str | None)]:
@@ -25,11 +25,7 @@ class Solution(aoc.AbstractSolution):
                 antinodes.add((pair[1][0] + vector[0], pair[1][1] + vector[1]))
 
         number_of_antinodes = len(
-            [
-                antinode
-                for antinode in antinodes
-                if mapping.is_coord_in_map(self.map, antinode)
-            ]
+            [antinode for antinode in antinodes if self.map.check_coords_in_bounds(antinode)]
         )
 
         return (
@@ -52,7 +48,7 @@ class Solution(aoc.AbstractSolution):
                 while True:
                     antinode = (antinode[0] - vector[0], antinode[1] - vector[1])
 
-                    if not mapping.is_coord_in_map(self.map, antinode):
+                    if not self.map.check_coords_in_bounds(antinode):
                         break
 
                     antinodes.add(antinode)
@@ -61,7 +57,7 @@ class Solution(aoc.AbstractSolution):
                 while True:
                     antinode = (antinode[0] + vector[0], antinode[1] + vector[1])
 
-                    if not mapping.is_coord_in_map(self.map, antinode):
+                    if not self.map.check_coords_in_bounds(antinode):
                         break
 
                     antinodes.add(antinode)

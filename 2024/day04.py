@@ -1,24 +1,24 @@
 from typing import override
+
 import aoc_util as aoc
-import utility.mapping as mapping
+from utility.mapping import Map
 
 
 class Solution(aoc.AbstractSolution):
     @override
     def parse(self, puzzle_input: list[str]) -> None:
-        self.puzzle_input: dict[tuple[int, int], str] = mapping.generate_map_with_coordinates(aoc.parse_input(puzzle_input))
+        self.puzzle_input = Map(aoc.parse_input(puzzle_input))
 
 
     @override
     def part1(self) -> tuple[str, (int | float | str | None)]:
         xmas_found: int = 0
 
-        for coords, letter in self.puzzle_input.items():
+        for coords, letter in self.puzzle_input.map.items():
             if (letter != "X"):
                 continue
 
-            letter_m_list = mapping.get_matching_neighbors(
-                self.puzzle_input,
+            letter_m_list = self.puzzle_input.get_matching_neighbors(
                 coords,
                 lambda _, n: n[1] == "M"
             )
@@ -39,14 +39,13 @@ class Solution(aoc.AbstractSolution):
     def part2(self) -> tuple[str, (int | float | str | None)]:
         xmas_found: int = 0
 
-        for coords, letter in self.puzzle_input.items():
+        for coords, letter in self.puzzle_input.map.items():
             # only look at As and their neighbors
             if (letter != "A"):
                 continue
 
             # check if two Ms are neighboring diagonally
-            letter_m_list = mapping.get_matching_neighbors(
-                self.puzzle_input,
+            letter_m_list = self.puzzle_input.get_matching_neighbors(
                 coords,
                 lambda _, neighbor: neighbor[1] == "M",
                 horizontal=False,
@@ -57,8 +56,7 @@ class Solution(aoc.AbstractSolution):
                 continue
 
             # check if two Ss are neighboring diagonally
-            letter_s_list = mapping.get_matching_neighbors(
-                self.puzzle_input,
+            letter_s_list = self.puzzle_input.get_matching_neighbors(
                 coords,
                 lambda _, neighbor: neighbor[1] == "S",
                 horizontal=False,

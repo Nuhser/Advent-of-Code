@@ -2,24 +2,20 @@ from enum import Enum
 from typing import override
 
 import aoc_util as aoc
-import utility.mapping as mapping
+from utility.mapping import Map
 
 
 class Solution(aoc.AbstractSolution):
     @override
     def parse(self, puzzle_input: list[str]) -> None:
-        self.map: dict[tuple[int, int], MapField] = (
-            mapping.generate_map_with_coordinates(
-                aoc.parse_input(puzzle_input), MapField
-            )
-        )
-        self.guard_starting_position: tuple[int, int]
+        self.map = Map(aoc.parse_input(puzzle_input), cast_to=MapField)
 
-        for coords, map_field in self.map.items():
-            if map_field == MapField.GUARD_STARTING_POSITION:
-                self.guard_starting_position = coords
-                self.map[coords] = MapField.EMPTY
-                break
+        # print(self.map.__dict__)
+
+        guard_starting_position = self.map.find_coords(MapField.GUARD_STARTING_POSITION)
+
+        self.guard_starting_position: tuple[int, int] = guard_starting_position
+        self.map.set(guard_starting_position, MapField.EMPTY)
 
     @override
     def part1(self) -> tuple[str, (int | float | str | None)]:
@@ -132,7 +128,7 @@ class Solution(aoc.AbstractSolution):
 
     def get_path_and_distance_to_next_obstruction(
         self,
-        obstructions_map: dict[tuple[int, int], "MapField"],
+        obstructions_map: Map["MapField"],
         current_position: tuple[int, int],
         current_direction: tuple[int, int],
     ) -> tuple[list[tuple[int, int]], (int | None)]:
@@ -144,7 +140,7 @@ class Solution(aoc.AbstractSolution):
             coords, path = map(
                 list,
                 zip(
-                    *mapping.get_map_row(obstructions_map, current_position[1])[
+                    *obstructions_map.get_row(current_position[1])[
                         (
                             current_position[0] + current_direction[0]
                         ) :: current_direction[0]
@@ -155,7 +151,7 @@ class Solution(aoc.AbstractSolution):
             coords, path = map(
                 list,
                 zip(
-                    *mapping.get_map_column(obstructions_map, current_position[0])[
+                    *obstructions_map.get_column(current_position[0])[
                         (
                             current_position[1] + current_direction[1]
                         ) :: current_direction[1]
