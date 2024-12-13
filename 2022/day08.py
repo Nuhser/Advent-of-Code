@@ -5,9 +5,11 @@ import numpy as np
 
 from math import prod
 
+import utility.util
+
 class Solution(aoc.AbstractSolution):
     def parse(self, puzzle_input: list[str]) -> None:
-        self.tree_map = {(x, y): self.Tree(height) for y, line in enumerate(aoc.parse_input(puzzle_input)) for x, height in enumerate(aoc.split_string_in_chunks(line, 1, cast_to=int))}
+        self.tree_map = {(x, y): self.Tree(height) for y, line in enumerate(aoc.parse_input(puzzle_input)) for x, height in enumerate(utility.util.split_string_in_chunks(line, 1, cast_to=int))}
 
         self.max_x = 0
         self.max_y = 0

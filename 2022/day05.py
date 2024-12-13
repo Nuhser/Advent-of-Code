@@ -1,4 +1,5 @@
 import aoc_util as aoc
+import utility.util
 
 class Solution(aoc.AbstractSolution):
     def parse(self, puzzle_input: list[str]) -> None:
@@ -10,7 +11,7 @@ class Solution(aoc.AbstractSolution):
         self.moves = [(int(move[1]), int(move[3]), int(move[5])) for move in self.moves]
 
         # format start position
-        start_positions = [aoc.split_string_in_chunks(row, 3, 1) for row in start_positions[: -1]]
+        start_positions = [utility.util.split_string_in_chunks(row, 3, 1) for row in start_positions[: -1]]
 
         # initialize stacks
         self.initial_crates = [[] for _ in range(len(start_positions[0]))]

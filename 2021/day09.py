@@ -3,10 +3,12 @@ import plotly.graph_objects as go
 
 from math import prod
 
+import utility.util
+
 class Solution(aoc.AbstractSolution):
     def parse(self, puzzle_input: list[str]) -> None:
-        self.height_map = {(x, y): height for y, line in enumerate(aoc.parse_input(puzzle_input)) for x, height in enumerate(aoc.split_string_in_chunks(line, 1, cast_to=int))}
-        self.height_map_for_visualization = [aoc.split_string_in_chunks(line, 1, cast_to=int) for line in aoc.parse_input(puzzle_input)]
+        self.height_map = {(x, y): height for y, line in enumerate(aoc.parse_input(puzzle_input)) for x, height in enumerate(utility.util.split_string_in_chunks(line, 1, cast_to=int))}
+        self.height_map_for_visualization = [utility.util.split_string_in_chunks(line, 1, cast_to=int) for line in aoc.parse_input(puzzle_input)]
 
     def part1(self) -> tuple[str, (int | str)]:
         # find low points and calculate risk level

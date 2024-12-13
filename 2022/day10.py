@@ -1,4 +1,5 @@
 import aoc_util as aoc
+import utility.util
 
 class Solution(aoc.AbstractSolution):
     def parse(self, puzzle_input: list[str]) -> None:
@@ -50,4 +51,4 @@ class Solution(aoc.AbstractSolution):
 
                 X += int(instruction[1])
 
-        return "\n".join([line for line in aoc.split_string_in_chunks(display, 40)]), None
+        return "\n".join([line for line in utility.util.split_string_in_chunks(display, 40)]), None

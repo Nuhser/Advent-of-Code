@@ -4,16 +4,18 @@ import numpy as np
 
 from queue import PriorityQueue, Queue
 
+import utility.util
+
 class Solution(aoc.AbstractSolution):
     def parse(self, puzzle_input: list[str]) -> None:
-        self.points_single = {(x, y): [risk_level, float("inf"), None] for y, line in enumerate(aoc.parse_input(puzzle_input)) for x, risk_level in enumerate(aoc.split_string_in_chunks(line, 1, cast_to=int))}
+        self.points_single = {(x, y): [risk_level, float("inf"), None] for y, line in enumerate(aoc.parse_input(puzzle_input)) for x, risk_level in enumerate(utility.util.split_string_in_chunks(line, 1, cast_to=int))}
         
         self.points_single[0, 0] = [self.points_single[0, 0][0], 0, None]
         self.target_single = (max(x for x, _ in self.points_single), max(y for _, y in self.points_single))
 
         self.points_multiple = dict()
         for y, line in enumerate(aoc.parse_input(puzzle_input)):
-            for x, risk_level in enumerate(aoc.split_string_in_chunks(line, 1, cast_to=int)):
+            for x, risk_level in enumerate(utility.util.split_string_in_chunks(line, 1, cast_to=int)):
                 for i in range(5):
                     for j in range(5):
                         self.points_multiple[(x + (100 * i), y + (100 * j))] = [(int(risk_level) - 1 + i + j) % 9 + 1, float('inf'), None]

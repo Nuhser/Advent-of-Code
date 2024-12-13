@@ -3,6 +3,8 @@ from utility.terminal_formatting import Formatting
 import aoc_util as aoc
 import plotly.graph_objects as go
 
+import utility.util
+
 
 class Solution(aoc.AbstractSolution):
     def parse(self, puzzle_input: list[str]) -> None:
@@ -10,7 +12,7 @@ class Solution(aoc.AbstractSolution):
         self.end = (-1, -1)
         self.heightmap: dict[tuple[int, int], int] = dict()
         for y, line in enumerate(aoc.parse_input(puzzle_input)):
-            for x, height in enumerate(aoc.split_string_in_chunks(line, 1)):
+            for x, height in enumerate(utility.util.split_string_in_chunks(line, 1)):
                 if height == "S":
                     self.start = (x, y)
                     height = "a"

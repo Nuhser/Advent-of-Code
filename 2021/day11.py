@@ -1,8 +1,9 @@
 import aoc_util as aoc
+import utility.util
 
 class Solution(aoc.AbstractSolution):
     def parse(self, puzzle_input: list[str]) -> None:
-        self.octopuses = {(x, y): [energy_level, True] for y, line in enumerate(aoc.parse_input(puzzle_input)) for x, energy_level in enumerate(aoc.split_string_in_chunks(line, 1, cast_to=int))}
+        self.octopuses = {(x, y): [energy_level, True] for y, line in enumerate(aoc.parse_input(puzzle_input)) for x, energy_level in enumerate(utility.util.split_string_in_chunks(line, 1, cast_to=int))}
 
     def part1(self) -> tuple[str, (int | str)]:
         flash_counter = 0

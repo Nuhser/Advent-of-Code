@@ -41,3 +41,13 @@ def get_diff_between_strings(string1: str, string2: str) -> int:
             diff += 1
 
     return diff
+
+
+def split_string_in_chunks(
+    string: str, chunk_size: int, padding_size: int = 0, cast_to: type = str
+) -> list:
+    chunks = []
+    for i in range(0, len(string), chunk_size + padding_size):
+        chunks.append(cast_to(string[i : i + chunk_size]))
+
+    return chunks

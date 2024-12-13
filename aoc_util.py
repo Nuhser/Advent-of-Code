@@ -76,7 +76,9 @@ def get_test_input(
 
                 splitted_line = line.strip().removeprefix("#!").split(":")
 
-                expected_results[splitted_line[0]] = splitted_line[1] if not splitted_line[1] == "?" else None
+                expected_results[splitted_line[0]] = (
+                    splitted_line[1] if not splitted_line[1] == "?" else None
+                )
 
             test_input.seek(last_position)
 
@@ -98,7 +100,7 @@ def parse_input(
         return [cast_to(line.strip() if strip_lines else line) for line in puzzle_input]
     else:
         return [
-            recursive_split(line.strip() if strip_lines else line, delimiters, cast_to)
+            _recursive_split(line.strip() if strip_lines else line, delimiters, cast_to)
             for line in puzzle_input
         ]
 
@@ -119,7 +121,7 @@ def parse_input_with_blocks(
         if len(line_delimiters) == 0:
             blocks[-1].append(cast_to(line))
         else:
-            blocks[-1].append(recursive_split(line, line_delimiters, cast_to))
+            blocks[-1].append(_recursive_split(line, line_delimiters, cast_to))
 
     return blocks
 
@@ -156,13 +158,13 @@ def parse_input_with_blocks_and_block_specific_line_delimiters(
             blocks[-1].append(cast_to(line))
         else:
             blocks[-1].append(
-                recursive_split(line, line_delimiters[block_idx], cast_to)
+                _recursive_split(line, line_delimiters[block_idx], cast_to)
             )
 
     return blocks
 
 
-def recursive_split(
+def _recursive_split(
     item: str, delimiters: tuple[str, *tuple[str, ...]], cast_to: type
 ) -> list:
     if len(delimiters) == 1:
@@ -174,18 +176,8 @@ def recursive_split(
         ]
     else:
         return [
-            recursive_split(subitem, delimiters[1:], cast_to)
+            _recursive_split(subitem, delimiters[1:], cast_to)
             for subitem in (
                 item.split(delimiters[0]) if delimiters[0] != "" else item.split()
             )
         ]
-
-
-def split_string_in_chunks(
-    string: str, chunk_size: int, padding_size: int = 0, cast_to: type = str
-) -> list:
-    chunks = []
-    for i in range(0, len(string), chunk_size + padding_size):
-        chunks.append(cast_to(string[i : i + chunk_size]))
-
-    return chunks
