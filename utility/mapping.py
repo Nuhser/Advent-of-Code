@@ -6,13 +6,13 @@ class Map[T]:
         self,
         map_list: list[list[Any] | str],
         cast_to: type[T] = str,
-        filter: None | Callable[[tuple[int, int], Any], bool] = None,
+        filter_function: None | Callable[[tuple[int, int], Any], bool] = None,
     ):
         self.map: dict[tuple[int, int], T] = {}
 
         for y, row in enumerate(map_list):
             for x, element in enumerate(row):
-                if (filter == None) or filter((x, y), element):
+                if (filter_function is None) or filter_function((x, y), element):
                     self.map[x, y] = cast_to(element)  # type: ignore
 
     def __getitem__(self, coords: tuple[int, int]) -> T:
