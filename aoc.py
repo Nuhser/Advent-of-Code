@@ -175,15 +175,18 @@ def validate_expected_solutions(
         raise AttributeError(
             f"No expected results found in the test file ({args.year}/test{args.day:02d}.txt)! Make sure that the correct number of expected results is given at the start of the file (e.g.: #!part1:<RESULT>)."
         )
-    elif (args.part == 1) and ("part1" not in expected_results):
-        raise AttributeError(
-            "No expected test result found in your test file for part 1 of the solution! Make sure that the correct number of expected results is given at the start of the file (e.g.: #!part1:<RESULT>)."
-        )
-    elif (args.part == 2) and ("part2" not in expected_results):
-        raise AttributeError(
-            "No expected test result found in your test file for part 2 of the solution! Make sure that the correct number of expected results is given at the start of the file (e.g.: #!part2:<RESULT>)."
-        )
-    elif args.part == None:
+
+    if (len(args.test_numbers) == 1) and (args.test_numbers != [None]):
+        if (args.part == 1) and ("part1" not in expected_results):
+            raise AttributeError(
+                "No expected test result found in your test file for part 1 of the solution! Make sure that the correct number of expected results is given at the start of the file (e.g.: #!part1:<RESULT>)."
+            )
+        elif (args.part == 2) and ("part2" not in expected_results):
+            raise AttributeError(
+                "No expected test result found in your test file for part 2 of the solution! Make sure that the correct number of expected results is given at the start of the file (e.g.: #!part2:<RESULT>)."
+            )
+
+    if args.part == None:
         if "part1" not in expected_results:
             print(
                 f"\n{Color.YELLOW}Couldn't find an expected solution for test part 1. Therefore, only running part 2.{Color.DEFAULT}"
@@ -232,13 +235,15 @@ def test(args) -> None:
         puzzle_input, expected_results = aoc.get_test_input(
             args.year, args.day, test_number
         )
-        validate_expected_solutions(
-            args, expected_results
-        )  # check if the correct test solutions are provided
+        validate_expected_solutions(args, expected_results)
         solution, parse_time = parse_input(args, puzzle_input, True)
-        run_time, part1_solution, part1_correctness, part2_solution, part2_correctness = solve(
-            args, solution, expected_results, True
-        )
+        (
+            run_time,
+            part1_solution,
+            part1_correctness,
+            part2_solution,
+            part2_correctness,
+        ) = solve(args, solution, expected_results, True)
 
         if args.track_time:
             print(
@@ -247,18 +252,39 @@ def test(args) -> None:
             )
 
         if len(args.test_numbers) > 1:
-            part1_correctness_string: str = " ❓" if (part1_correctness == None) else " ✅" if part1_correctness else " ❌"
-            part2_correctness_string: str = " ❓" if (part2_correctness == None) else " ✅" if part2_correctness else " ❌"
+            part1_correctness_string: str = (
+                " ❓"
+                if (part1_correctness == None)
+                else " ✅" if part1_correctness else " ❌"
+            )
+            part2_correctness_string: str = (
+                " ❓"
+                if (part2_correctness == None)
+                else " ✅" if part2_correctness else " ❌"
+            )
 
             test_results.append(
-                [test_number, str(part1_solution) + part1_correctness_string, str(part2_solution) + part2_correctness_string]
+                [test_number]
+                + (
+                    [str(part1_solution) + part1_correctness_string]
+                    if (original_part in [None, 1])
+                    else []
+                )
+                + (
+                    [str(part2_solution) + part2_correctness_string]
+                    if (original_part in [None, 2])
+                    else []
+                )
                 + ([parse_time + run_time] if args.track_time else [])
             )
 
     if len(args.test_numbers) > 1:
         table = PrettyTable()
-        table.field_names = ["Test #", "Part 1", "Part 2"] + (
-            ["Compute Time"] if args.track_time else []
+        table.field_names = (
+            ["Test #"]
+            + (["Part 1"] if (original_part in [None, 1]) else [])
+            + (["Part 2"] if (original_part in [None, 2]) else [])
+            + (["Compute Time"] if args.track_time else [])
         )
         table.align = "r"
         table.float_format = "0.5"
@@ -272,7 +298,13 @@ def solve(
     solution: aoc.AbstractSolution,
     expected_results: dict[str, (str | None)] | None,
     run_is_test: bool,
-) -> tuple[float, (int | float | str | None), (bool | None), (int | float | str | None), (bool | None)]:
+) -> tuple[
+    float,
+    (int | float | str | None),
+    (bool | None),
+    (int | float | str | None),
+    (bool | None),
+]:
     part1_time: float = 0.0
     part2_time: float = 0.0
     part1_solution: int | float | str | None = None
@@ -370,7 +402,13 @@ def solve(
                 + Formatting.RESET
             )
 
-    return part1_time + part2_time, part1_solution, part1_correctness, part2_solution, part2_correctness
+    return (
+        part1_time + part2_time,
+        part1_solution,
+        part1_correctness,
+        part2_solution,
+        part2_correctness,
+    )
 
 
 def visualize(args) -> None:
