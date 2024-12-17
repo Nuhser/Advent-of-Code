@@ -15,3 +15,4 @@ Each day consists of one input file containing my personal randomly generated pu
 7. [Bridge Repair](https://github.com/Nuhser/Advent-of-Code/blob/master/2024/day07.py) (*[original task](https://adventofcode.com/2024/day/7)*)
 8. [Resonant Collinearity](https://github.com/Nuhser/Advent-of-Code/blob/master/2024/day08.py) (*[original task](https://adventofcode.com/2024/day/8)*)
 9. [Disk Fragmenter](https://github.com/Nuhser/Advent-of-Code/blob/master/2024/day09.py) (*[original task](https://adventofcode.com/2024/day/9)*)
+10. [Hoof It](https://github.com/Nuhser/Advent-of-Code/blob/master/2024/day10.py) (*[original task](https://adventofcode.com/2024/day/10)*)
