@@ -31,13 +31,13 @@ class Solution(aoc.AbstractSolution):
         position: int = 50
 
         for command in self.commands:
-            old_position = position
+            started_on_zero = position == 0
             count += abs(command) // 100
 
             command = (abs(command) % 100) * (-1 if (command < 0) else 1)
             position += command
 
-            if (old_position != 0) and ((position <= 0) or (position >= 100)):
+            if (not started_on_zero) and ((position <= 0) or (position >= 100)):
                 count += 1
 
             position %= 100
