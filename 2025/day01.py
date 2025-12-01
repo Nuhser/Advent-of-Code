@@ -1,6 +1,5 @@
 from typing import override
 import aoc_util as aoc
-import math
 
 
 class Solution(aoc.AbstractSolution):
