@@ -7,3 +7,4 @@ Each day consists of one input file containing my personal randomly generated pu
 ## This Year's Tasks
 
 1. [Secret Entrance](https://github.com/Nuhser/Advent-of-Code/blob/master/2025/day01.py) (*[original task](https://adventofcode.com/2025/day/1)*)
+2. [Gift Shop ](https://github.com/Nuhser/Advent-of-Code/blob/master/2025/day02.py) (*[original task](https://adventofcode.com/2025/day/2)*)
