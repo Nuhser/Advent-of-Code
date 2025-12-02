@@ -31,4 +31,23 @@ class Solution(aoc.AbstractSolution):
 
     @override
     def part2(self) -> tuple[str, (int | float | str | None)]:
-        return super().part2()
+        invalid_ids: set[int] = set()
+
+        for start, end in [(r[0], r[1]) for r in self.ranges]:
+            for id in range(int(start), int(end) + 1):
+                if (id in invalid_ids):
+                    continue
+
+                id = str(id)
+
+                for i in range(1, (len(id) // 2) + 1):
+                    if (len(id) % i != 0):
+                        continue
+
+                    first_sequence = id[: i]
+                    if (all([s == first_sequence for s in [id[j : j+i] for j in range(i, len(id), i)]])):
+                        invalid_ids.add(int(id))
+                        break
+
+        result = sum(invalid_ids)
+        return f"Sum of all invalid IDs: {result}", result
