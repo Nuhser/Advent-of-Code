@@ -18,9 +18,9 @@ class Solution(aoc.AbstractSolution):
 
             second_digit: int = 0
             for idx in possible_first_indices:
-                for value in bank[idx+1 :]:
-                    if (second_digit < value):
-                        second_digit = value
+                value = max(bank[idx+1 :])
+                if (second_digit < value):
+                    second_digit = value
 
             joltages.append((first_digit * 10) + second_digit)
 
