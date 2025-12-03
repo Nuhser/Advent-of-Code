@@ -31,4 +31,33 @@ class Solution(aoc.AbstractSolution):
 
     @override
     def part2(self) -> tuple[str, (int | float | str | None)]:
-        return super().part2()
+        joltages: list[int] = []
+
+        for i, bank in enumerate(self.banks):
+            if (self.verbose):
+                print(f"Checking bank {i}...")
+
+            first_digit, index = self.find_biggest_possible_joltage(bank, 0, 11)
+            digits: list[int] = [first_digit]
+
+            for end_idx in range(10, -1, -1):
+                digit, new_index = self.find_biggest_possible_joltage(bank, index+1, end_idx)
+
+                digits.append(digit)
+                index = new_index
+
+            joltages.append(sum([(10 ** i) * digit for i, digit in enumerate(reversed(digits))]))
+
+            if (self.verbose):
+                print(f"New joltage: {joltages[-1]}\n")
+
+        total_joltage = sum(joltages)
+
+        return f"The total joltage is {total_joltage}", total_joltage
+
+
+    def find_biggest_possible_joltage(self, bank: list[int], start_idx: int, end_idx: int) -> tuple[int, int]:
+        max_joltage: int = max(bank[start_idx : -end_idx if (end_idx > 0) else None])
+        index: int = min([idx for idx, joltage in enumerate(bank[: -end_idx if (end_idx > 0) else None]) if (joltage == max_joltage) and (idx >= start_idx)])
+
+        return max_joltage, index
