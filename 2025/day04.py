@@ -26,7 +26,29 @@ class Solution(aoc.AbstractSolution):
 
     @override
     def part2(self) -> tuple[str, (int | float | str | None)]:
-        return super().part2()
+        map = self.map.copy()
+        removed_rolls: int = 0
+
+        while(True):
+            accessable_rolls: list[tuple[int, int]] = []
+            for coords in map.find_all_coords(self.GridCell.ROLL):
+                neighbor_rolls = map.get_matching_neighbors(
+                    coords,
+                    lambda _, n: bool(n[1])
+                )
+
+                if (len(neighbor_rolls) < 4):
+                    accessable_rolls.append(coords)
+
+            if (len(accessable_rolls) < 1):
+                break
+
+            for coords in accessable_rolls:
+                map.set(coords, self.GridCell.EMPTY)
+
+            removed_rolls += len(accessable_rolls)
+
+        return f"{removed_rolls} rolls could be removed.", removed_rolls
 
 
     class GridCell(Enum):
