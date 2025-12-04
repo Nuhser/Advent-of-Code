@@ -284,7 +284,7 @@ def test(args) -> None:
             ["Test #"]
             + (["Part 1"] if (original_part in [None, 1]) else [])
             + (["Part 2"] if (original_part in [None, 2]) else [])
-            + (["Compute Time"] if args.track_time else [])
+            + (["Compute Time [s]"] if args.track_time else [])
         )
         table.align = "r"
         table.float_format = "0.5"
