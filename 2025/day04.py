@@ -1,13 +1,13 @@
 from enum import Enum
 from typing import override
 import aoc_util as aoc
-import utility.mapping as mapping
+from utility.mapping import Map
 
 
 class Solution(aoc.AbstractSolution):
     @override
     def parse(self, puzzle_input: list[str]) -> None:
-        self.map = mapping.Map(aoc.parse_input(puzzle_input), cast_to=self.GridCell)
+        self.map: Map['Solution.GridCell'] = Map(aoc.parse_input(puzzle_input), cast_to=self.GridCell)
 
 
     @override
