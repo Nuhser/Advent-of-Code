@@ -35,7 +35,41 @@ class Solution(aoc.AbstractSolution):
 
     @override
     def part2(self) -> tuple[str, (int | float | str | None)]:
-        return super().part2()
+        coords_to_check: set[tuple[int, int]] = {self.start}
+
+        timelines: int = 0
+        timeline_dict: dict[tuple[int, int], int] = {self.start: 1}
+        while(len(coords_to_check) > 0):
+            new_coords_to_check: set[tuple[int, int]] = set()
+            for coords in coords_to_check:
+                next_coords: tuple[int, int] = (coords[0], coords[1] + 1)
+                if (self.map.check_coords_in_bounds(next_coords)):
+                    if (self.map[next_coords] == self.MapField.EMPTY):
+                        new_coords_to_check.add(next_coords)
+
+                        if (next_coords in timeline_dict):
+                            timeline_dict[next_coords] += timeline_dict[coords]
+                        else:
+                            timeline_dict[next_coords] = timeline_dict[coords]
+                    else:
+                        new_coords_to_check.add((next_coords[0] - 1, next_coords[1]))
+                        new_coords_to_check.add((next_coords[0] + 1, next_coords[1]))
+
+                        if ((next_coords[0] - 1, next_coords[1]) in timeline_dict):
+                            timeline_dict[(next_coords[0] - 1, next_coords[1])] += timeline_dict[coords]
+                        else:
+                            timeline_dict[(next_coords[0] - 1, next_coords[1])] = timeline_dict[coords]
+                            
+                        if ((next_coords[0] + 1, next_coords[1]) in timeline_dict):
+                            timeline_dict[(next_coords[0] + 1, next_coords[1])] += timeline_dict[coords]
+                        else:
+                            timeline_dict[(next_coords[0] + 1, next_coords[1])] = timeline_dict[coords]
+                else:
+                    timelines += timeline_dict[coords]
+            
+            coords_to_check = new_coords_to_check
+
+        return f"The beams created {timelines} timelines.", timelines
     
     class MapField(Enum):
         START = 'S'
