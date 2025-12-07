@@ -17,17 +17,18 @@ class Solution(aoc.AbstractSolution):
 
         splitters_hit: set[tuple[int, int]] = set()
         while(len(coords_to_check) > 0):
-            for coords in coords_to_check.copy():
-                coords_to_check.remove(coords)
-
+            new_coords_to_check: set[tuple[int, int]] = set()
+            for coords in coords_to_check:
                 next_coords: tuple[int, int] = (coords[0], coords[1] + 1)
                 if (self.map.check_coords_in_bounds(next_coords)):
                     if (self.map[next_coords] == self.MapField.EMPTY):
-                        coords_to_check.add(next_coords)
+                        new_coords_to_check.add(next_coords)
                     else:
                         splitters_hit.add(next_coords)
-                        coords_to_check.add((next_coords[0] - 1, next_coords[1]))
-                        coords_to_check.add((next_coords[0] + 1, next_coords[1]))
+                        new_coords_to_check.add((next_coords[0] - 1, next_coords[1]))
+                        new_coords_to_check.add((next_coords[0] + 1, next_coords[1]))
+            
+            coords_to_check = new_coords_to_check
 
         return f"The beams hit {len(splitters_hit)} splitters.", len(splitters_hit)
 
