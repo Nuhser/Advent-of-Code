@@ -13,3 +13,4 @@ Each day consists of one input file containing my personal randomly generated pu
 5. [Cafeteria ](https://github.com/Nuhser/Advent-of-Code/blob/master/2025/day05.py) (*[original task](https://adventofcode.com/2025/day/5)*)
 6. [Trash Compactor](https://github.com/Nuhser/Advent-of-Code/blob/master/2025/day06.py) (*[original task](https://adventofcode.com/2025/day/6)*)
 7. [Laboratories](https://github.com/Nuhser/Advent-of-Code/blob/master/2025/day07.py) (*[original task](https://adventofcode.com/2025/day/7)*)
+8. [Playground](https://github.com/Nuhser/Advent-of-Code/blob/master/2025/day08.py) (*[original task](https://adventofcode.com/2025/day/8)*)
